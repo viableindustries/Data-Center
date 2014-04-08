@@ -12,7 +12,6 @@ angular
       .when('/', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
-        redirectTo: '/dashboard'
       })
       .when('/dashboard', {
         templateUrl: 'views/dashboard.html',

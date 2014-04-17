@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('AuthorizeCtrl', ['$scope', '$location', 'ipCookie', function ($scope, $location, ipCookie) {
-    $scope.user = {};
+  .controller('AuthorizeCtrl', ['$scope', '$rootScope', '$location', 'ipCookie', function ($scope, $rootScope, $location, ipCookie) {
 
     $scope.getAccessToken = function () {
         var locationHash = $location.hash();
@@ -13,11 +12,14 @@ angular.module('commonsCloudAdminApp')
           expires: 2
         };
 
+        $rootScope.authenticated = true;
+
         return ipCookie('session', cleanToken, cookieOptions);
       };
 
     $scope.getAccessToken();
 
+    $location.hash('');
     $location.path('/');
 
   }]);

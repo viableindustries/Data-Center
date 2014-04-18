@@ -7,7 +7,7 @@ angular
     'ngSanitize',
     'ngRoute'
   ])
-  .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+  .config(function ($routeProvider, $locationProvider) {
 
     // Setup routes for our application
     $routeProvider
@@ -19,6 +19,10 @@ angular
         templateUrl: 'views/authorize.html',
         controller: 'AuthorizeCtrl'
       })
+      .when('/applications', {
+        templateUrl: 'views/applications.html',
+        controller: 'ApplicationsCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
@@ -26,4 +30,7 @@ angular
     // If you remove this, you break the whole application
     $locationProvider.html5Mode(true).hashPrefix('!');
 
-  }]);
+  }).run(function($http, ipCookie) {
+    $http.defaults.headers.common.Authorization = 'Bearer ' + ipCookie('session');
+    $http.defaults.headers.common['Content-Type'] = 'application/json';
+  });

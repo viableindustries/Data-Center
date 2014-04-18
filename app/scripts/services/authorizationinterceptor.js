@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .factory('AuthorizationInterceptor', ['$rootScope', 'ipCookie', function ($rootScope, ipCookie) {
+  .factory('Auth', function ($rootScope, $q, $http, ipCookie) {
 
     //
     // Before we do anything else we should check to make sure
@@ -19,25 +19,9 @@ angular.module('commonsCloudAdminApp')
 
     if (ipCookie('session')) {
       $rootScope.auth.is_authenticated = true;
+      $http.defaults.headers.common.Authorization = 'Bearer ' + ipCookie('session');
+      $http.defaults.headers.common['Content-Type'] = 'application/json';
     }
 
-    return {
-        request: function(config) {
-            var sessionCookie = ipCookie('token');
-            config.headers = config.headers || {};
-            if (sessionCookie) {
-                config.headers.Authorization = 'Bearer ' + sessionCookie;
-            }
-            return config || $q.when(config);
-        },
-        response: function(response) {
-            if (response.status === 401) {
-                console.log('// TODO: Redirect user to login page.');
-            }
-            return response || $q.when(response);
-        }
-    };
-
-  }]).config(function ($httpProvider) {
-    $httpProvider.interceptors.push('AuthorizationInterceptor');
+    return {};
   });

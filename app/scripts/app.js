@@ -7,7 +7,7 @@ angular
     'ngSanitize',
     'ngRoute'
   ])
-  .config(function ($routeProvider, $locationProvider) {
+  .config(function ($routeProvider, $locationProvider, $httpProvider) {
 
     // Setup routes for our application
     $routeProvider
@@ -30,10 +30,8 @@ angular
     // If you remove this, you break the whole application
     $locationProvider.html5Mode(true).hashPrefix('!');
 
-    $httpProvider.defaults.useXDomain = true;
-    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    // $httpProvider.defaults.withCredentials = true;
+    // $httpProvider.defaults.useXDomain = true;
+    // $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-  }).run(function($http, ipCookie) {
-    $http.defaults.headers.common.Authorization = 'Bearer ' + ipCookie('session');
-    $http.defaults.headers.common['Content-Type'] = 'application/json';
   });

@@ -16,7 +16,9 @@ angular.module('commonsCloudAdminApp')
       // });
 
 
-      $http.get('http://api.commonscloud.org/v2/applications.json')
+      $http.get('http://api.commonscloud.org/v2/applications.json', {
+        withCredentials: true
+      })
         .success(function (data, status, headers, config){
           console.log('SUCCESS: ', data, status, headers, config);
         }).error(function (data, status, headers, config){

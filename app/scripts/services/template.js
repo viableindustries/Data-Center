@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .provider('Templates', function () {
+  .provider('Template', function () {
 
     this.$get = ['$resource', function ($resource) {
 
@@ -25,7 +25,6 @@ angular.module('commonsCloudAdminApp')
       });
 
       return Template;
-      // return new Greeter();
     }];
 
   });

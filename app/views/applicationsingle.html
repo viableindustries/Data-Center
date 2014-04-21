@@ -3,3 +3,28 @@
     <li><a href="/applications" title="">Applications</a></li>
     <li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
 </ol>
+
+<h1>{{ application.name }}</h1>
+
+    <div class="row existing-applications-templates">
+
+        <div data-ng-repeat="template in templates" class="col-sm-4">          
+          <article class="template">
+            
+            <h1><a data-toggle="tooltip" data-placement="bottom" title="" href="/applications/{{ application.id }}/templates/{{ template.id }}/features" data-original-title="View all Funder features">{{ template.name }} <span class="glyphicon glyphicon-circle-arrow-right"></span></a></h1>
+            <h3>XX <span class="stat-label">{{ template.name }}</span></h3>
+            <p class="services">
+              <span data-toggle="tooltip" data-placement="bottom" title="Visible to the public" class="service glyphicon glyphicon-eye-open"></span>
+              
+              
+            </p>
+            
+            <hr>
+            <p>
+              <a class="button small" href="/applications/{{ application.id }}/templates/{{ template.id }}/features/add"><span class="glyphicon glyphicon-plus"></span> New {{ template.name }}</a>
+            </p>
+            
+          </article>
+        </div>
+
+    </div>

@@ -28,7 +28,7 @@ angular
         controller: 'ApplicationSingleCtrl'
       })
       .when('/templates', {
-        templateUrl: 'views/templates.html',
+        templateUrl: '/views/templates.html',
         controller: 'TemplatesCtrl'
       })
       .otherwise({

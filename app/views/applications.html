@@ -1,1 +1,21 @@
-<p>This is the applications view.</p>
+<ol class="breadcrumb">
+    <li class="front-page"><a href="#" title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li>
+    <li><a href="/applications" title="">Applications</a></li>
+</ol>
+
+<section data-ng-show="applications.length">
+<h1>Existing Applications</h1>
+<ul>
+    <li data-ng-repeat="application in applications"><a href="/applications/{{ application.id }}">{{ application.name }}</a> - {{ application.url }} | <a data-ng-click="delete(application)" href=""><span class="glyphicon glyphicon-trash"></span></a></li>
+</ul>
+</section>
+
+<section>
+    <h1>Create an Application</h1>
+
+    <form method="POST" data-ng-submit="save(application)">
+        <input type="text" id="name" value="name" data-ng-model="application.name" value="" />
+        <input type="text" id="url" value="url" data-ng-model="application.url" value="" />
+        <input type="submit" id="submit" name="submit" value="Create Application" />
+    </form>
+</section>

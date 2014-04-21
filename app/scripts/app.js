@@ -12,16 +12,24 @@ angular
     // Setup routes for our application
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html',
+        templateUrl: '/views/main.html',
         controller: 'MainCtrl'
       })
       .when('/authorize', {
-        templateUrl: 'views/authorize.html',
+        templateUrl: '/views/authorize.html',
         controller: 'AuthorizeCtrl'
       })
       .when('/applications', {
-        templateUrl: 'views/applications.html',
+        templateUrl: '/views/applications.html',
         controller: 'ApplicationsCtrl'
+      })
+      .when('/applications/:applicationId', {
+        templateUrl: '/views/applicationsingle.html',
+        controller: 'ApplicationSingleCtrl'
+      })
+      .when('/templates', {
+        templateUrl: 'views/templates.html',
+        controller: 'TemplatesCtrl'
       })
       .otherwise({
         redirectTo: '/'

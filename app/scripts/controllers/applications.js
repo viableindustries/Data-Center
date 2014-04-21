@@ -1,15 +1,29 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationsCtrl', function ($scope, $http, ipCookie) {
+  .controller('ApplicationsCtrl', ['$scope', '$route', 'Application', function ($scope, $route, Application) {
 
-      $http({
-        url: 'http://api.commonscloud.org/v2/applications.json',
-        method: 'GET'
-      }).success(function (data, status, headers, config){
-        console.log('SUCCESS: ', data, status, headers, config);
-      }).error(function (data, status, headers, config){
-        console.log('ERROR: ', data, status, headers, config);
-      });
+    $scope.application = new Application();
+    $scope.applications = Application.query();
 
-  });
+    $scope.save = function () {
+
+      $scope.application.$save().then(function (response) {
+        $scope.applications.push(response.response);
+      })
+
+      $scope.application = new Application();      
+    };
+
+    $scope.delete = function (application) {
+
+      var application_ = {
+        id: application.id
+      }
+
+      Application.delete(application_);
+
+      $scope.applications.pop($scope.applications, application);
+    };
+
+  }]);

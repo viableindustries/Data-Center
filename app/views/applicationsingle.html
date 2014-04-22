@@ -1,30 +1,41 @@
-<ol class="breadcrumb">
-    <li class="front-page"><a href="#" title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li>
-    <li><a href="/applications" title="">Applications</a></li>
-    <li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
-</ol>
+<div class="row">
 
-<h1>{{ application.name }}</h1>
+  <nav data-ng-show="$root.navigation" class="col-xs-10 col-sm-3 sidebar"></nav>
 
-    <div class="row existing-applications-templates">
+  <section class="col-xs-12 col-sm-9 page-content">
+    <header>
+      <ol class="breadcrumb">
+        <li class="front-page"><a data-ng-click="$root.navigation=!$root.navigation" title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li>
+        <li><a href="/applications" title="">Applications</a></li>
+        <li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
+      </ol>
+    </header>
 
-        <div data-ng-repeat="template in templates" class="col-sm-4">          
-          <article class="template">
-            
-            <h1><a data-toggle="tooltip" data-placement="bottom" title="" href="/applications/{{ application.id }}/templates/{{ template.id }}/features" data-original-title="View all Funder features">{{ template.name }} <span class="glyphicon glyphicon-circle-arrow-right"></span></a></h1>
-            <h3>XX <span class="stat-label">{{ template.name }}</span></h3>
-            <p class="services">
-              <span data-toggle="tooltip" data-placement="bottom" title="Visible to the public" class="service glyphicon glyphicon-eye-open"></span>
+    <div class="inner wide">
+      <h1>{{ application.name }}</h1>
+
+      <div class="row existing-applications-templates">
+          <div data-ng-repeat="template in templates" class="col-sm-4">          
+            <article class="template">
               
-              
-            </p>
-            
-            <hr>
-            <p>
-              <a class="button small" href="/applications/{{ application.id }}/templates/{{ template.id }}/features/add"><span class="glyphicon glyphicon-plus"></span> New {{ template.name }}</a>
-            </p>
-            
-          </article>
-        </div>
+              <h1><a data-toggle="tooltip" data-placement="bottom" title="" href="/applications/{{ application.id }}/templates/{{ template.id }}/features" data-original-title="View all Funder features">{{ template.name }} <span class="glyphicon glyphicon-circle-arrow-right"></span></a></h1>
+              <h3>XX <span class="stat-label">{{ template.name }}</span></h3>
+              <p class="services">
+                <span data-ng-show="template.is_public" title="Visible to the public" class="service glyphicon glyphicon-eye-open"></span>
+                <span data-ng-show="!template.is_public" title="Hidden from the public" class="glyphicon glyphicon-eye-close"></span>
+                <span data-ng-show="template.is_crowdsourced" title="Crowd-sourcing is enabled" class="service glyphicon glyphicon-user"></span>
+                <span data-ng-show="template.is_geospatial" title="This is geo-spatial data" class="service glyphicon glyphicon-globe"></span>
+                <span data-ng-show="template.is_moderated" title="Moderation and Notification are enabled" class="glyphicon glyphicon-bell"></span>            
+              </p>
 
+              <hr>
+              <p>
+                <a class="button small" href="/applications/{{ application.id }}/templates/{{ template.id }}/features/add"><span class="glyphicon glyphicon-plus"></span> New {{ template.name }}</a>
+              </p>
+              
+            </article>
+          </div>
+      </div>
     </div>
+  </section>
+</div>

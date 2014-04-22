@@ -1,0 +1,121 @@
+body,
+body.modal-open {
+  background-color: rgb(92,100,106);
+  background-color: rgb(252,252,252);
+  color: rgb(51,51,51);
+  margin: 0 auto 60px;
+}
+
+.site-content {
+  margin: 0;
+  padding: 0;
+}
+
+.site-content .row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.sidebar {
+  background-color: rgb(33,39,41);
+  border-right: 8px solid rgb(23,29,31);
+  height: 100%;
+  min-height: 100%;
+  height: auto;
+  position: fixed;
+  z-index: 9;
+}
+
+.sidebar-false .sidebar,
+.hidden-sidebar .sidebar {
+  left: -999999px;
+}
+
+.visible-sidebar .sidebar {
+  left: 0;
+}
+
+.page-content {
+  margin-left: 25%;
+  position: relative;
+}
+
+.sidebar-false .page-content,
+.hidden-sidebar .page-content {
+  margin-left: 0;
+  width: 100%;
+}
+
+.page-content > header {
+  background-color: rgb(252,252,252);
+  background-color: rgba(252,252,252,0.95);
+  margin-left: -15px;
+  margin-right: -15px;
+  position: fixed;
+  width: 100%;
+  z-index: 9;
+}
+
+.page-content > .inner {
+  margin: 0 auto;
+  max-width: 75%;
+  padding-top: 96px;
+}
+
+.page-content > .inner.wide {
+  max-width: 95%;
+}
+
+
+/**
+ * Messages
+ */
+.alert {
+    font-size: 1.3em;
+}
+
+.alert-error{
+    background-color:#f2dede;
+    border-color:#eed3d7;
+    color:#b94a48;
+}
+
+.alert-error hr{
+    border-top-color:#e6c1c7;
+}
+
+.alert-error .alert-link{
+    color:#953b39;
+}
+
+
+
+/**
+ * Icons
+ */
+.glyphicon {
+    top: 2px;
+}
+
+
+/**
+ * Modal window overrides
+ */
+.modal-backdrop {
+  background-color: transparent;
+}
+
+.modal-fullscreen .modal-dialog {
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  overflow: scroll;
+}
+
+.modal-fullscreen .modal-content {
+  height: 100%;
+  border-radius: 0;
+}

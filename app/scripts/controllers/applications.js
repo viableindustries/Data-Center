@@ -1,10 +1,12 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationsCtrl', ['$scope', '$route', 'Application', function ($scope, $route, Application) {
+  .controller('ApplicationsCtrl', ['$rootScope', '$scope', '$route', 'Application', 'ipCookie', '$location', function ($rootScope, $scope, $route, Application, ipCookie, $location) {
 
     $scope.application = new Application();
     $scope.applications = Application.query();
+
+    $rootScope.navigation = false;
 
     $scope.save = function () {
 

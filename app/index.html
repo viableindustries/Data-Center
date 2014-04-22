@@ -17,13 +17,13 @@
     <link rel="stylesheet" href="/styles/main.css">
     <!-- endbuild -->
   </head>
-  <body>
+  <body class="sidebar-{{ $root.navigation }}">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container" data-ng-view=""></div>
+    <div role="main" data-ng-view="" class="site-content"></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>

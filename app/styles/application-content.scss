@@ -1,0 +1,236 @@
+.template {
+  background-color: rgb(245, 245, 245);
+  border: 1px solid rgb(236,236,236);
+  border-bottom: 3px solid rgb(220,220,220);
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  margin: 0 0 48px;
+  min-height: 285px;
+  padding: 30px 40px;
+  position: relative;
+}
+
+.template-instance {
+  background: rgb(220, 220, 220);
+  margin: 0 0 16px;
+  padding: 8px 0 0;
+}
+
+.application {
+  background-color: rgb(245, 245, 245);
+  border: 1px solid rgb(236,236,236);
+  border-bottom: 3px solid rgb(220,220,220);
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  margin: 0 0 48px;
+  padding: 30px 40px;
+  position: relative;
+}
+
+.highlight {
+  border-bottom-color: rgb(244,202,0);
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: 0;
+  margin-bottom: 16px;
+  margin-top: 6px;
+}
+  h1 a,
+  h1 a:hover {
+    color: rgb(64,64,64);
+    text-decoration: none;
+  }
+  
+  h1 a .glyphicon {
+    color: rgb(64, 172, 24);
+    display: none;
+    font-size: 14px;
+    top: -1px;
+  }
+
+  h1 a:hover .glyphicon {
+    display: inline-block;
+  }
+
+h2 {
+  font-size: 16px;
+  font-weight: 300;
+}
+
+h3 {
+  border-bottom: 1px solid rgb(228,228,228);
+  border-top: 1px solid rgb(228,228,228);
+  font-size: 48px;
+  font-weight: 700;
+}
+h3 .stat-label {
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0;
+  text-transform: lowercase;
+}
+
+.services {
+  color: rgb(172,172,172)
+}
+  .services .service {
+    margin-right: 6px;
+  }
+  .service.highlight {
+    color: rgb(244,202,0);
+  }
+
+.new.template{
+  text-align: center;
+}
+
+.new.template .button {
+  margin-top: 85px;
+}
+
+.table-viewer .table-scroller {
+  overflow: scroll;
+}
+.table-viewer .table th:first-child {
+  min-width: 60px;  
+}
+.table-viewer .table td:first-child .edit {
+  visibility: hidden;
+}
+
+.table-viewer .table tr:hover > td:first-child .edit {
+  visibility: visible;
+}
+
+.table-viewer .table th {
+  min-width: 160px;
+}
+
+.pending-submissions-wrapper {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  overflow: hidden;
+  height: 100px;
+  width: 100px;
+}
+
+.pending-submissions {
+  background: rgb(255, 215, 0);
+  display: block;
+  height: 80px;
+  overflow: hidden;
+  padding: 42px 26px 0 0;
+  position: absolute;
+  right: -80px;
+  top: -16px;
+  width: 180px;
+  text-align: center;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.pending-submissions .moderation-count {
+  color: rgb(252, 252, 252);
+  display: inline-block;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  margin-left: 4px;
+  margin-top: -2px;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  text-shadow: 0 0 4px rgb(242,177,0);
+  width: 30px;
+}
+
+.tooltip.bottom {
+  margin-top: 8px;
+}
+
+.tooltip-inner {
+  background-color: rgb(64,64,64);
+  padding: 8px;
+  
+}
+
+
+/**
+ * Sidebar navigation
+ */
+.nav.sidebar {
+}
+
+.sidebar .nav > li {
+}
+
+.sidebar .nav > li > a {
+  background-color: transparent;
+  border-radius: 5px;
+}
+
+.sidebar .nav > li > a:hover,
+.sidebar .nav > li > a:focus {
+  text-decoration: none;
+  background-color: darken(rgb(33,39,41), 10%);
+  color: lighten(rgb(30, 190, 195), 10%);
+}
+
+
+.sidebar .nav > li.active > a {
+  background-color: rgb(242,242,242);
+}
+
+
+/**
+ * Field Builder
+ */
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.unselectable input,
+.unselectable select,
+.unselectable textarea {
+  cursor: default;
+}
+
+
+
+/**
+ * Collaborators Page
+ */
+.collaborators .checkbox {
+  -webkit-appearance: none;
+  color:  red;
+  top: -4px;
+  font-size: 16px;
+}
+
+.collaborators input.checkbox:hover {
+}
+
+.collaborators input.checkbox[checked="checked"] {
+  color: green;
+}
+
+.collaborators td {
+  text-align: center;
+  vertical-align: middle;
+}

@@ -1,10 +1,12 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationSingleCtrl', ['$scope', '$routeParams', 'Application', 'Template', function ($scope, $routeParams, Application, Template) {
+  .controller('ApplicationSingleCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', function ($rootScope, $scope, $routeParams, Application, Template) {
 
     $scope.application = {};
     $scope.templates = [];
+
+    $rootScope.navigation = false;
 
     //
     // Get the single application that the user wants to view

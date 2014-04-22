@@ -1,0 +1,15 @@
+/** **/
+
+.element-invisible {
+    display: none;
+}
+
+.element-hidden {
+    visibility: hidden;
+}
+
+@mixin cross-platform-border-radius($corner-radius) {
+  border-radius: $corner-radius;
+  -moz-border-radius: $corner-radius;
+  -webkit-border-radius: $corner-radius;
+}

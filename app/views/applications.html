@@ -15,25 +15,16 @@
 
       <div class="row existing-applications-templates">
           <div data-ng-repeat="application in applications | orderBy:'name'" class="col-xs-12">          
-            <article class="application">
-              
-              <h1><a href="/applications/{{ application.id }}">{{ application.name }} <span class="glyphicon glyphicon-circle-arrow-right"></span></a></h1>
-              <p data-ng-show="application.description">{{ application.description }}</p>
-              <p data-ng-show="application.url"><a href="{{ application.url }}" target="_blank">{{ application.url }}</a> <span class="glyphicon glyphicon-link"></span></p>
-<!--               <h3>XX <span class="stat-label">{{ template.name }}</span></h3>
-              <p class="services">
-                <span data-ng-show="template.is_public" title="Visible to the public" class="service glyphicon glyphicon-eye-open"></span>
-                <span data-ng-show="!template.is_public" title="Hidden from the public" class="glyphicon glyphicon-eye-close"></span>
-                <span data-ng-show="template.is_crowdsourced" title="Crowd-sourcing is enabled" class="service glyphicon glyphicon-user"></span>
-                <span data-ng-show="template.is_geospatial" title="This is geo-spatial data" class="service glyphicon glyphicon-globe"></span>
-                <span data-ng-show="template.is_moderated" title="Moderation and Notification are enabled" class="glyphicon glyphicon-bell"></span>            
-              </p>
-
-              <hr>
-              <p>
-                <a class="button small" href="/applications/{{ application.id }}/templates/{{ template.id }}/features/add"><span class="glyphicon glyphicon-plus"></span> New {{ template.name }}</a>
-              </p>
- -->              
+            <article class="application row">
+                <div class="col-sm-10">
+                    <h1><a href="/applications/{{ application.id }}">{{ application.name }} <span class="glyphicon glyphicon-circle-arrow-right"></span></a></h1>
+                    <p data-ng-show="application.description">{{ application.description }}</p>
+                    <p data-ng-show="application.url"><a href="{{ application.url }}" target="_blank">{{ application.url }}</a> <span class="glyphicon glyphicon-link"></span></p>
+                </div>
+                <div class="col-sm-2">
+                    <p><a data-ng-click="delete(application)"><span class="glyphicon glyphicon-trash"></span></a></p>
+                    <p><a data-ng-click="edit(application)"><span class="glyphicon glyphicon-pencil"></span></a></p>
+                </div>
             </article>
 
           </div>

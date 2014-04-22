@@ -29,13 +29,15 @@ angular.module('commonsCloudAdminApp')
             if (sessionCookie) {
                 config.headers.Authorization = 'Bearer ' + sessionCookie;
             }
+            console.info('AuthorizationInterceptor::Request', config || $q.when(config));
             return config || $q.when(config);
         },
         response: function(response) {
-            if (response.status === 401) {
+            if (response.status === 401 || response.status === 403) {
                 $location.hash('');
                 $location.path('/login');
             }
+            console.info('AuthorizationInterceptor::Response', response || $q.when(response));
             return response || $q.when(response);
         }
     };

@@ -25,53 +25,21 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.save = function () {
 
+      console.log($scope.application);
+
       //
       // Save the Application via a post to the API and then push it onto the
       // Applications array, so that it appears in the user interface
       //
       $scope.application.$save().then(function (response) {
         $scope.applications.push(response.response);
-      })
+      });
 
       //
       // Empty the form fields and hide the form
       //
       $scope.application = new Application();
       $scope.NewApplication = false;   
-    };
-
-    //
-    // Delete an existing Application from the API Database
-    //
-    $scope.delete = function (application) {
-
-      //
-      // Construct an object containing only the Application ID so that we
-      // aren't sending along Application parameters in the URL
-      //
-      var application_ = {
-        id: application.id
-      }
-
-      //
-      // Send the 'DELETE' method to the API so it's removed from the database
-      //
-      Application.delete(application_);
-
-      //
-      // @todo
-      //
-      // We need to make sure that we aren't removing the Application from the
-      // user interface, unless it's really been deleted from the database. I
-      // don't believe the API is returning the appropriate response, and
-      // therefore we have no way to catch it
-      //
-
-      //
-      // Remove the newly deleted Application from the array, so that it no
-      // longer appears in the user interface
-      //
-      $scope.applications.pop($scope.applications, application);
     };
 
   }]);

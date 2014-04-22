@@ -51,8 +51,6 @@ h2 {
 }
 
 h3 {
-  border-bottom: 1px solid rgb(228,228,228);
-  border-top: 1px solid rgb(228,228,228);
   font-size: 48px;
   font-weight: 700;
 }
@@ -69,12 +67,12 @@ h5, p, li, main {
 }
 
 a {
-  color: rgb(30, 190, 195);
+  color: $color-brand-blue-base;
   text-decoration: none;
 }
 
 a:hover {
-  color: darken(rgb(30, 190, 195), 10%);
+  color: darken($color-brand-blue-base, 5%);
   text-decoration: underline;
 }
 
@@ -84,7 +82,7 @@ a:hover {
 
 .sidebar hr {
   border: 0;
-  border-top: 1px solid rgb(23, 29, 31);
+  border-top: 1px solid $color-brand-black-base;
 }
 
 .sidebar p.heading {
@@ -107,29 +105,47 @@ a:hover {
   padding-left: 0;
 } 
 
-.breadcrumb {
+.breadcrumb,
+.account.nav {
   background-color: transparent;
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
   margin-bottom: 0;
   padding: 0;
 }
 
-.breadcrumb > li {
+.breadcrumb > li,
+.account.nav > li {
   font-size: 16px;
   vertical-align: middle;
 }
 
+.account.nav > li {
+  display: inline;
+  display: inline-block;
+}
+
+.breadcrumb > li > a,
+.account.nav > li > a {
+  color: $color-brand-brown-lighter;
+}
+
 .brand,
-.breadcrumb > li.front-page {
-  background-color: rgb(23,29,31);
+.breadcrumb > li.front-page,
+.user,
+.notifications {
   font-size: 24px;
   padding: 8px 16px;
 }
 
-.breadcrumb > li.active {
+.breadcrumb > li.active,
+.account.nav > li.active {
   font-weight: bold;
 }
 
-.breadcrumb > li + li:before {
+.breadcrumb > li + li:before,
+.account.nav > li + li:before {
   color: rgb(221,221,221);
 }
 
@@ -222,4 +238,8 @@ tr.ui-sortable-helper td {
   background-color: rgb(66, 139, 202);
   color: rgb(255, 255, 255);
   text-decoration: none;
+}
+
+.dropdown-menu {
+  display: block;
 }

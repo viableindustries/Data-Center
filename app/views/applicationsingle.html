@@ -4,37 +4,156 @@
 
   <section class="col-xs-12 col-sm-9 page-content">
     <header>
-      <ol class="breadcrumb">
-        <li class="front-page"><a data-ng-click="$root.navigation=!$root.navigation" title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li>
-        <li><a href="/applications" title="">Applications</a></li>
-        <li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
-      </ol>
+      <div class="row">
+        <div class="col-sm-10">
+          <ol class="breadcrumb">
+            <li class="front-page"><a data-ng-click="$root.navigation=!$root.navigation" title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li>
+            <li><a href="/applications" title="">Applications</a></li>
+            <li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
+          </ol>
+        </div>
+        <div class="col-sm-2">
+          <ul class="nav account">
+            <li><a href="" class="notifications"><span class="glyphicon glyphicon-bell"></span></a></li>
+            <li data-ng-mouseleave="UserAccount=!UserAccount" class="dropdown">
+              <a data-ng-click="UserAccount=!UserAccount" class="user dropdown-toggle"><img gravatar-src="'joshua@viableindustries.com'" gravatar-size="32" /></a>
+              <ul data-ng-show="UserAccount" class="dropdown-menu dropdown-menu-right">
+                <li><a href="//api.commonscloud.org/user/profile/" target="_blank">Account Settings</a></li>
+                <li><a href="//api.commonscloud.org/user/password/" target="_blank">Change Password</a></li>
+                <li><a href="//api.commonscloud.org/logout">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
     </header>
 
-    <div class="inner wide">
-      <h1>{{ application.name }}</h1>
+    <div data-ng-show="!loading" class="inner wide">
+      <div class="row">
+        <div class="col-xs-12">  
+          <header class="application">
+            <div class="row">
+              <div class="col-sm-11">
+                <div data-ng-show="!EditApplication">
+                  <h1>{{ application.name }}</h1>
+                  <p data-ng-show="application.description">{{ application.description }}</p>
+                  <p data-ng-show="application.url"><a href="{{ application.url }}" target="_blank">{{ application.url }}</a> <span class="glyphicon glyphicon-link"></span></p>
+                </div>
+                <div data-ng-show="EditApplication">
+                  <form method="PUT">
+                    <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}" />
+                    <textarea rows="6" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description">{{ application.description }}</textarea>
+                    <input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" placeholder="Website" value="{{ application.url }}" />
+                    <input type="submit" data-ng-click="save(application)" class="button" value="Save Changes" />
+                  </form>
+                </div>
+              </div>
+              <div class="col-xs-1 text-right">
+                <a data-ng-show="!EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a data-ng-show="EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-remove"></span></a>
+              </div>
+            </div>
+          </header>
+          <article class="application single">      
+                <div data-ng-repeat="template in templates" class="row">          
+                  <article class="template col-sm-12" data-ng-if="template.is_listed">
 
-      <div class="row existing-applications-templates">
-          <div data-ng-repeat="template in templates" class="col-sm-4">          
-            <article class="template">
-              
-              <h1><a data-toggle="tooltip" data-placement="bottom" title="" href="/applications/{{ application.id }}/templates/{{ template.id }}/features" data-original-title="View all Funder features">{{ template.name }} <span class="glyphicon glyphicon-circle-arrow-right"></span></a></h1>
-              <h3>XX <span class="stat-label">{{ template.name }}</span></h3>
-              <p class="services">
-                <span data-ng-show="template.is_public" title="Visible to the public" class="service glyphicon glyphicon-eye-open"></span>
-                <span data-ng-show="!template.is_public" title="Hidden from the public" class="glyphicon glyphicon-eye-close"></span>
-                <span data-ng-show="template.is_crowdsourced" title="Crowd-sourcing is enabled" class="service glyphicon glyphicon-user"></span>
-                <span data-ng-show="template.is_geospatial" title="This is geo-spatial data" class="service glyphicon glyphicon-globe"></span>
-                <span data-ng-show="template.is_moderated" title="Moderation and Notification are enabled" class="glyphicon glyphicon-bell"></span>            
-              </p>
+                    <div class="row">
+                      <div class="col-sm-1">
+                        <a class="button small" href="/applications/{{ application.id }}/templates/{{ template.id }}/features/add"><span class="glyphicon glyphicon-plus"></span></a>
+                      </div>
+                      <div class="col-sm-6">
+                        <h1><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features">{{ template.name }}</a></h1>
+                        <p class="services">
+                          <span data-ng-show="template.is_public" title="Visible to the public" class="service glyphicon glyphicon-eye-open"></span>
+                          <span data-ng-show="!template.is_public" title="Hidden from the public" class="glyphicon glyphicon-eye-close"></span>
+                          <span data-ng-show="template.is_crowdsourced" title="Crowd-sourcing is enabled" class="service glyphicon glyphicon-user"></span>
+                          <span data-ng-show="template.is_geospatial" title="This is geo-spatial data" class="service glyphicon glyphicon-globe"></span>
+                          <span data-ng-show="template.is_moderated" title="Moderation and Notification are enabled" class="glyphicon glyphicon-bell"></span>            
+                        </p>
+                      </div>
+                      <div class="col-sm-4">
+                        <h3>0,000</h3>
+                      </div>
+                    </div>                   
+                  </article>
+                </div>
+                <div class="row">          
+                  <article class="template col-sm-12">
+                    <a data-ng-show="!AddTemplate" class="button" data-ng-click="AddTemplate=!AddTemplate">Create a new template</a>
+                    <div data-ng-show="AddTemplate">
+                      <form method="POST">
+                        <div class="form-group">
+                          <label class="control-label" for="name">Feature Name</label>
+                          <input class="form-control" data-ng-model="newTemplate.name" id="name" name="name" type="text" autofocus="">
+                          <p class="help-block">This is the name of the Feature Type, it's what others will see</p>
 
-              <hr>
-              <p>
-                <a class="button small" href="/applications/{{ application.id }}/templates/{{ template.id }}/features/add"><span class="glyphicon glyphicon-plus"></span> New {{ template.name }}</a>
-              </p>
+                          <label class="control-label" for="help">Help text</label>
+                          <input class="form-control" data-ng-model="newTemplate.help" id="help" name="help" type="text">
+                          <p class="help-block">Provide users with the context of this Feature Type or guidlines on proper submission</p>
+                        </div>
+                        
+                        <hr>
               
-            </article>
-          </div>
+                        <div class="form-group">
+                          <div class="checkbox">
+                            <label for="publicly_viewable" class="control-label">
+                              <input data-ng-model="newTemplate.is_public" id="publicly_viewable" name="publicly_viewable" type="checkbox" /> <strong>Public</strong>
+                            </label>
+                            <p class="help-block">When a Feature Type is marked as public, we will display content with a status of 'public' or content that has been moderated to the public and it will be accessible via the API as well.</p>
+                          </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group">
+                          <div class="checkbox">
+                            <label for="crowd_sourcing" class="control-label">
+                              <input data-ng-model="newTemplate.is_crowdsourced" id="crowd_sourcing" name="crowd_sourcing" type="checkbox" /> <strong>Crowd-sourcing</strong>
+                            </label>
+                            <p class="help-block">When Crowd-sourcing is enabled, the public will be allowed to submit content via the API or via an HTML Form.</p>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="checkbox">
+                            <label for="moderate">
+                              <input data-ng-model="newTemplate.is_moderated" id="moderate" name="moderate" type="checkbox" /> <strong>Moderate crowd-sourced content</strong>
+                            </label>
+                            <p class="help-block">By default we recommend that all crowd-sourced content be put into a "moderation" status when it is submitted.</p>
+                          </div>
+                        </div>
+
+                        <hr />
+
+                        <div class="form-group">
+                          <div class="checkbox">
+                            <label for="geospatial">
+                              <input data-ng-model="newTemplate.is_geospatial" id="geospatial" name="geospatial" type="checkbox" /> <strong>GeoSpatial Data</strong>
+                            </label>
+                            <p class="help-block">This will vary from type to type, only you know if this feature type should contain geographiclly specific data.</p>
+                          </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group">
+                            <p class="help-block">By clicking save you will create a new Feature Type within the Commons. To begin using the new Feature Type, you will probably want to start by adding some more fields to collect.</p>
+                            <input data-ng-click="createTemplate()" id="save" name="save" type="submit" class="button" value="Save">
+                            <a class="button-cancel pull-right" data-ng-click="AddTemplate=!AddTemplate">Cancel</a>
+                          </div>
+                      </form>
+                    </div>
+                  </article>
+                </div>
+          </article>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <article class="application delete">
+            <p class="text-right"><a data-ng-click="delete(application)">Delete this application</a></p>
+          </article>
+        </div>
       </div>
     </div>
   </section>

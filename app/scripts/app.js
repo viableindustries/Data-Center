@@ -5,7 +5,8 @@ angular
     'ivpusic.cookie',
     'ngResource',
     'ngSanitize',
-    'ngRoute'
+    'ngRoute',
+    'ui.gravatar'
   ])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
 
@@ -26,6 +27,9 @@ angular
       .when('/applications/:applicationId', {
         templateUrl: '/views/applicationsingle.html',
         controller: 'ApplicationSingleCtrl'
+      })
+      .when('/applications/:applicationId/templates', {
+        redirectTo: '/applications/:applicationId'
       })
       .when('/templates', {
         templateUrl: '/views/templates.html',

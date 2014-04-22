@@ -4,14 +4,85 @@
 // Application List
 //
 .application {
-  background-color: rgb(245, 245, 245);
-  margin: 0 0 48px;
+  background-color: $color-brand-white-base;
+  border-bottom: 1px solid darken($color-brand-white-base, 8%);
+  color: $color-brand-black-lighter;
+  margin: 0;
   padding: 0;
 }
 
+  .application p {
+    max-width: 660px;
+  }
+
+  header.application {
+    background-color: $color-brand-blue-base;
+    border: 0;
+    color: $color-brand-white-base;
+    padding: 32px 16px;
+  }
+
+  header.application h1 {
+    text-shadow: 1px 1px 2px darken($color-brand-blue-base, 4%);
+  }
+
+  header.application a {
+    color: $color-brand-white-base;
+  }
+
+  header.application a:hover {
+    color: darken($color-brand-white-base, 4%);
+  }
+
+  header.application a .glyphicon {
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  header.application .form-control,
+  header.application .form-control.input-lg {
+    background-color: transparent;
+    color: $color-brand-white-base;
+    border: 0;
+    border-bottom: 1px dashed $color-brand-white-base;
+    box-shadow: none;
+    margin: 0 0 16px;
+    max-width: 660px;
+    padding: 0;
+    width: 100%;
+  }
+
+  header.application .form-control.input-lg {
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 0.0125em;
+    line-height: 1;
+  }
+
+  .application.single {
+    padding: 32px 16px;
+  }
+
+  .application.delete {
+    border-top: 1px solid darken($color-brand-white-base, 4%);
+    padding: 32px 16px 24px;
+
+    p {
+      max-width: 100%;
+    }
+
+    a,
+    a:hover {
+      color: rgb(255,64,64);
+      cursor: pointer;
+    }
+  }
+
   .application.new {
     background-color: $color-brand-blue-base;
+    border: 0;
     color: $color-brand-white-base;
+    padding: 0;
   }
 
   .application .placeholder {
@@ -21,14 +92,130 @@
     letter-spacing: 0.0125em;
     line-height: 1;
     margin: 0;
-    padding: 0;
+    padding: 32px 16px;
+
+    .glyphicon {
+      font-size: 14px;
+      top: -2px;
+    }
+  }
+
+  .application-content {
+    background-color: $color-brand-white-base;
+    padding: 32px 16px;
+  }
+
+  .application-settings p {
+    padding-top: 32px;
+    text-align: right;
+  }
+
+  .application-settings a {
+    color: lighten($color-brand-black-lightest, 20%);
+    font-size: 24px;
+    text-decoration: none;
+  }
+
+  .application-settings a:hover {
+    color: lighten($color-brand-black-lightest, 10%);
+    text-decoration: none;
+  }
+
+  .application.new,
+  header.application {
+    ::-webkit-input-placeholder {
+      color: lighten(desaturate($color-brand-blue-base, 10%), 15%);
+    }
+    :-moz-placeholder {
+      color: $color-brand-white-base;
+    }
+    ::-moz-placeholder {
+      color: $color-brand-white-base;
+    }
+    :-ms-input-placeholder {
+      color: $color-brand-white-base;
+    }
+  }
+
+  .application.new form {
+
+    .col-sm-1,
+    .col-sm-2,
+    .col-sm-3,
+    .col-sm-4,
+    .col-sm-5,
+    .col-sm-6,
+    .col-sm-7,
+    .col-sm-8,
+    .col-sm-9,
+    .col-sm-10,
+    .col-sm-11,
+    .col-sm-12 {
+      margin-left: 0;
+      margin-right: 0;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .form-group {
+      margin-bottom: 0;
+    }
+
+    input:active,
+    input:focus {
+      box-shadow: none;
+    }
+
+    //
+    // Application Name Input
+    //
+    input.form-control,
+    input.form-control.input-lg {
+      background-color: transparent;
+      color: $color-brand-white-base;
+      border: 0;
+      border-radius: 0;
+      -moz-border-radius: 0;
+      -webkit-border-radius: 0;
+      font-size: 24px;
+      letter-spacing: 0.0125em;
+      line-height: 1;
+      padding: 42px 32px;
+    }
+
+    input.form-control:hover {
+      background-color: darken($color-brand-blue-base, 4%);
+    }
+
+    //
+    // Application Save button
+    //
+    .submit {
+      background-color: $color-brand-green-base;
+    }
+    .submit input {
+      background: transparent;
+      border: 0;
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 0.0125em;
+      padding: 32px 16px;
+      width: 100%;
+    }
+    .submit input:hover {
+      background-color: darken($color-brand-green-base, 4%);
+    }
+    .submit input:active,
+    .submit input:focus {
+      background-color: darken($color-brand-green-base, 6%);
+    }
   }
 
 .template {
   background-color: $color-brand-white-base;
+  border-top: 1px solid darken($color-brand-white-base, 8%);
   color: $color-brand-black-base;
   margin: 0 0 48px;
-  min-height: 285px;
   padding: 30px 40px;
 }
 

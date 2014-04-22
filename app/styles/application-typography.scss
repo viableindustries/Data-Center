@@ -1,5 +1,13 @@
+//
+// Typefaces
+//
+$font-serif: Georgia, serif;
+$font-sans: "Helvetica Neue", "Helvetica", Helvetica, "Helvetica W01 Roman", Arial, sans-serif;
+
+
+
 body {
-  font-family: "Helvetica Neue", Helvetica, 'Helvetica W01 Roman', Arial, sans-serif;
+  font-family: $font-sans;
   font-size: 100%;
 }
 
@@ -12,17 +20,48 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 0.0125em;
   line-height: 1;
   margin-bottom: 16px;
 }
 
+  h1 a,
+  h1 a:hover {
+    color: rgb(64,64,64);
+    text-decoration: none;
+  }
+  
+  h1 a .glyphicon {
+    color: rgb(64, 172, 24);
+    display: none;
+    font-size: 14px;
+    top: -1px;
+  }
+
+  h1 a:hover .glyphicon {
+    display: inline-block;
+  }
+
+
 h2 {
-  font-size: 24px;
+  font-size: 16px;
+  font-weight: 300;
   margin-bottom: 16px;
 }
 
 h3 {
-  font-size: 1.8em;
+  border-bottom: 1px solid rgb(228,228,228);
+  border-top: 1px solid rgb(228,228,228);
+  font-size: 48px;
+  font-weight: 700;
+}
+
+h3 .stat-label {
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0;
+  text-transform: lowercase;
 }
 
 h5, p, li, main {

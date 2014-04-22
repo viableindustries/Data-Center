@@ -1,14 +1,35 @@
-.template {
+
+
+//
+// Application List
+//
+.application {
   background-color: rgb(245, 245, 245);
-  border: 1px solid rgb(236,236,236);
-  border-bottom: 3px solid rgb(220,220,220);
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
+  margin: 0 0 48px;
+  padding: 0;
+}
+
+  .application.new {
+    background-color: $color-brand-blue-base;
+    color: $color-brand-white-base;
+  }
+
+  .application .placeholder {
+    color: $color-brand-white-base;
+    cursor: pointer;
+    font-size: 24px;
+    letter-spacing: 0.0125em;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+  }
+
+.template {
+  background-color: $color-brand-white-base;
+  color: $color-brand-black-base;
   margin: 0 0 48px;
   min-height: 285px;
   padding: 30px 40px;
-  position: relative;
 }
 
 .template-instance {
@@ -17,62 +38,8 @@
   padding: 8px 0 0;
 }
 
-.application {
-  background-color: rgb(245, 245, 245);
-  border: 1px solid rgb(236,236,236);
-  border-bottom: 3px solid rgb(220,220,220);
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  margin: 0 0 48px;
-  padding: 0;
-  position: relative;
-}
-
 .highlight {
   border-bottom-color: rgb(244,202,0);
-}
-
-h1 {
-  font-size: 24px;
-  font-weight: 300;
-  letter-spacing: 0;
-  margin-bottom: 16px;
-  margin-top: 6px;
-}
-  h1 a,
-  h1 a:hover {
-    color: rgb(64,64,64);
-    text-decoration: none;
-  }
-  
-  h1 a .glyphicon {
-    color: rgb(64, 172, 24);
-    display: none;
-    font-size: 14px;
-    top: -1px;
-  }
-
-  h1 a:hover .glyphicon {
-    display: inline-block;
-  }
-
-h2 {
-  font-size: 16px;
-  font-weight: 300;
-}
-
-h3 {
-  border-bottom: 1px solid rgb(228,228,228);
-  border-top: 1px solid rgb(228,228,228);
-  font-size: 48px;
-  font-weight: 700;
-}
-h3 .stat-label {
-  font-size: 16px;
-  font-weight: 300;
-  letter-spacing: 0;
-  text-transform: lowercase;
 }
 
 .services {

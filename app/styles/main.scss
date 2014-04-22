@@ -13,7 +13,14 @@ $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/
     padding: 0.2em 0;
 }
 
+//
+// Brand Colors
+//
 $color-brand-blue-base: rgb(25,166,215);
+
+$color-brand-white-base: rgb(252,252,252);
+
+$color-brand-black-base: rgb(23,29,31);
 
 
 @import "application-utility";

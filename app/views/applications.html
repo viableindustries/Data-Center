@@ -13,32 +13,35 @@
     <div class="inner wide" data-ng-show="applications.length">
       <h1>{{ application.name }}</h1>
 
-      <div class="row existing-applications-templates">
-          <div data-ng-repeat="application in applications | orderBy:'name'" class="col-xs-12">          
-            <article class="application row">
-                <div class="col-sm-10">
-                    <h1><a href="/applications/{{ application.id }}">{{ application.name }} <span class="glyphicon glyphicon-circle-arrow-right"></span></a></h1>
-                    <p data-ng-show="application.description">{{ application.description }}</p>
-                    <p data-ng-show="application.url"><a href="{{ application.url }}" target="_blank">{{ application.url }}</a> <span class="glyphicon glyphicon-link"></span></p>
-                </div>
-                <div class="col-sm-2">
-                    <p><a data-ng-click="delete(application)"><span class="glyphicon glyphicon-trash"></span></a></p>
-                    <p><a data-ng-click="edit(application)"><span class="glyphicon glyphicon-pencil"></span></a></p>
-                </div>
-            </article>
-
-          </div>
-          <div class="col-xs-12">          
-            <article class="application">
-                <form method="POST" data-ng-submit="save(application)">
-                  <div class="form-group">
-                    <input type="text" id="name" value="name" data-ng-model="application.name" class="form-control input-lg" value="" placeholder="A new Application name" />
-                  </div>
-                    <input type="url" id="url" value="url" data-ng-model="application.url" value="" />
-                    <input type="submit" id="submit" name="submit" value="Create Application" />
-                </form>
-            </article>
-          </div>
+      <div class="row">
+        <div class="col-xs-12">          
+          <article class="application new">
+            <div data-ng-show="!NewApplication">
+              <p class="placeholder" data-ng-click="NewApplication=!NewApplication"><span class="glyphicon glyphicon-plus"></span> New Application</p>
+            </div>
+            <form data-ng-show="NewApplication" method="POST" data-ng-submit="save(application)">
+              <div class="form-group">
+                <input type="text" id="name" value="name" data-ng-model="application.name" class="form-control input-lg" value="" placeholder="A new Application name" />
+              </div>
+<!--                 <input type="submit" id="submit" name="submit" value="Create Application" />
+ -->            </form>
+          </article>
+        </div>
+      </div>      
+      <div class="row">
+        <div data-ng-repeat="application in applications | orderBy:'name'" class="col-xs-12">          
+          <article class="application row">
+            <div class="col-sm-10">
+              <h1><a href="/applications/{{ application.id }}">{{ application.name }} <span class="glyphicon glyphicon-circle-arrow-right"></span></a></h1>
+              <p data-ng-show="application.description">{{ application.description }}</p>
+              <p data-ng-show="application.url"><a href="{{ application.url }}" target="_blank">{{ application.url }}</a> <span class="glyphicon glyphicon-link"></span></p>
+            </div>
+            <div class="col-sm-2">
+              <p><a data-ng-click="delete(application)"><span class="glyphicon glyphicon-trash"></span></a></p>
+              <p><a data-ng-click="edit(application)"><span class="glyphicon glyphicon-pencil"></span></a></p>
+            </div>
+          </article>
+        </div>
       </div>
     </div>
 

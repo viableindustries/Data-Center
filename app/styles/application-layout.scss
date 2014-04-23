@@ -2,6 +2,8 @@ body,
 body.modal-open {
   background-color: $color-brand-black-lighter;
   color: $color-brand-white-base;
+  font-family: $font-sans;
+  font-size: 100%;
   margin: 0 auto 60px;
 }
 

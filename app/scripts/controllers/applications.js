@@ -39,7 +39,7 @@ angular.module('commonsCloudAdminApp')
       // Empty the form fields and hide the form
       //
       $scope.application = new Application();
-      $scope.NewApplication = false;   
+      $scope.NewApplication = false;
     };
 
   }]);

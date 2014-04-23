@@ -10,7 +10,8 @@
     "angular-resource": "1.2.15",
     "angular-cookie": "",
     "angular-sanitize": "1.2.15",
-    "angular-route": "1.2.15"
+    "angular-route": "1.2.15",
+    "angular-gravatar": "0.1.4"
   },
   "devDependencies": {
     "angular-mocks": "1.2.15",

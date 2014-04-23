@@ -25,19 +25,19 @@ angular.module('commonsCloudAdminApp')
     //
     Application.get({
         id: $routeParams.applicationId
-    }).$promise.then(function(response) {
+      }).$promise.then(function(response) {
         $scope.application = response.response;
         $scope.loading = false;
-    });
+      });
 
     //
     // Get a list of templates associated with the current application
     //
     Template.query({
         applicationId: $routeParams.applicationId
-    }).$promise.then(function(response) {
+      }).$promise.then(function(response) {
         $scope.templates = response;
-    });
+      });
 
 
     //
@@ -80,7 +80,7 @@ angular.module('commonsCloudAdminApp')
       //
       var application_ = {
         id: application.id
-      }
+      };
 
       //
       // Send the 'DELETE' method to the API so it's removed from the database

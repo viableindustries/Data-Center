@@ -29,6 +29,17 @@ $color-brand-green-base: rgb(64, 172, 24);
 $color-brand-brown-lighter: rgb(229, 228, 224);
 $color-brand-brown-lightest: rgb(244, 241, 236);
 
+
+//
+// Brand Font Stack
+//
+$font-serif: Georgia, serif;
+$font-sans: "pragmatica-web", "Helvetica Neue", "Helvetica", Arial, sans-serif;
+
+
+//
+// Import Dependencies
+//
 @import "application-utility";
 @import "application-layout";
 @import "application-typography";

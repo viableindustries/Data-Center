@@ -4,10 +4,27 @@
 
   <section class="col-xs-12 col-sm-9 page-content">
     <header>
-      <ol class="breadcrumb">
-        <li class="front-page"><a data-ng-click="$root.navigation=!$root.navigation" title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li>
-        <li><a href="/applications" title="">Applications</a></li>
-      </ol>
+      <div class="row">
+        <div class="col-sm-10">
+          <ol class="breadcrumb">
+            <li class="front-page"><a data-ng-click="$root.navigation=!$root.navigation" title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li>
+            <li class="active"><a href="/applications" title="">Applications</a></li>
+          </ol>
+        </div>
+        <div class="col-sm-2 text-right">
+          <ul class="nav account">
+            <li><a href="" class="notifications"><span class="glyphicon glyphicon-bell"></span></a></li>
+            <li data-ng-mouseleave="UserAccount=!UserAccount" class="dropdown">
+              <a data-ng-click="UserAccount=!UserAccount" class="user dropdown-toggle"><img gravatar-src="'joshua@viableindustries.com'" gravatar-size="24" /></a>
+              <ul data-ng-show="UserAccount" class="dropdown-menu dropdown-menu-right">
+                <li><a href="//api.commonscloud.org/user/profile/" target="_blank">Account Settings</a></li>
+                <li><a href="//api.commonscloud.org/user/password/" target="_blank">Change Password</a></li>
+                <li><a href="//api.commonscloud.org/logout">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
     </header>
 
     <div class="inner wide" data-ng-show="applications.length">

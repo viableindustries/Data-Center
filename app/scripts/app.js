@@ -6,6 +6,7 @@ angular
     'ngResource',
     'ngSanitize',
     'ngRoute',
+    'ngAnimate',
     'ui.gravatar'
   ])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {

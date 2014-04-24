@@ -32,9 +32,10 @@ angular
       .when('/applications/:applicationId/templates', {
         redirectTo: '/applications/:applicationId'
       })
-      .when('/templates', {
-        templateUrl: '/views/templates.html',
-        controller: 'TemplatesCtrl'
+      .when('/applications/:applicationId/templates/:templateId', {
+        templateUrl: '/views/templatessingle.html',
+        // controller: 'TemplatesSingleCtrl'
+        controller: 'ApplicationSingleCtrl'
       })
       .otherwise({
         redirectTo: '/'

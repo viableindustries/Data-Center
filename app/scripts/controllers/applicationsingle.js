@@ -1,10 +1,13 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationSingleCtrl', ['$rootScope', '$scope', '$routeParams', '$location', 'Application', 'Template', function ($rootScope, $scope, $routeParams, $location, Application, Template) {
+  .controller('ApplicationSingleCtrl', ['$rootScope', '$scope', '$routeParams', '$location', 'Application', 'Template', 'Feature', function ($rootScope, $scope, $routeParams, $location, Application, Template, Feature) {
 
     $scope.application = {};
     $scope.templates = [];
+    $scope.template = {};
+    $scope.features = [];
+    $scope.feature = {};
     $scope.newTemplate = {
       'is_public': true,
       'is_crowdsourced': true,
@@ -39,13 +42,35 @@ angular.module('commonsCloudAdminApp')
         $scope.templates = response;
       });
 
+    if ($routeParams.templateId) {
+      Template.get({
+          id: $routeParams.templateId
+        }).$promise.then(function(response) {
+          $scope.template = response.response;
+          $scope.loading = false;
+          Feature.query({
+            storage: $scope.template.storage
+          }).$promise.then(function (response) {
+            $scope.features = response;
+            console.log('$scope.features', $scope.features);
+          });
+        });
+    }
+
+    if ($scope.template.id) {
+      console.log('Get those features');
+      Feature.query({
+        storage: $scope.template.storage
+      }).$promise.then(function (response) {
+        $scope.features = response;
+        console.log('$scope.features', $scope.features);
+      });
+    }
 
     //
     // Save a new Application to the API Database
     //
     $scope.save = function () {
-
-      console.log($scope.application);
 
       if ($scope.application.id) {
         console.log('Updated an existing post');
@@ -54,14 +79,6 @@ angular.module('commonsCloudAdminApp')
           id: $scope.application.id
         }, $scope.application);
       }
-
-      //
-      // Save the Application via a post to the API and then push it onto the
-      // Applications array, so that it appears in the user interface
-      //
-      // $scope.application.$save().then(function (response) {
-      //   $scope.applications.push(response.response);
-      // });
 
     };
 
@@ -97,12 +114,6 @@ angular.module('commonsCloudAdminApp')
       // don't believe the API is returning the appropriate response, and
       // therefore we have no way to catch it
       //
-
-      //
-      // Remove the newly deleted Application from the array, so that it no
-      // longer appears in the user interface
-      //
-      // $scope.applications.pop($scope.applications, application);
     };
 
   }]);

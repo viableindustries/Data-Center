@@ -7,7 +7,8 @@ angular
     'ngSanitize',
     'ngRoute',
     'ngAnimate',
-    'ui.gravatar'
+    'ui.gravatar',
+    'ui.sortable'
   ])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
 

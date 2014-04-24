@@ -31,9 +31,7 @@
             <div class="row">
               <div class="col-sm-11">
                 <div data-ng-show="!EditApplication">
-                  <h1>{{ application.name }}</h1>
-                  <p data-ng-show="application.description">{{ application.description }}</p>
-                  <p data-ng-show="application.url"><a href="{{ application.url }}" target="_blank">{{ application.url }}</a> <span class="glyphicon glyphicon-link"></span></p>
+                  <h1 class="short">{{ application.name }}</h1>
                 </div>
                 <div data-ng-show="EditApplication">
                   <form method="PUT">
@@ -58,7 +56,7 @@
             </ul>
           </nav>
 
-          <article class="application single">
+          <article class="application single template-nested">
             <div class="row">
               <div class="col-sm-5">
                 <h1>{{ template.name }}</h1>

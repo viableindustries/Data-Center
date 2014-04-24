@@ -20,7 +20,7 @@ angular.module('commonsCloudAdminApp')
           }
         },
         update: {
-          method: 'PUT'
+          method: 'PATCH'
         }
       });
 

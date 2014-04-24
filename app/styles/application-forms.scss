@@ -27,6 +27,11 @@ form#register_user_form {
   padding: 48px;
 }
 
+.form-narrow {
+  margin-top: 64px;
+  max-width: 660px;
+}
+
 
 /**
  * Styling for the labels for our various forms
@@ -223,6 +228,17 @@ textarea:focus {
   box-shadow: none;
   font-size: 18px;
   padding: 0;
+}
+
+
+/**
+ *
+ */
+.form-control,
+.form-control.input-lg {
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
 }
 
 

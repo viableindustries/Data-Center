@@ -31,9 +31,7 @@
             <div class="row">
               <div class="col-sm-11">
                 <div data-ng-show="!EditApplication">
-                  <h1>{{ application.name }}</h1>
-                  <p data-ng-show="application.description">{{ application.description }}</p>
-                  <p data-ng-show="application.url"><a href="{{ application.url }}" target="_blank">{{ application.url }}</a> <span class="glyphicon glyphicon-link"></span></p>
+                  <h1 class="short">{{ application.name }}</h1>
                 </div>
                 <div data-ng-show="EditApplication">
                   <form method="PUT">
@@ -58,7 +56,7 @@
             </ul>
           </nav>
 
-          <article class="application single">
+          <article class="application single template-nested">
             <div class="row">
               <div class="col-sm-5">
                 <h1>{{ template.name }}</h1>
@@ -73,9 +71,71 @@
                 </ul>
               </div>
             </div>
+            <div data-ng-show="alerts.length !== 0" class="row alerts">
+              <div class="col-sm-6 col-sm-offset-3">
+                <p data-ng-repeat="alert in alerts" class="alert alert-{{ alert.type }}"><strong>{{ alert.title }}</strong> {{ alert.details }}</p>
+              </div>
+            </div>
             <div class="row">
               <div class="col-sm-12">
-                <h1>Settings view</h1>
+                <form method="POST" class="form-narrow">
+                  <div class="form-group">
+                    <label class="control-label" for="name">Template Name</label>
+                    <input class="form-control input-lg" data-ng-model="template.name" id="name" name="name" type="text" autofocus="">
+                    <p class="help-block">This is the name of the Feature Type, it's what others will see</p>
+
+                    <label class="control-label" for="help">Help text</label>
+                    <input class="form-control" data-ng-model="template.help" id="help" name="help" type="text">
+                    <p class="help-block">Provide users with the context of this Feature Type or guidlines on proper submission</p>
+                  </div>
+                  
+                  <hr>
+        
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label for="publicly_viewable" class="control-label">
+                        <input data-ng-model="template.is_public" id="publicly_viewable" name="publicly_viewable" type="checkbox" /> <strong>Public</strong>
+                      </label>
+                      <p class="help-block">When a Feature Type is marked as public, we will display content with a status of 'public' or content that has been moderated to the public and it will be accessible via the API as well.</p>
+                    </div>
+                  </div>
+
+                  <hr>
+
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label for="crowd_sourcing" class="control-label">
+                        <input data-ng-model="template.is_crowdsourced" id="crowd_sourcing" name="crowd_sourcing" type="checkbox" /> <strong>Crowd-sourcing</strong>
+                      </label>
+                      <p class="help-block">When Crowd-sourcing is enabled, the public will be allowed to submit content via the API or via an HTML Form.</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label for="moderate">
+                        <input data-ng-model="template.is_moderated" id="moderate" name="moderate" type="checkbox" /> <strong>Moderate crowd-sourced content</strong>
+                      </label>
+                      <p class="help-block">By default we recommend that all crowd-sourced content be put into a "moderation" status when it is submitted.</p>
+                    </div>
+                  </div>
+
+                  <hr />
+
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label for="geospatial">
+                        <input data-ng-model="template.is_geospatial" id="geospatial" name="geospatial" type="checkbox" /> <strong>GeoSpatial Data</strong>
+                      </label>
+                      <p class="help-block">This will vary from type to type, only you know if this feature type should contain geographiclly specific data.</p>
+                    </div>
+                  </div>
+
+                  <hr>
+
+                  <div class="form-group">
+                      <input data-ng-click="updateTemplate()" id="save" name="save" type="submit" class="button pull-right" value="Update Template">
+                    </div>
+                </form>
               </div>
             </div>
           </article>

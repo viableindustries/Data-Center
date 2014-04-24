@@ -31,9 +31,7 @@
             <div class="row">
               <div class="col-sm-11">
                 <div data-ng-show="!EditApplication">
-                  <h1>{{ application.name }}</h1>
-                  <p data-ng-show="application.description">{{ application.description }}</p>
-                  <p data-ng-show="application.url"><a href="{{ application.url }}" target="_blank">{{ application.url }}</a> <span class="glyphicon glyphicon-link"></span></p>
+                  <h1 class="short">{{ application.name }}</h1>
                 </div>
                 <div data-ng-show="EditApplication">
                   <form method="PUT">
@@ -58,7 +56,7 @@
             </ul>
           </nav>
 
-          <article class="application single">
+          <article class="application single template-nested">
             <div class="row">
               <div class="col-sm-5">
                 <h1>{{ template.name }}</h1>
@@ -75,7 +73,66 @@
             </div>
             <div class="row">
               <div class="col-sm-12">
-                <h1>Developers view</h1>
+                <table class="table table-stripe">
+                  <thead>
+                    <tr>
+                      <th>Task</th>
+                      <th>Method</th>
+                      <th>Route</th>
+                      <th>Accepts</th>
+                      <th>Returns</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Listing Data</a></td>
+                      <td>GET</td>
+                      <td>/v2/{{ template.storage }}.json</td>
+                      <td><em>Nothing</em></td>
+                      <td>A list of existing features</td>
+                    </tr>
+
+                    <tr>
+                      <td>Creating a feature</td>
+                      <td>POST</td>
+                      <td>/v2/{{ template.storage }}.json</td>
+                      <td>A single feature</td>
+                      <td>The saved feature or errors</td>
+                    </tr>
+
+                    <tr>
+                      <td>Getting a feature</td>
+                      <td>GET</td>
+                      <td>/v2/{{ template.storage }}/&lt;ObjectId:feature_id&gt;.json</td>
+                      <td><em>Nothing</em></td>
+                      <td>A single feature</td>
+                    </tr>
+
+                    <tr>
+                      <td>Updating a feature</td>
+                      <td>PATCH</td>
+                      <td>/v2/{{ template.storage }}/&lt;ObjectId:feature_id&gt;.json</td>
+                      <td>A single feature</td>
+                      <td>The updated feature or errors</td>
+                    </tr>
+
+                    <tr>
+                      <td>Updating a feature</td>
+                      <td>PUT</td>
+                      <td>/v2/{{ template.storage }}/&lt;ObjectId:feature_id&gt;.json</td>
+                      <td>A single feature</td>
+                      <td>The updated feature or errors</td>
+                    </tr>
+
+                    <tr>
+                      <td>Deleting a feature</td>
+                      <td>DELETE</td>
+                      <td>/v2/{{ template.storage }}/&lt;ObjectId:feature_id&gt;/.json</td>
+                      <td>A single feature</td>
+                      <td><em>Nothing</em></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </article>

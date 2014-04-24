@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationSingleCtrl', ['$rootScope', '$scope', '$routeParams', '$location', 'Application', 'Template', 'Feature', function ($rootScope, $scope, $routeParams, $location, Application, Template, Feature) {
+  .controller('ApplicationSingleCtrl', ['$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'Template', 'Feature', 'Field', function ($rootScope, $scope, $routeParams, $location, $timeout, Application, Template, Feature, Field) {
 
     $scope.application = {};
     $scope.templates = [];
     $scope.template = {};
+    $scope.fields = [];
+    $scope.field = {};
     $scope.features = [];
     $scope.feature = {};
     $scope.newTemplate = {
@@ -15,6 +17,7 @@ angular.module('commonsCloudAdminApp')
       'is_geospatial': true
     };
     $scope.loading = true;
+    $scope.alerts = [];
 
     $rootScope.navigation = false;
     $scope.EditApplication = false;
@@ -83,7 +86,29 @@ angular.module('commonsCloudAdminApp')
     };
 
     $scope.createTemplate = function () {
+
+      $scope.newTemplate.$save()
+
       console.log($scope.newTemplate);
+    };
+
+    $scope.updateTemplate = function () {
+      Template.update({
+        id: $scope.template.id
+      }, $scope.template);
+
+      var alert = {
+        'type': 'success',
+        'title': 'Updated',
+        'details': 'Your template updates were saved successfully!'
+      };
+
+      $scope.alerts.push(alert);
+
+      $timeout(function () {
+        $scope.alerts = [];
+      }, 3000);
+
     };
 
     //
@@ -115,5 +140,12 @@ angular.module('commonsCloudAdminApp')
       // therefore we have no way to catch it
       //
     };
+
+    Field.query({
+        templateId: $routeParams.templateId
+      }).$promise.then(function(response) {
+        $scope.fields = response;
+      });
+
 
   }]);

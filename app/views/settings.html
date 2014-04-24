@@ -12,7 +12,7 @@
             <li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
             <li><a href="/applications/{{ application.id }}/templates" title="">Templates</a></li>
             <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}" title="">{{ template.name }}</a></li>
-            <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features" title="">Features</a></li>
+            <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/settings" title="">Settings</a></li>
           </ol>
         </div>
         <div class="col-sm-2 text-right">
@@ -65,21 +65,17 @@
               </div>
               <div class="col-sm-7">
                 <ul class="nav nav-pills pull-right">
-                  <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features">Features</a></li>
+                  <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features">Features</a></li>
                   <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/statistics">Statistics</a></li>
                   <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/fields">Fields</a></li>
-                  <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/settings">Settings</a></li>
+                  <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/settings">Settings</a></li>
                   <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/developers">Developers</a></li>
                 </ul>
               </div>
             </div>
             <div class="row">
               <div class="col-sm-12">
-                <table class="table table-hover">
-                  <tr data-ng-repeat="feature in features">
-                    <td>{{ feature.id }}</td>
-                  </tr>
-                </table>
+                <h1>Settings view</h1>
               </div>
             </div>
           </article>

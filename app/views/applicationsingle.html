@@ -2,14 +2,15 @@
 
   <nav data-ng-show="$root.navigation" class="col-xs-10 col-sm-3 sidebar"></nav>
 
-  <section class="col-xs-12 col-sm-9 page-content">
+  <section data-ng-show="!loading" class="col-xs-12 col-sm-9 page-content">
     <header>
       <div class="row">
         <div class="col-sm-10">
           <ol class="breadcrumb">
             <li class="front-page"><a title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li>
             <li><a href="/applications" title="">Applications</a></li>
-            <li class="active"><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
+            <li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
+            <li class="active"><a href="/applications/{{ application.id }}/templates" title="">Templates</a></li>
           </ol>
         </div>
         <div class="col-sm-2 text-right">
@@ -50,8 +51,8 @@
 
           <nav class="application-navigation navbar navbar-default">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="">Templates</a></li>
-              <li><a href="">Collaborators</a></li>
+              <li class="active"><a href="/applications/{{ application.id }}/templates">Templates</a></li>
+              <li><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li>
             </ul>
           </nav>
 

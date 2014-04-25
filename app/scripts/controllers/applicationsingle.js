@@ -3,6 +3,13 @@
 angular.module('commonsCloudAdminApp')
   .controller('ApplicationSingleCtrl', ['$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'Template', 'Feature', 'Field', function ($rootScope, $scope, $routeParams, $location, $timeout, Application, Template, Feature, Field) {
 
+  //
+  // VARIABLES
+  //
+
+    //
+    // Placeholders for our on-screen content
+    //
     $scope.application = {};
     $scope.templates = [];
     $scope.template = {};
@@ -10,21 +17,33 @@ angular.module('commonsCloudAdminApp')
     $scope.field = {};
     $scope.features = [];
     $scope.feature = {};
+
+    //
+    // Placeholders for non-existent content
+    //
     $scope.newTemplate = {
       'is_public': true,
       'is_crowdsourced': true,
       'is_moderated': true,
       'is_geospatial': true
     };
+
+    //
+    // Controls for showing/hiding specific page elements that may not be
+    // fully loaded or when a specific user interaction has not yet happened
+    //
     $scope.loading = true;
     $scope.alerts = [];
-
     $rootScope.navigation = false;
     $scope.EditApplication = false;
     $scope.AddTemplate = false;
-    $scope.UserAccount = false;
+    $scope.orderByField = null;
+    $scope.reverseSort = false;
 
 
+  //
+  // CONTENT
+  //
 
     //
     // Get the single application that the user wants to view
@@ -45,30 +64,35 @@ angular.module('commonsCloudAdminApp')
         $scope.templates = response;
       });
 
+    //
+    // When the URL contains a Template ID that means we need to load the
+    // template and all of it's associated realtionships, such as Fields
+    // and Features
+    //
     if ($routeParams.templateId) {
       Template.get({
           id: $routeParams.templateId
         }).$promise.then(function(response) {
           $scope.template = response.response;
           $scope.loading = false;
+
           Feature.query({
             storage: $scope.template.storage
           }).$promise.then(function (response) {
             $scope.features = response;
-            console.log('$scope.features', $scope.features);
+          });
+
+          Field.query({
+            templateId: $scope.template.id
+          }).$promise.then(function (response) {
+            $scope.fields = response;
           });
         });
     }
 
-    if ($scope.template.id) {
-      console.log('Get those features');
-      Feature.query({
-        storage: $scope.template.storage
-      }).$promise.then(function (response) {
-        $scope.features = response;
-        console.log('$scope.features', $scope.features);
-      });
-    }
+  //
+  // CONTENT MUTATIONS
+  //
 
     //
     // Save a new Application to the API Database
@@ -85,18 +109,27 @@ angular.module('commonsCloudAdminApp')
 
     };
 
+    //
+    // Create a new Template that does not yet exist in the API database
+    //
     $scope.createTemplate = function () {
-
-      $scope.newTemplate.$save()
-
-      console.log($scope.newTemplate);
+      $scope.newTemplate.$save();
     };
 
+    //
+    // Update the attributes of an existing Template
+    //
     $scope.updateTemplate = function () {
       Template.update({
         id: $scope.template.id
       }, $scope.template);
 
+      //
+      // Once the template has been updated successfully we should give the
+      // user some on-screen feedback and then remove it from the screen after
+      // a few seconds as not to confuse them or force them to reload the page
+      // to dismiss the message
+      //
       var alert = {
         'type': 'success',
         'title': 'Updated',
@@ -141,11 +174,13 @@ angular.module('commonsCloudAdminApp')
       //
     };
 
-    Field.query({
-        templateId: $routeParams.templateId
-      }).$promise.then(function(response) {
-        $scope.fields = response;
-      });
-
+    //
+    // Update how Features are sorted based on Field/Header clicked and
+    // react to a second click by inverting the order
+    //
+    $scope.ChangeOrder = function (value) {
+      $scope.orderByField = value;
+      $scope.reverseSort =! $scope.reverseSort;
+    };
 
   }]);

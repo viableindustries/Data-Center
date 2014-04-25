@@ -74,9 +74,22 @@
             <div class="row">
               <div class="col-sm-12">
                 <table class="table table-hover">
-                  <tr data-ng-repeat="feature in features">
-                    <td>{{ feature.id }}</td>
-                  </tr>
+                  <thead>
+                    <tr>
+                      <th class="edit">&nbsp;</th>
+                      <th data-ng-repeat="field in fields" data-ng-if="field.is_listed && field.data_type === 'text'">
+                        <a href="javascript:void()" data-ng-click="ChangeOrder(field.name)">
+                          {{ field.label }} <span data-ng-show="orderByField == '{{ field.name }}'"><span data-ng-show="!reverseSort" class="glyphicon glyphicon-arrow-down"></span><span data-ng-show="reverseSort" class="glyphicon glyphicon-arrow-up"></span></span>
+                        </a>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr data-ng-repeat="feature in features | orderBy:orderByField:reverseSort">
+                      <td><span class="glyphicon glyphicon-pencil"></span></td>
+                      <td data-ng-repeat="field in fields" data-ng-if="field.is_listed && field.data_type === 'text'">{{ feature[field.name] }}</td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </div>

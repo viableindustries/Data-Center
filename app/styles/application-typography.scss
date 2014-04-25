@@ -179,6 +179,12 @@ table {}
         text-transform: uppercase;
     }
 
+    .table > thead > tr > th.edit,
+    .table > tbody > tr > th.edit,
+    .table > tfoot > tr > th.edit {
+      width: 32px;
+    }
+
     .table > thead > tr > td,
     .table > tbody > tr > td,
     .table > tfoot > tr > td {

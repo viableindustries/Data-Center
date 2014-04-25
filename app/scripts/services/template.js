@@ -19,6 +19,10 @@ angular.module('commonsCloudAdminApp')
             return templates.response.templates;
           }
         },
+        save: {
+          method: 'POST',
+          url: '//api.commonscloud.org/v2/applications/:applicationId/templates.json'
+        },
         update: {
           method: 'PATCH'
         }

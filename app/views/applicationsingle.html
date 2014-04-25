@@ -38,7 +38,7 @@
                     <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}" />
                     <textarea rows="6" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description">{{ application.description }}</textarea>
                     <input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" placeholder="Website" value="{{ application.url }}" />
-                    <input type="submit" data-ng-click="save(application)" class="button" value="Save Changes" />
+                    <input type="submit" data-ng-click="UpdateApplication(application)" class="button" value="Save Changes" />
                   </form>
                 </div>
               </div>
@@ -84,10 +84,10 @@
                   <article class="template col-sm-12">
                     <a data-ng-show="!AddTemplate" class="button" data-ng-click="AddTemplate=!AddTemplate">Create a new template</a>
                     <div data-ng-show="AddTemplate">
-                      <form method="POST">
+                      <form method="POST" class="form-narrow">
                         <div class="form-group">
-                          <label class="control-label" for="name">Feature Name</label>
-                          <input class="form-control" data-ng-model="newTemplate.name" id="name" name="name" type="text" autofocus="">
+                          <label class="control-label" for="name">Template Name</label>
+                          <input class="form-control input-lg" data-ng-model="newTemplate.name" id="name" name="name" type="text" autofocus="">
                           <p class="help-block">This is the name of the Feature Type, it's what others will see</p>
 
                           <label class="control-label" for="help">Help text</label>
@@ -139,10 +139,8 @@
                         <hr>
 
                         <div class="form-group">
-                            <p class="help-block">By clicking save you will create a new Feature Type within the Commons. To begin using the new Feature Type, you will probably want to start by adding some more fields to collect.</p>
-                            <input data-ng-click="createTemplate()" id="save" name="save" type="submit" class="button" value="Save">
-                            <a class="button-cancel pull-right" data-ng-click="AddTemplate=!AddTemplate">Cancel</a>
-                          </div>
+                          <input data-ng-click="CreateTemplate()" id="save" name="save" type="submit" class="button pull-right" value="Create Template" />
+                        </div>
                       </form>
                     </div>
                   </article>
@@ -153,7 +151,7 @@
       <div class="row">
         <div class="col-sm-12">
           <article class="application delete">
-            <p class="text-right"><a data-ng-click="delete(application)">Delete this application</a></p>
+            <p class="text-right"><a data-ng-click="DeleteApplication(application)">Delete this application</a></p>
           </article>
         </div>
       </div>

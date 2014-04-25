@@ -38,7 +38,7 @@
                     <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}" />
                     <textarea rows="6" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description">{{ application.description }}</textarea>
                     <input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" placeholder="Website" value="{{ application.url }}" />
-                    <input type="submit" data-ng-click="save(application)" class="button" value="Save Changes" />
+                    <input type="submit" data-ng-click="UpdateApplication(application)" class="button" value="Save Changes" />
                   </form>
                 </div>
               </div>
@@ -63,13 +63,6 @@
                     <h1 style="color: rgb(111,111,111);">We're still working on this page.</h1>
                   </article>
                 </div>
-          </article>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <article class="application delete">
-            <p class="text-right"><a data-ng-click="delete(application)">Delete this application</a></p>
           </article>
         </div>
       </div>

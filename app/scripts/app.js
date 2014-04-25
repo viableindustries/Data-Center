@@ -8,7 +8,7 @@ angular
     'ngRoute',
     'ngAnimate',
     'ui.gravatar',
-    'ui.sortable'
+    'ui.directives'
   ])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
 

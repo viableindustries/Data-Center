@@ -69,6 +69,19 @@ angular.module('commonsCloudAdminApp')
         applicationId: $routeParams.applicationId
       }).$promise.then(function(response) {
         $scope.templates = response;
+
+        angular.forEach($scope.templates, function (template, index) {
+
+          $scope.templates[index].features = []
+
+          Feature.query({
+              storage: template.storage
+            }).$promise.then(function (response) {
+              $scope.templates[index].features = response;
+              console.log('$scope.templates[index].features', $scope.templates[index].features);
+            });
+        });
+
       });
 
     //
@@ -86,7 +99,7 @@ angular.module('commonsCloudAdminApp')
           Feature.query({
             storage: $scope.template.storage
           }).$promise.then(function (response) {
-            $scope.features = response;
+            $scope.features = response.response.features;
           });
 
           Field.query({

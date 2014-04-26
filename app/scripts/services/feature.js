@@ -10,12 +10,9 @@ angular.module('commonsCloudAdminApp')
       }, {
         query: {
           method: 'GET',
-          isArray: true,
+          isArray: false,
           transformResponse: function (data, headersGetter) {
-
-            var features = angular.fromJson(data);
-
-            return features.response.features;
+            return angular.fromJson(data);
           }
         },
         get: {

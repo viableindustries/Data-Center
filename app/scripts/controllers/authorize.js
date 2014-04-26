@@ -20,6 +20,6 @@ angular.module('commonsCloudAdminApp')
     $scope.getAccessToken();
 
     $location.hash('');
-    $location.path('/');
+    $location.path('/applications');
 
   }]);

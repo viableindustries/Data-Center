@@ -74,12 +74,37 @@ angular.module('commonsCloudAdminApp')
 
           $scope.templates[index].features = []
 
+          //
+          // Get a list of all features
+          //
           Feature.query({
               storage: template.storage
             }).$promise.then(function (response) {
               $scope.templates[index].features = response;
               console.log('$scope.templates[index].features', $scope.templates[index].features);
             });
+
+          //
+          // Get a list of Features awaiting moderation
+          //
+          Feature.query({
+              storage: template.storage,
+              q: {
+                "filters": [
+                  {
+                    "name": "status",
+                    "op": "eq",
+                    "val": "crowd"
+                  }
+                ]
+              }
+            }).$promise.then(function (response) {
+              $scope.templates[index].moderation = response;
+              if ($scope.templates[index].moderation.properties.total_features > 0) {
+                $scope.templates[index].moderation = true;
+              }
+            });
+
         });
 
       });

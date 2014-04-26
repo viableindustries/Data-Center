@@ -29,6 +29,7 @@ angular.module('commonsCloudAdminApp')
         if (sessionCookie) {
           config.headers.Authorization = 'Bearer ' + sessionCookie;
         }
+        config.headers['Content-Type'] = 'application/json';
         console.info('AuthorizationInterceptor::Request', config || $q.when(config));
         return config || $q.when(config);
       },

@@ -43,6 +43,16 @@ angular
         // controller: 'TemplatesSingleCtrl'
         controller: 'ApplicationSingleCtrl'
       })
+      .when('/applications/:applicationId/templates/:templateId/features/add', {
+        templateUrl: '/views/addfeatures.html',
+        // controller: 'TemplatesSingleCtrl'
+        controller: 'ApplicationSingleCtrl'
+      })
+      .when('/applications/:applicationId/templates/:templateId/features/:featureId', {
+        templateUrl: '/views/editfeature.html',
+        // controller: 'TemplatesSingleCtrl'
+        controller: 'ApplicationSingleCtrl'
+      })
       .when('/applications/:applicationId/templates/:templateId', {
         redirectTo: '/applications/:applicationId/templates/:templateId/features'
       })

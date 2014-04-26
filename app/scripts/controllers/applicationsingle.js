@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationSingleCtrl', ['$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'Template', 'Feature', 'Field', function ($rootScope, $scope, $routeParams, $location, $timeout, Application, Template, Feature, Field) {
+  .controller('ApplicationSingleCtrl', ['$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'Template', 'Feature', 'Field', 'Statistic', function ($rootScope, $scope, $routeParams, $location, $timeout, Application, Template, Feature, Field, Statistic) {
 
   //
   // VARIABLES
@@ -17,12 +17,15 @@ angular.module('commonsCloudAdminApp')
     $scope.field = {};
     $scope.features = [];
     $scope.feature = {};
+    $scope.statistics = [];
+    $scope.statistic = {};
 
     //
     // Placeholders for non-existent content
     //
     $scope.newTemplate = new Template();
     $scope.newField = new Field();
+    $scope.newStatistic = new Statistic();
     // $scope.newTemplate = {
     //   'is_public': true,
     //   'is_crowdsourced': true,
@@ -90,9 +93,26 @@ angular.module('commonsCloudAdminApp')
             templateId: $scope.template.id
           }).$promise.then(function (response) {
             $scope.fields = response;
+
+            if ($routeParams.featureId) {
+              Feature.get({
+                storage: $scope.template.storage,
+                featureId: $routeParams.featureId
+              }).$promise.then(function (response) {
+                $scope.feature = response;
+                console.log('$scope.feature', $scope.feature);
+              });
+            }
+          });
+
+          Statistic.query({
+            templateId: $scope.template.id
+          }).$promise.then(function (response) {
+            $scope.statistics = response;
           });
         });
     }
+
 
   //
   // CONTENT MUTATIONS
@@ -302,7 +322,36 @@ angular.module('commonsCloudAdminApp')
       // don't believe the API is returning the appropriate response, and
       // therefore we have no way to catch it
       //
-    };    
+    };
+
+    //
+    // Update the attributes of an existing Template
+    //
+    $scope.UpdateFeature = function () {
+      Feature.update({
+        storage: $scope.template.storage,
+        featureId: $scope.feature.id
+      }, $scope.feature);
+
+      //
+      // Once the template has been updated successfully we should give the
+      // user some on-screen feedback and then remove it from the screen after
+      // a few seconds as not to confuse them or force them to reload the page
+      // to dismiss the message
+      //
+      var alert = {
+        'type': 'success',
+        'title': 'Updated',
+        'details': 'Your feature updates were saved successfully!'
+      };
+
+      $scope.alerts.push(alert);
+
+      $timeout(function () {
+        $scope.alerts = [];
+      }, 3000);
+
+    };
 
 
     //

@@ -73,6 +73,8 @@
             </div>
             <div class="row">
               <div class="col-sm-12">
+                <a class="button pull-right" href="/applications/{{ application.id }}/templates/{{ template.id }}/features/add">New Feature</a>
+
                 <table class="table table-hover">
                   <thead>
                     <tr>
@@ -86,7 +88,7 @@
                   </thead>
                   <tbody>
                     <tr data-ng-repeat="feature in features | orderBy:orderByField:reverseSort">
-                      <td><span class="glyphicon glyphicon-pencil"></span></td>
+                      <td><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features/{{ feature.id }}"><span class="glyphicon glyphicon-pencil"></span></td>
                       <td data-ng-repeat="field in fields" data-ng-if="field.is_listed && field.data_type === 'text'">{{ feature[field.name] }}</td>
                     </tr>
                   </tbody>

@@ -18,8 +18,20 @@ angular.module('commonsCloudAdminApp')
             return features.response.features;
           }
         },
+        get: {
+          method: 'GET',
+          url: '//api.commonscloud.org/v2/:storage/:featureId.json',
+          transformResponse: function (data, headersGetter) {
+
+            var feature = angular.fromJson(data);
+
+            return feature.response;
+          }
+
+        },
         update: {
-          method: 'PUT'
+          method: 'PATCH',
+          url: '//api.commonscloud.org/v2/:storage/:featureId.json',
         }
       });
 

@@ -12,7 +12,7 @@
             <li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
             <li><a href="/applications/{{ application.id }}/templates" title="">Templates</a></li>
             <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}" title="">{{ template.name }}</a></li>
-            <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/statistics" title="">Statistics</a></li>
+            <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/fields" title="">Fields</a></li>
           </ol>
         </div>
         <div class="col-sm-2 text-right">
@@ -64,38 +64,46 @@
               <div class="col-sm-7">
                 <ul class="nav nav-pills pull-right">
                   <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features">Features</a></li>
-                  <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/statistics">Statistics</a></li>
-                  <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/fields">Fields</a></li>
+                  <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/statistics">Statistics</a></li>
+                  <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/fields">Fields</a></li>
                   <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/settings">Settings</a></li>
                   <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/developers">Developers</a></li>
                 </ul>
               </div>
             </div>
             <div class="row">
-              <div class="col-sm-12">
-                <table class="table table-hover">
-                  <thead>
-                    <tr>
-                      <th class="edit">&nbsp;</th>
-                      <th>Name</th>
-                      <th>Function</th>
-                      <th>Units</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr data-ng-repeat="statistic in statistics | orderBy:orderByField:reverseSort">
-                      <td><span class="glyphicon glyphicon-pencil"></span></td>
-                      <td>{{ statistic.name }}</td>
-                      <td>{{ statistic.function }}</td>
-                      <td>{{ statistic.units }}</td>
-                    </tr>
-                    <tr>
-                      <td colspan="4" class="text-center">
-                        <a data-ng-click="NewStatistic()">New Statistic</a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div class="col-sm-6">
+                <form>
+                  <fieldset>
+                    <div class="form-group" data-ng-repeat="field in fields" data-ng-click="ActionEditField(field)">
+                      <div data-ng-if="field.data_type === 'boolean'" class="checkbox">
+                        <label>
+                          <input type="checkbox" id="{{ field.name }}" name="{{ field.name }}" value="" checked="checked" /> {{ field.label }}
+                        </label>
+                      </div>
+                      <label data-ng-if="field.data_type !== 'boolean'" for="{{ field.name }}" class="control-label">{{ field.label }}</label>
+
+                      <input data-ng-if="field.data_type === 'text'" class="form-control" type="text" id="{{ field.name }}" name="{{ field.name }}" value="" />
+                      <input data-ng-if="field.data_type === 'email'" class="form-control" type="email" id="{{ field.name }}" name="{{ field.name }}" value="" />
+                      <input data-ng-if="field.data_type === 'url'" class="form-control" type="url" id="{{ field.name }}" name="{{ field.name }}" value="" />
+                      <input data-ng-if="field.data_type === 'phone'" class="form-control" type="tel" id="{{ field.name }}" name="{{ field.name }}" value="" />
+                      <input data-ng-if="field.data_type === 'date'" class="form-control" class="form-control" type="date" id="{{ field.name }}" name="{{ field.name }}" value="" />
+                      <input data-ng-if="field.data_type === 'time'" class="form-control" type="time" id="{{ field.name }}" name="{{ field.name }}" value="" />
+                      <input data-ng-if="field.data_type === 'file'" class="form-control" type="file" id="{{ field.name }}" name="{{ field.name }}" value="" />
+                      <input data-ng-if="field.data_type === 'whole_number' || field.data_type === 'float'" class="form-control" type="number" id="{{ field.name }}" name="{{ field.name }}" value="" />
+
+                      <textarea class="form-control" data-ng-if="field.data_type === 'textarea'" id="{{ field.name }}" name="{{ field.name }}"></textarea>
+
+                      <select class="form-control" data-ng-if="field.data_type === 'relationship'" id="{{ field.name }}" name="{{ field.name }}"></select>
+                    </div>
+                  </fieldset>
+                  <div class="form-group">
+                    <a href="javascript:void()" data-ng-click="CreateFeature()" class="button pull-right">Create Feature</a>
+                  </div>
+                </form>
+              </div>
+              <div class="col-sm-6">
+              map
               </div>
             </div>
           </article>

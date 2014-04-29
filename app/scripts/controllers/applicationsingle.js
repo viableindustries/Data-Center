@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationSingleCtrl', ['$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'Template', 'Feature', 'Field', 'Statistic', function ($rootScope, $scope, $routeParams, $location, $timeout, Application, Template, Feature, Field, Statistic) {
+  .controller('ApplicationSingleCtrl', ['$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'Template', 'Feature', 'Field', 'Statistic', 'leafletData', function ($rootScope, $scope, $routeParams, $location, $timeout, Application, Template, Feature, Field, Statistic, leafletData) {
 
   //
   // VARIABLES
@@ -16,7 +16,6 @@ angular.module('commonsCloudAdminApp')
     $scope.fields = [];
     $scope.field = {};
     $scope.features = [];
-    $scope.feature = {};
     $scope.statistics = [];
     $scope.statistic = {};
 
@@ -26,6 +25,7 @@ angular.module('commonsCloudAdminApp')
     $scope.newTemplate = new Template();
     $scope.newField = new Field();
     $scope.newStatistic = new Statistic();
+    $scope.feature = new Feature();
     // $scope.newTemplate = {
     //   'is_public': true,
     //   'is_crowdsourced': true,
@@ -46,7 +46,9 @@ angular.module('commonsCloudAdminApp')
     $scope.reverseSort = false;
     $scope.FieldEdit = false;
     $scope.FieldAdd = false;
-
+    $scope.ShowMap = true;
+    $scope.ShowGeoJSONEditor = false;
+    $scope.MapLoaded = false;
 
   //
   // CONTENT
@@ -81,7 +83,6 @@ angular.module('commonsCloudAdminApp')
               storage: template.storage
             }).$promise.then(function (response) {
               $scope.templates[index].features = response;
-              console.log('$scope.templates[index].features', $scope.templates[index].features);
             });
 
           //
@@ -131,6 +132,7 @@ angular.module('commonsCloudAdminApp')
             templateId: $scope.template.id
           }).$promise.then(function (response) {
             $scope.fields = response;
+            $scope.getEnumeratedValues($scope.fields);
 
             if ($routeParams.featureId) {
               Feature.get({
@@ -138,9 +140,9 @@ angular.module('commonsCloudAdminApp')
                 featureId: $routeParams.featureId
               }).$promise.then(function (response) {
                 $scope.feature = response;
-                console.log('$scope.feature', $scope.feature);
               });
             }
+            $scope.getEditableMap();
           });
 
           Statistic.query({
@@ -162,7 +164,6 @@ angular.module('commonsCloudAdminApp')
     $scope.UpdateApplication = function () {
 
       if ($scope.application.id) {
-        console.log('Updated an existing post');
         $scope.EditApplication = false;
         Application.update({
           id: $scope.application.id
@@ -205,11 +206,9 @@ angular.module('commonsCloudAdminApp')
     // Create a new Template that does not yet exist in the API database
     //
     $scope.CreateTemplate = function () {
-      console.log($scope.newTemplate);
       $scope.newTemplate.$save({
         applicationId: $scope.application.id
       }).then(function (response) {
-        console.log('response.response', response.response);
         $scope.templates.push(response.response);
       });
     };
@@ -279,13 +278,11 @@ angular.module('commonsCloudAdminApp')
       $scope.newField.$save({
         templateId: $scope.template.id
       }).then(function (response) {
-        console.log('response.response', response.response);
         $scope.fields.push(response.response);
       });
     };
 
     $scope.ActionEditField = function (field_) {
-      console.log('ActionEditField', field_);
       $scope.editField = field_;
       $scope.FieldEdit = true;
       $scope.FieldAdd = false;
@@ -362,6 +359,17 @@ angular.module('commonsCloudAdminApp')
       //
     };
 
+    $scope.CreateFeature = function () {
+      $scope.feature.geometry = $scope.convertFeatureCollectionToGeometryCollection($scope.feature.geometry);
+
+      $scope.feature.$save({
+        storage: $scope.template.storage
+      }).then(function (response) {
+        leafletData.unresolveMap();
+        $location.path('/applications/2/templates/1/features');
+      });
+    };
+
     //
     // Update the attributes of an existing Template
     //
@@ -391,6 +399,129 @@ angular.module('commonsCloudAdminApp')
 
     };
 
+  //
+  // 
+  //
+
+
+    $scope.getEditableMap = function () {
+
+      leafletData.getMap().then(function(map) {
+
+        //
+        // Prepare a drawing layer for our FeatureGroup
+        //
+        var featureGroup = L.featureGroup()
+        map.addLayer(featureGroup);
+
+        //
+        //
+        // Enable Drawing Controls
+        var drawControl = new L.Control.Draw({
+
+          edit: {
+            featureGroup: featureGroup,
+            remove: true
+          }
+        })
+
+        map.addControl(drawControl);
+
+        //
+        // Check to see if existing map layers exist for this API Feature
+        //
+        if ($scope.feature.geometry) {
+          $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
+          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+        }
+
+        //
+        // On Drawing Complete add it to our FeatureGroup
+        //
+        map.on('draw:created', function (e) {
+          var newLayer = e.layer;
+          featureGroup.addLayer(newLayer);
+
+          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+        });
+
+        map.on('draw:edited', function (e) {
+          var editedLayers = e.layers;
+          editedLayers.eachLayer(function (layer) {
+            featureGroup.addLayer(layer);            
+          });
+
+          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+        });
+
+        map.on('draw:deleted', function (e) {
+          var deletedLayers = e.layers;
+          deletedLayers.eachLayer(function (layer) {
+            featureGroup.removeLayer(layer);            
+          });
+
+          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+        });
+
+        //
+        // Load and Prepare the Mapbox Basemap Tiles
+        //
+        // var MapboxBasemap = L.tileLayer('https://{s}.tiles.mapbox.com/v3/developedsimple.hl46o07c/{z}/{x}/{y}.png', {
+        //   attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+        // });
+
+        // map.addLayer(MapboxBasemap);
+
+
+        //
+        // We need to invalidate the size of the Mapbox container so that it
+        // displays properly. This is annoying and ugly ... timeouts are evil.
+        // However, it serves as a temporary solution until we can figure out
+        // something better.
+        //
+        $timeout(function () {
+          map.invalidateSize();
+        }, 500);
+        
+        //
+        // Listen for changes to the GeoJSON Editor
+        //
+        // $scope.$watch('feature.geometry', function(){
+        //   if ($scope.feature.geometry) {
+        //     $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
+        //     $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+        //   }
+        // });
+      });
+
+      $scope.MapLoaded = true;
+    };
+
+
+    $scope.geojsonToLayer = function (geojson, layer) {
+        layer.clearLayers();
+        L.geoJson(geojson).eachLayer(add);
+        function add(l) {
+            l.addTo(layer);
+        }
+    }
+
+    //
+    // Build enumerated values for drop downs
+    //
+    $scope.getEnumeratedValues = function (field_list) {
+
+      angular.forEach(field_list, function (field_, index) {
+        if (field_.data_type === 'relationship') {
+          Feature.query({
+              storage: field_.relationship
+            }).$promise.then(function (response) {
+              $scope.fields[index].values = response.response.features;
+            });
+        }
+      });
+
+    };
 
     //
     // Update how Features are sorted based on Field/Header clicked and
@@ -399,6 +530,26 @@ angular.module('commonsCloudAdminApp')
     $scope.ChangeOrder = function (value) {
       $scope.orderByField = value;
       $scope.reverseSort =! $scope.reverseSort;
+    };
+
+    //
+    // Convert a FeatureCollection to a GeometryCollection so that it can be
+    // saved to a Geometry field within the CommonsCloud API
+    //
+    $scope.convertFeatureCollectionToGeometryCollection = function (featureCollection) {
+
+      var ExistingCollection = angular.fromJson(featureCollection);
+
+      var NewFeatureCollection = {
+        'type': 'GeometryCollection',
+        'geometries': []
+      }
+
+      angular.forEach(ExistingCollection.features, function (feature, index) {
+        NewFeatureCollection.geometries.push(feature.geometry)
+      });
+
+      return NewFeatureCollection;
     };
 
   }]);

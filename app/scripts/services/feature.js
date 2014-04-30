@@ -62,6 +62,10 @@ angular.module('commonsCloudAdminApp')
 
             return feature;
           }
+        },
+        delete: {
+          method: 'DELETE',
+          url: '//api.commonscloud.org/v2/:storage/:featureId.json'
         }
       });
 

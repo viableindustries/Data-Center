@@ -74,7 +74,7 @@ angular.module('commonsCloudAdminApp')
 
         angular.forEach($scope.templates, function (template, index) {
 
-          $scope.templates[index].features = []
+          $scope.templates[index].features = [];
 
           //
           // Get a list of all features
@@ -360,13 +360,16 @@ angular.module('commonsCloudAdminApp')
     };
 
     $scope.CreateFeature = function () {
-      $scope.feature.geometry = $scope.convertFeatureCollectionToGeometryCollection($scope.feature.geometry);
+
+      if ($scope.feature.geometry) {
+        $scope.feature.geometry = $scope.convertFeatureCollectionToGeometryCollection($scope.feature.geometry);
+      }
 
       $scope.feature.$save({
         storage: $scope.template.storage
       }).then(function (response) {
         leafletData.unresolveMap();
-        $location.path('/applications/2/templates/1/features');
+        $location.path('/applications/' + $scope.application.id + '/templates/' + $scope.template.id + '/features');
       });
     };
 
@@ -399,10 +402,40 @@ angular.module('commonsCloudAdminApp')
 
     };
 
-  //
-  // 
-  //
+    //
+    // Delete an existing Field from the API Database
+    //
+    $scope.DeleteFeature = function (feature) {
 
+      console.log('$scope.template', $scope.template);
+
+      //
+      // Construct an object containing only the Application ID so that we
+      // aren't sending along Application parameters in the URL
+      //
+      var field_ = {
+        storage: $scope.template.storage,
+        featureId: feature.id
+      };
+
+      //
+      // Send the 'DELETE' method to the API so it's removed from the database
+      //
+      Feature.delete(field_);
+
+      $scope.features.pop(feature);
+
+      $location.path('/applications/' + $scope.application.id + '/templates/' + $scope.template.id + '/features');
+
+      //
+      // @todo
+      //
+      // We need to make sure that we aren't removing the Application from the
+      // user interface, unless it's really been deleted from the database. I
+      // don't believe the API is returning the appropriate response, and
+      // therefore we have no way to catch it
+      //
+    };
 
     $scope.getEditableMap = function () {
 
@@ -411,7 +444,7 @@ angular.module('commonsCloudAdminApp')
         //
         // Prepare a drawing layer for our FeatureGroup
         //
-        var featureGroup = L.featureGroup()
+        var featureGroup = L.featureGroup();
         map.addLayer(featureGroup);
 
         //
@@ -423,7 +456,7 @@ angular.module('commonsCloudAdminApp')
             featureGroup: featureGroup,
             remove: true
           }
-        })
+        });
 
         map.addControl(drawControl);
 
@@ -500,11 +533,11 @@ angular.module('commonsCloudAdminApp')
 
     $scope.geojsonToLayer = function (geojson, layer) {
         layer.clearLayers();
-        L.geoJson(geojson).eachLayer(add);
         function add(l) {
             l.addTo(layer);
         }
-    }
+        L.geoJson(geojson).eachLayer(add);
+    };
 
     //
     // Build enumerated values for drop downs
@@ -543,10 +576,10 @@ angular.module('commonsCloudAdminApp')
       var NewFeatureCollection = {
         'type': 'GeometryCollection',
         'geometries': []
-      }
+      };
 
       angular.forEach(ExistingCollection.features, function (feature, index) {
-        NewFeatureCollection.geometries.push(feature.geometry)
+        NewFeatureCollection.geometries.push(feature.geometry);
       });
 
       return NewFeatureCollection;

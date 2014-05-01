@@ -37,7 +37,7 @@
             <form data-ng-show="NewApplication" method="POST" data-ng-submit="save(application)">
               <div class="form-group row">
                 <div class="col-sm-10">
-                  <input type="text" id="name" value="name" data-ng-model="application.name" class="form-control input-lg" value="" autofocus="autofocus" placeholder="Enter your application name" />
+                  <input type="text" id="name" value="name" data-ng-model="application.name" class="form-control input-lg" autofocus="autofocus" placeholder="Enter your application name" required="required" />
                 </div>
                 <div class="col-sm-2 submit">
                   <input type="submit" id="submit" name="submit" value="Create Application" />

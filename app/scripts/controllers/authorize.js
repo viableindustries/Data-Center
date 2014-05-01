@@ -9,6 +9,7 @@ angular.module('commonsCloudAdminApp')
         var cleanToken = accessToken.replace('access_token=', '');
 
         var cookieOptions = {
+          path: 'http://127.0.0.1:9000',
           expires: 2
         };
 

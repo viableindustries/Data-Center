@@ -34,7 +34,7 @@
                   <h1 class="short">{{ application.name }}</h1>
                 </div>
                 <div data-ng-show="EditApplication">
-                  <form method="PUT">
+                  <form method="PATCH">
                     <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}" />
                     <textarea rows="6" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description">{{ application.description }}</textarea>
                     <input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" placeholder="Website" value="{{ application.url }}" />
@@ -102,18 +102,6 @@
               </div>
               <div class="col-sm-6 col-sm-offset-1">
                 <form method="POST">
-<!--                   <fieldset data-ng-show="!fields.length;">
-                    <legend>Building your template</legend>
-                    <div class="form-group">
-                      <p>Start building your template by adding new fields or edit fields you added in the past. The fields you add here will be automatically created in the database and be available through the endpoints on the Developer page of this template.</p>
-                      <hr />
-                      <h4><strong>Add a new field</strong> to your template</h4>
-                      <a data-ng-click="FieldHelp=!FieldHelp;FieldAdd=!FieldAdd" class="button">Add a new field</a>
-                      <hr />
-                      <h4><strong>Edit an existing field</strong></h4>
-                      <p>Click a field in the "Form Preview" to the left to edit the field settings.</p>
-                    </div>
-                  </fieldset> -->
                   <fieldset data-ng-show="FieldEdit;">
                     <legend>Edit a new field</legend>
                     <div class="form-group">
@@ -206,7 +194,7 @@
                     </div>
                     <div class="form-group delete">
                       <a data-ng-click="DeleteField(editField)">Delete Field</a>
-                      <input data-ng-click="UpdateField()" id="save" name="save" type="submit" class="button pull-right" value="Update Field" />
+                      <input data-ng-click="UpdateField()" id="update" name="update" type="submit" class="button pull-right" value="Update Field" />
                     </div>
                   </fieldset>
                   <fieldset data-ng-show="FieldAdd;!FieldEdit;">
@@ -253,7 +241,7 @@
                     <div class="form-group" data-ng-show="newField.data_type === 'relationship'">
                       <label for="relationship" class="control-label">Relationship</label>
                       <select data-ng-model="newField.relationship" id="relationship" name="relationship" class="form-control">
-                        <option data-ng-repeat="template_ in templates" data-ng-if="template.name !== template_.name" value={{ template_.id }}>{{ template_.name }}</option>
+                        <option data-ng-repeat="template_ in templates" data-ng-if="template.name !== template_.name" value="{{ template_.id }}">{{ template_.name }}</option>
                       </select>
                       <p class="help-block">The other Feature Collection you would like to relate this Feature with, for example an enumeration of other values</p>
                     </div>

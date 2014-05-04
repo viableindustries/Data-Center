@@ -91,11 +91,11 @@ angular.module('commonsCloudAdminApp')
           Feature.query({
               storage: template.storage,
               q: {
-                "filters": [
+                'filters': [
                   {
-                    "name": "status",
-                    "op": "eq",
-                    "val": "crowd"
+                    'name': 'status',
+                    'op': 'eq',
+                    'val': 'crowd'
                   }
                 ]
               }
@@ -439,105 +439,105 @@ angular.module('commonsCloudAdminApp')
 
     $scope.getEditableMap = function () {
 
-      leafletData.getMap().then(function(map) {
+      // leafletData.getMap().then(function(map) {
 
-        //
-        // Prepare a drawing layer for our FeatureGroup
-        //
-        var featureGroup = L.featureGroup();
-        map.addLayer(featureGroup);
+      //   //
+      //   // Prepare a drawing layer for our FeatureGroup
+      //   //
+      //   var featureGroup = L.featureGroup();
+      //   map.addLayer(featureGroup);
 
-        //
-        //
-        // Enable Drawing Controls
-        var drawControl = new L.Control.Draw({
+      //   //
+      //   //
+      //   // Enable Drawing Controls
+      //   var drawControl = new L.Control.Draw({
 
-          edit: {
-            featureGroup: featureGroup,
-            remove: true
-          }
-        });
+      //     edit: {
+      //       featureGroup: featureGroup,
+      //       remove: true
+      //     }
+      //   });
 
-        map.addControl(drawControl);
+      //   map.addControl(drawControl);
 
-        //
-        // Check to see if existing map layers exist for this API Feature
-        //
-        if ($scope.feature.geometry) {
-          $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
-          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
-        }
+      //   //
+      //   // Check to see if existing map layers exist for this API Feature
+      //   //
+      //   if ($scope.feature.geometry) {
+      //     $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
+      //     $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+      //   }
 
-        //
-        // On Drawing Complete add it to our FeatureGroup
-        //
-        map.on('draw:created', function (e) {
-          var newLayer = e.layer;
-          featureGroup.addLayer(newLayer);
+      //   //
+      //   // On Drawing Complete add it to our FeatureGroup
+      //   //
+      //   map.on('draw:created', function (e) {
+      //     var newLayer = e.layer;
+      //     featureGroup.addLayer(newLayer);
 
-          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
-        });
+      //     $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+      //   });
 
-        map.on('draw:edited', function (e) {
-          var editedLayers = e.layers;
-          editedLayers.eachLayer(function (layer) {
-            featureGroup.addLayer(layer);            
-          });
+      //   map.on('draw:edited', function (e) {
+      //     var editedLayers = e.layers;
+      //     editedLayers.eachLayer(function (layer) {
+      //       featureGroup.addLayer(layer);
+      //     });
 
-          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
-        });
+      //     $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+      //   });
 
-        map.on('draw:deleted', function (e) {
-          var deletedLayers = e.layers;
-          deletedLayers.eachLayer(function (layer) {
-            featureGroup.removeLayer(layer);            
-          });
+      //   map.on('draw:deleted', function (e) {
+      //     var deletedLayers = e.layers;
+      //     deletedLayers.eachLayer(function (layer) {
+      //       featureGroup.removeLayer(layer);
+      //     });
 
-          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
-        });
+      //     $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+      //   });
 
-        //
-        // Load and Prepare the Mapbox Basemap Tiles
-        //
-        var MapboxBasemap = L.tileLayer('https://{s}.tiles.mapbox.com/v3/developedsimple.hl46o07c/{z}/{x}/{y}.png', {
-          attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-        });
+      //   //
+      //   // Load and Prepare the Mapbox Basemap Tiles
+      //   //
+      //   var MapboxBasemap = L.tileLayer('https://{s}.tiles.mapbox.com/v3/developedsimple.hl46o07c/{z}/{x}/{y}.png', {
+      //     attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+      //   });
 
-        map.addLayer(MapboxBasemap);
+      //   map.addLayer(MapboxBasemap);
 
 
-        //
-        // We need to invalidate the size of the Mapbox container so that it
-        // displays properly. This is annoying and ugly ... timeouts are evil.
-        // However, it serves as a temporary solution until we can figure out
-        // something better.
-        //
-        $timeout(function () {
-          map.invalidateSize();
-        }, 500);
+      //   //
+      //   // We need to invalidate the size of the Mapbox container so that it
+      //   // displays properly. This is annoying and ugly ... timeouts are evil.
+      //   // However, it serves as a temporary solution until we can figure out
+      //   // something better.
+      //   //
+      //   $timeout(function () {
+      //     map.invalidateSize();
+      //   }, 500);
         
-        //
-        // Listen for changes to the GeoJSON Editor
-        //
-        // $scope.$watch('feature.geometry', function(){
-        //   if ($scope.feature.geometry) {
-        //     $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
-        //     $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
-        //   }
-        // });
-      });
+      //   //
+      //   // Listen for changes to the GeoJSON Editor
+      //   //
+      //   // $scope.$watch('feature.geometry', function(){
+      //   //   if ($scope.feature.geometry) {
+      //   //     $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
+      //   //     $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+      //   //   }
+      //   // });
+      // });
 
-      $scope.MapLoaded = true;
+      // $scope.MapLoaded = true;
     };
 
 
-    $scope.geojsonToLayer = function (geojson, layer) {
-        layer.clearLayers();
-        function add(l) {
-            l.addTo(layer);
-        }
-        L.geoJson(geojson).eachLayer(add);
-    };
+    // $scope.geojsonToLayer = function (geojson, layer) {
+    //   layer.clearLayers();
+    //   function add(l) {
+    //     l.addTo(layer);
+    //   }
+    //   L.geoJson(geojson).eachLayer(add);
+    // };
 
     //
     // Build enumerated values for drop downs

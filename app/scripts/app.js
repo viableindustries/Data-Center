@@ -62,6 +62,11 @@ angular
         // controller: 'StatisticsCtrl'
         controller: 'ApplicationSingleCtrl'
       })
+      .when('/applications/:applicationId/templates/:templateId/statistics/add', {
+        templateUrl: '/views/addstatistics.html',
+        // controller: 'StatisticsCtrl'
+        controller: 'ApplicationSingleCtrl'
+      })
       .when('/applications/:applicationId/templates/:templateId/fields', {
         templateUrl: '/views/fields.html',
         // controller: 'FieldsCtrl'

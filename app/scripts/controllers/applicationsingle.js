@@ -437,6 +437,23 @@ angular.module('commonsCloudAdminApp')
       //
     };
 
+    $scope.CreateStatistic = function (statistic) {
+      $scope.newStatistic.$save({
+        templateId: $scope.template.id
+      }).then(function (response) {
+        console.log('CreateStatistic::response', repsonse);
+        $location.path('/applications/' + $scope.application.id + '/templates/' + $scope.template.id + '/statistics');
+      });
+    };
+
+    $scope.UpdateStatistic = function (statistic) {
+
+    };
+
+    $scope.DeleteStatistic = function (statistic) {
+
+    };
+
     $scope.getEditableMap = function () {
 
       // leafletData.getMap().then(function(map) {

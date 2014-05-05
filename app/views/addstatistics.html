@@ -12,7 +12,7 @@
             <li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
             <li><a href="/applications/{{ application.id }}/templates" title="">Templates</a></li>
             <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}" title="">{{ template.name }}</a></li>
-            <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/statistics" title="">Statistics</a></li>
+            <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features/add" title="">New Feature</a></li>
           </ol>
         </div>
         <div class="col-sm-2 text-right">
@@ -72,30 +72,38 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-sm-12">
-                <table class="table table-hover">
-                  <thead>
-                    <tr>
-                      <th class="edit">&nbsp;</th>
-                      <th>Name</th>
-                      <th>Function</th>
-                      <th>Units</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr data-ng-repeat="statistic in statistics | orderBy:orderByField:reverseSort">
-                      <td><span class="glyphicon glyphicon-pencil"></span></td>
-                      <td>{{ statistic.name }}</td>
-                      <td>{{ statistic.function }}</td>
-                      <td>{{ statistic.units }}</td>
-                    </tr>
-                    <tr>
-                      <td colspan="4" class="text-center">
-                        <a href="/applications/{{ application.id }}/templates/{{ template.id }}/statistics/add">New Statistic</a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div class="col-sm-6 col-sm-offset-3">
+                <form method="POST">
+                  <fieldset>
+                    <div class="form-group">
+                      <label for="name">Name</label>
+                      <input type="text" class="form-control" data-ng-model="newStatistic.name" id="name" name="name" />
+                    </div>
+                    <div class="form-group">
+                      <label for="units">Units</label>
+                      <input type="text" class="form-control" data-ng-model="newStatistic.units" id="units" name="units" />
+                      <p class="help-block">A simple label to use along side of your rolled-up statistic (e.g., $, %, gal., lbs.)</p>
+                    </div>
+                    <div class="form-group">
+                      <label for="function">Function</label>
+                      <select class="form-control" data-ng-model="newStatistic.function" id="function" name="function" required="required">
+                        <option selected="selected" value="sum">Sum</option>
+                      </select>
+                      <p class="help-block">The function you'd like to perform on the Field you define next</p>
+                    </div>
+                    <div class="form-group">
+                      <label for="field_id">Field</label>
+                      <select class="form-control" data-ng-model="newStatistic.field_id" id="field_id" name="field_id" required="required" data-ng-options="value_.id as value_.label for value_ in fields">
+                        <option>--Choose a field</option>
+                      </select>
+                      <p class="help-block">This would be the field you like to perform the Function above (e.g., {{ newStatistic.function }} )</p>
+                    </div>
+                  </fieldset>
+                  <hr />
+                  <div class="form-group">
+                    <a href="javascript:void()" data-ng-click="CreateStatistic(newStatistic)" class="button pull-right">Create Statistic</a>
+                  </div>
+                </form>
               </div>
             </div>
           </article>

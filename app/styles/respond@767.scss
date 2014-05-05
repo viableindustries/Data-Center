@@ -1,4 +1,13 @@
 @media (max-width: 767px) {
+  .page-content > .inner.wide {
+    max-width: 100%;
+  }
+
+  .page-content > .inner.wide > .row > div {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
   h1 a.visible-xs {
     display: inline-block !important;
     font-size: 16px;

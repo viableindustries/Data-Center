@@ -7,6 +7,8 @@ angular.module('commonsCloudAdminApp')
   // VARIABLES
   //
 
+    console.log('$routeParams', $routeParams);
+
     //
     // Placeholders for our on-screen content
     //
@@ -122,11 +124,24 @@ angular.module('commonsCloudAdminApp')
           $scope.template = response.response;
           $scope.loading = false;
 
-          Feature.query({
-            storage: $scope.template.storage
-          }).$promise.then(function (response) {
-            $scope.features = response.response.features;
-          });
+          if ($routeParams.page) {
+            Feature.query({
+              storage: $scope.template.storage,
+              page: $routeParams.page
+            }).$promise.then(function (response) {
+              console.log('Feature', response);
+              $scope.featureproperties = response.properties;
+              $scope.features = response.response.features;
+            });
+          } else {
+            Feature.query({
+              storage: $scope.template.storage
+            }).$promise.then(function (response) {
+              console.log('Feature', response);
+              $scope.featureproperties = response.properties;
+              $scope.features = response.response.features;
+            });
+          }
 
           Field.query({
             templateId: $scope.template.id

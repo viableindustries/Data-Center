@@ -65,10 +65,10 @@
             <div data-ng-show="!AddTemplate" data-ng-repeat="template in templates" class="row">          
               <article class="template col-sm-12 pending-moderation-{{ template.moderation }}">
                 <div class="row">
-                  <div class="col-sm-1 col-sm-offset-1 edit-settings">
+                  <div class="col-sm-1 col-sm-offset-2 edit-settings">
                     <p><a href="/applications/{{ application.id }}/templates/{{ template.id }}/settings"><span class="glyphicon glyphicon-pencil"></span></a></p>
                   </div>
-                  <div class="col-sm-4">
+                  <div class="col-sm-3">
                     <h1><a href="/applications/{{ application.id }}/templates/{{ template.id }}">{{ template.name }}</a></h1>
                     <p class="services">
                       <span data-ng-show="template.is_public" title="Visible to the public" class="service glyphicon glyphicon-eye-open"></span>
@@ -78,7 +78,7 @@
                       <span data-ng-show="template.is_moderated" title="Moderation and Notification are enabled" class="glyphicon glyphicon-bell pending-moderation-{{ template.moderation }}"></span>            
                     </p>
                   </div>
-                  <div class="col-sm-4">
+                  <div class="col-sm-3 text-right">
                     <h3>{{ template.features.properties.total_features | number:0 }} <small>features</small></h3>
                   </div>
                 </div>                   

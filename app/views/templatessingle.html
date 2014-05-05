@@ -73,7 +73,11 @@
             </div>
             <div class="row">
               <div class="col-sm-12">
-                <a class="button pull-right" href="/applications/{{ application.id }}/templates/{{ template.id }}/features/add">New Feature</a>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <a class="button pull-right" href="/applications/{{ application.id }}/templates/{{ template.id }}/features/add">New Feature</a>
+                  </div>
+                </div>
 
                 <table class="table table-hover">
                   <thead>
@@ -93,6 +97,11 @@
                     </tr>
                   </tbody>
                 </table>
+
+                <ul class="pager">
+                  <li data-ng-if="featureproperties.current_page !== 1" class="previous"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features?page={{ featureproperties.current_page-1 }}">&larr; Newer</a></li>
+                  <li data-ng-if="featureproperties.current_page !== featureproperties.total_pages" class="next"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features?page={{ featureproperties.current_page+1 }}">Older &rarr;</a></li>
+                </ul>
               </div>
             </div>
           </article>

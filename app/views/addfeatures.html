@@ -101,7 +101,17 @@
 
                     </div>
                   </fieldset>
+                  <hr />
                   <div class="form-group">
+                    <label for="status">Feature Status</label>
+                    <select class="form-control" data-ng-model="feature.status" id="status" name="status" required="required">
+                      <option selected="selected" value="">--Choose a status--</option>
+                      <option value="draft">Draft</option>
+                      <option value="crowd">Crowd Sourced</option>
+                      <option value="private">Private</option>
+                      <option value="public">Public</option>
+                    </select>
+                    <br />
                     <a href="javascript:void()" data-ng-click="CreateFeature(feature)" class="button pull-right">Create Feature</a>
                   </div>
                 </form>

@@ -153,6 +153,15 @@ angular.module('commonsCloudAdminApp')
         });
     }
 
+    if ($routeParams.statisticId) {
+      Statistic.get({
+        templateId: $routeParams.templateId,
+        statisticId: $routeParams.statisticId
+      }).$promise.then(function (response) {
+        $scope.statistic = response;
+      });
+    }
+
 
   //
   // CONTENT MUTATIONS
@@ -439,19 +448,55 @@ angular.module('commonsCloudAdminApp')
 
     $scope.CreateStatistic = function (statistic) {
       $scope.newStatistic.$save({
-        templateId: $scope.template.id
+        templateId: $routeParams.templateId
       }).then(function (response) {
-        console.log('CreateStatistic::response', repsonse);
         $location.path('/applications/' + $scope.application.id + '/templates/' + $scope.template.id + '/statistics');
       });
     };
 
     $scope.UpdateStatistic = function (statistic) {
+      Statistic.update({
+        templateId: $scope.template.id,
+        statisticId: statistic.id
+      }, statistic);
 
+      //
+      // Once the template has been updated successfully we should give the
+      // user some on-screen feedback and then remove it from the screen after
+      // a few seconds as not to confuse them or force them to reload the page
+      // to dismiss the message
+      //
+      var alert = {
+        'type': 'success',
+        'title': 'Updated',
+        'details': 'We saved the updates you made to your statistic!'
+      };
+
+      $scope.alerts.push(alert);
+
+      $timeout(function () {
+        $scope.alerts = [];
+      }, 3000);
     };
 
     $scope.DeleteStatistic = function (statistic) {
 
+      var statistic_ = {
+        templateId: $scope.template.id,
+        statisticId: statistic.id
+      };
+
+      //
+      // Send the 'DELETE' method to the API so it's removed from the database
+      //
+      Statistic.delete(statistic_);
+
+      //
+      // Update the Statistics list so that it no longer displays the deleted
+      // items
+      //
+      $scope.statistics.pop(statistic);
+      $location.path('/applications/' + $scope.application.id + '/templates/' + $scope.template.id + '/statistics');
     };
 
     $scope.getEditableMap = function () {

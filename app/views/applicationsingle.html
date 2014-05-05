@@ -56,7 +56,7 @@
             </ul>
           </nav>
 
-          <article class="application single">
+          <article class="template single">
             <div class="row">
               <div class="col-sm-12">
                 <a data-ng-show="!AddTemplate" href="javascript:void();" class="button pull-right" data-ng-click="AddTemplate=!AddTemplate">Create a new template</a>
@@ -65,7 +65,10 @@
             <div data-ng-show="!AddTemplate" data-ng-repeat="template in templates" class="row">          
               <article class="template col-sm-12 pending-moderation-{{ template.moderation }}">
                 <div class="row">
-                  <div class="col-sm-6">
+                  <div class="col-sm-1 col-sm-offset-1 edit-settings">
+                    <p><a href="/applications/{{ application.id }}/templates/{{ template.id }}/settings"><span class="glyphicon glyphicon-pencil"></span></a></p>
+                  </div>
+                  <div class="col-sm-4">
                     <h1><a href="/applications/{{ application.id }}/templates/{{ template.id }}">{{ template.name }}</a></h1>
                     <p class="services">
                       <span data-ng-show="template.is_public" title="Visible to the public" class="service glyphicon glyphicon-eye-open"></span>
@@ -76,7 +79,7 @@
                     </p>
                   </div>
                   <div class="col-sm-4">
-                    <h3>{{ template.features.properties.total_features | number:0 }}</h3>
+                    <h3>{{ template.features.properties.total_features | number:0 }} <small>features</small></h3>
                   </div>
                 </div>                   
               </article>
@@ -147,13 +150,6 @@
                 </form>
               </article>
             </div>
-          </article>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <article class="application delete">
-            <p class="text-right"><a data-ng-click="DeleteApplication(application)">Delete this application</a></p>
           </article>
         </div>
       </div>

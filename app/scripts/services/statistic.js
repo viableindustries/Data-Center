@@ -8,6 +8,16 @@ angular.module('commonsCloudAdminApp')
       var Statistic = $resource('//api.commonscloud.org/v2/templates/:templateId/statistics/:statisticId.json', {
 
       }, {
+        get: {
+          method: 'GET',
+          transformResponse: function (data, headersGetter) {
+
+            var statistic = angular.fromJson(data);
+
+            return statistic.response;
+          }
+
+        },
         query: {
           method: 'GET',
           isArray: true,

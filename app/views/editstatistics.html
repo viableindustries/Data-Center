@@ -12,7 +12,7 @@
             <li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
             <li><a href="/applications/{{ application.id }}/templates" title="">Templates</a></li>
             <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}" title="">{{ template.name }}</a></li>
-            <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/settings" title="">Settings</a></li>
+            <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features/add" title="">New Feature</a></li>
           </ol>
         </div>
         <div class="col-sm-2 text-right">
@@ -64,9 +64,9 @@
               <div class="col-sm-7">
                 <ul class="nav nav-pills pull-right">
                   <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features">Features</a></li>
-                  <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/statistics">Statistics</a></li>
+                  <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/statistics">Statistics</a></li>
                   <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/fields">Fields</a></li>
-                  <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/settings">Settings</a></li>
+                  <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/settings">Settings</a></li>
                   <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/developers">Developers</a></li>
                 </ul>
               </div>
@@ -77,65 +77,38 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-sm-12">
-                <form method="POST" class="form-narrow">
-                  <div class="form-group">
-                    <label class="control-label" for="name">Template Name</label>
-                    <input class="form-control input-lg" data-ng-model="template.name" id="name" name="name" type="text" autofocus="">
-                    <p class="help-block">This is the name of the Feature Type, it's what others will see</p>
-
-                    <label class="control-label" for="help">Help text</label>
-                    <input class="form-control" data-ng-model="template.help" id="help" name="help" type="text">
-                    <p class="help-block">Provide users with the context of this Feature Type or guidlines on proper submission</p>
-                  </div>
-                  
-                  <hr>
-        
-                  <div class="form-group">
-                    <div class="checkbox">
-                      <label for="publicly_viewable" class="control-label">
-                        <input data-ng-model="template.is_public" id="publicly_viewable" name="publicly_viewable" type="checkbox" /> <strong>Public</strong>
-                      </label>
-                      <p class="help-block">When a Feature Type is marked as public, we will display content with a status of 'public' or content that has been moderated to the public and it will be accessible via the API as well.</p>
+              <div class="col-sm-6 col-sm-offset-3">
+                <form method="POST">
+                  <fieldset>
+                    <div class="form-group">
+                      <label for="name">Name</label>
+                      <input type="text" class="form-control" data-ng-model="statistic.name" id="name" name="name" />
                     </div>
-                  </div>
-
-                  <hr>
-
-                  <div class="form-group">
-                    <div class="checkbox">
-                      <label for="crowd_sourcing" class="control-label">
-                        <input data-ng-model="template.is_crowdsourced" id="crowd_sourcing" name="crowd_sourcing" type="checkbox" /> <strong>Crowd-sourcing</strong>
-                      </label>
-                      <p class="help-block">When Crowd-sourcing is enabled, the public will be allowed to submit content via the API or via an HTML Form.</p>
+                    <div class="form-group">
+                      <label for="units">Units</label>
+                      <input type="text" class="form-control" data-ng-model="statistic.units" id="units" name="units" />
+                      <p class="help-block">A simple label to use along side of your rolled-up statistic (e.g., $, %, gal., lbs.)</p>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="checkbox">
-                      <label for="moderate">
-                        <input data-ng-model="template.is_moderated" id="moderate" name="moderate" type="checkbox" /> <strong>Moderate crowd-sourced content</strong>
-                      </label>
-                      <p class="help-block">By default we recommend that all crowd-sourced content be put into a "moderation" status when it is submitted.</p>
+                    <div class="form-group">
+                      <label for="function">Function</label>
+                      <select class="form-control" data-ng-model="statistic.function" id="function" name="function" required="required">
+                        <option selected="selected" value="sum">Sum</option>
+                      </select>
+                      <p class="help-block">The function you'd like to perform on the Field you define next</p>
                     </div>
-                  </div>
-
+                    <div class="form-group">
+                      <label for="field_id">Field</label>
+                      <select class="form-control" data-ng-model="statistic.field_id" id="field_id" name="field_id" required="required" data-ng-options="value_.id as value_.label for value_ in fields">
+                        <option>--Choose a field--</option>
+                      </select>
+                      <p class="help-block">This would be the field you like to perform the Function above</p>
+                    </div>
+                  </fieldset>
                   <hr />
-
                   <div class="form-group">
-                    <div class="checkbox">
-                      <label for="geospatial">
-                        <input data-ng-model="template.is_geospatial" id="geospatial" name="geospatial" type="checkbox" /> <strong>GeoSpatial Data</strong>
-                      </label>
-                      <p class="help-block">This will vary from type to type, only you know if this feature type should contain geographiclly specific data.</p>
-                    </div>
+                    <a class="btn btn-link" data-ng-click="DeleteStatistic(statistic)" href="javascript:void()">Delete Statistic</a>
+                    <input type="submit" id="update" name="update" data-ng-click="UpdateStatistic(statistic)" class="button pull-right" value="Update Statistic" />
                   </div>
-
-                  <hr>
-
-                  <div class="form-group">
-                      <a class="btn btn-link" data-ng-click="DeleteTemplate(template)">Delete this template</a>
-                      <input data-ng-click="UpdateTemplate()" id="save" name="save" type="submit" class="button pull-right" value="Update Template">
-                    </div>
                 </form>
               </div>
             </div>

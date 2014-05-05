@@ -1,7 +1,7 @@
-@media (min-width: 767px) {
-  .page-content {
-    margin-left: 25%;
-    position: relative;
+@media (max-width: 767px) {
+  h1 a.visible-xs {
+    display: inline-block !important;
+    font-size: 16px;
   }
 }
 

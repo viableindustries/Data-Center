@@ -36,22 +36,18 @@ angular
       })
       .when('/applications/:applicationId/collaborators', {
         templateUrl: '/views/collaborators.html',
-        // controller: 'CollaboratorsCtrl'
         controller: 'ApplicationSingleCtrl'
       })
       .when('/applications/:applicationId/templates/:templateId/features', {
         templateUrl: '/views/templatessingle.html',
-        // controller: 'TemplatesSingleCtrl'
         controller: 'ApplicationSingleCtrl'
       })
       .when('/applications/:applicationId/templates/:templateId/features/add', {
         templateUrl: '/views/addfeatures.html',
-        // controller: 'TemplatesSingleCtrl'
         controller: 'ApplicationSingleCtrl'
       })
       .when('/applications/:applicationId/templates/:templateId/features/:featureId', {
         templateUrl: '/views/editfeature.html',
-        // controller: 'TemplatesSingleCtrl'
         controller: 'ApplicationSingleCtrl'
       })
       .when('/applications/:applicationId/templates/:templateId', {
@@ -59,27 +55,26 @@ angular
       })
       .when('/applications/:applicationId/templates/:templateId/statistics', {
         templateUrl: '/views/statistics.html',
-        // controller: 'StatisticsCtrl'
         controller: 'ApplicationSingleCtrl'
       })
       .when('/applications/:applicationId/templates/:templateId/statistics/add', {
         templateUrl: '/views/addstatistics.html',
-        // controller: 'StatisticsCtrl'
+        controller: 'ApplicationSingleCtrl'
+      })
+      .when('/applications/:applicationId/templates/:templateId/statistics/:statisticId', {
+        templateUrl: '/views/editstatistics.html',
         controller: 'ApplicationSingleCtrl'
       })
       .when('/applications/:applicationId/templates/:templateId/fields', {
         templateUrl: '/views/fields.html',
-        // controller: 'FieldsCtrl'
         controller: 'ApplicationSingleCtrl'
       })
       .when('/applications/:applicationId/templates/:templateId/settings', {
         templateUrl: '/views/settings.html',
-        // controller: 'SettingsCtrl'
         controller: 'ApplicationSingleCtrl'
       })
       .when('/applications/:applicationId/templates/:templateId/developers', {
         templateUrl: '/views/developers.html',
-        // controller: 'DevelopersCtrl'
         controller: 'ApplicationSingleCtrl'
       })
       .otherwise({

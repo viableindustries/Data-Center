@@ -117,18 +117,22 @@
     padding: 32px 16px;
   }
 
-  .application-settings p {
-    padding-top: 32px;
-    text-align: right;
+  .edit-settings p {
+    padding-top: 0;
+    text-align: center;
   }
 
-  .application-settings a {
+  .application .edit-settings {
+      padding-top: 32px;
+  }
+
+  .edit-settings a {
     color: lighten($color-brand-black-lightest, 20%);
     font-size: 24px;
     text-decoration: none;
   }
 
-  .application-settings a:hover {
+  .edit-settings a:hover {
     color: lighten($color-brand-black-lightest, 10%);
     text-decoration: none;
   }
@@ -227,8 +231,12 @@
   background-color: $color-brand-white-base;
   border-bottom: 1px solid darken($color-brand-white-base, 8%);
   color: $color-brand-black-base;
-  margin: 0 0 48px;
-  padding: 30px 40px;
+  margin: 0 0 16px;
+  padding: 30px 0;
+}
+
+.template > .row > div > h3 {
+  margin-top: -8px;
 }
 
 .template-instance {
@@ -407,4 +415,12 @@
 .collaborators td {
   text-align: center;
   vertical-align: middle;
+}
+
+
+/**
+ * CommonsCloud Branding
+ */
+.security-label {
+  margin: 16px 22px;
 }

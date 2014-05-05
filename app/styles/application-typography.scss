@@ -27,18 +27,6 @@ h1 {
   h1 a,
   h1 a:hover {
     color: rgb(64,64,64);
-    text-decoration: none;
-  }
-  
-  h1 a .glyphicon {
-    color: rgb(64, 172, 24);
-    display: none;
-    font-size: 14px;
-    top: -1px;
-  }
-
-  h1 a:hover .glyphicon {
-    display: inline-block;
   }
 
 

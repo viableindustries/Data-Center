@@ -73,6 +73,11 @@
             </div>
             <div class="row">
               <div class="col-sm-12">
+                <a href="/applications/{{ application.id }}/templates/{{ template.id }}/statistics/add" class="button pull-right">Create a new statistic</a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
                 <table class="table table-hover">
                   <thead>
                     <tr>
@@ -84,15 +89,10 @@
                   </thead>
                   <tbody>
                     <tr data-ng-repeat="statistic in statistics | orderBy:orderByField:reverseSort">
-                      <td><span class="glyphicon glyphicon-pencil"></span></td>
+                      <td><a href="/applications/{{ application.id }}/templates/{{ template.id }}/statistics/{{ statistic.id }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
                       <td>{{ statistic.name }}</td>
                       <td>{{ statistic.function }}</td>
                       <td>{{ statistic.units }}</td>
-                    </tr>
-                    <tr>
-                      <td colspan="4" class="text-center">
-                        <a href="/applications/{{ application.id }}/templates/{{ template.id }}/statistics/add">New Statistic</a>
-                      </td>
                     </tr>
                   </tbody>
                 </table>

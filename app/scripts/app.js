@@ -8,10 +8,9 @@ angular
     'ngRoute',
     'ngAnimate',
     'ui.gravatar',
-    'ui.directives',
     'leaflet-directive'
   ])
-  .config(function ($routeProvider, $locationProvider, $httpProvider) {
+  .config(function($routeProvider, $locationProvider, $httpProvider) {
 
     // Setup routes for our application
     $routeProvider

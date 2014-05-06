@@ -19,6 +19,10 @@ angular.module('commonsCloudAdminApp')
     $scope.statistics = [];
     $scope.statistic = {};
 
+    $scope.controls = {
+      draw: {}
+    };
+
     //
     // Placeholders for non-existent content
     //
@@ -153,9 +157,10 @@ angular.module('commonsCloudAdminApp')
                 featureId: $routeParams.featureId
               }).$promise.then(function(response) {
                 $scope.feature = response;
+                $scope.getEditableMap();
+                console.log('$scope.feature', $scope.feature);
               });
             }
-            $scope.getEditableMap();
           });
 
           Statistic.query({
@@ -278,7 +283,7 @@ angular.module('commonsCloudAdminApp')
           'details': 'Mind trying that again? It looks like we couldn\'t delete that Application for you.'
         });
       });
-      
+
     };
 
     //
@@ -367,8 +372,19 @@ angular.module('commonsCloudAdminApp')
     $scope.CreateField = function () {
       $scope.newField.$save({
         templateId: $scope.template.id
-      }).then(function (response) {
+      }).then(function(response) {
         $scope.fields.push(response.response);
+        $rootScope.alerts.push({
+          'type': 'success',
+          'title': 'Great!',
+          'details': 'Your new Field was added to the Template.'
+        });
+      }, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind trying that again? It looks like we couldn\'t create that Field for you.'
+        });
       });
     };
 
@@ -385,25 +401,19 @@ angular.module('commonsCloudAdminApp')
       Field.update({
         templateId: $scope.template.id,
         fieldId: $scope.editField.id
-      }, $scope.editField);
-
-      //
-      // Once the template has been updated successfully we should give the
-      // user some on-screen feedback and then remove it from the screen after
-      // a few seconds as not to confuse them or force them to reload the page
-      // to dismiss the message
-      //
-      var alert = {
-        'type': 'success',
-        'title': 'Updated',
-        'details': 'Your field updates were saved successfully!'
-      };
-
-      $rootScope.alerts.push(alert);
-
-      $timeout(function () {
-        $rootScope.alerts = [];
-      }, 3000);
+      }, $scope.editField).$promise.then(function(response) {
+        $rootScope.alerts.push({
+          'type': 'success',
+          'title': 'Updated!',
+          'details': 'Your Field updates were saved successfully!'
+        });
+      }, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind trying that again? It looks like we couldn\'t update that Field for you.'
+        });
+      });
 
       $scope.editField = {};
       $scope.FieldEdit = false;
@@ -416,37 +426,32 @@ angular.module('commonsCloudAdminApp')
     $scope.DeleteField = function (field) {
 
       //
-      // Construct an object containing only the Application ID so that we
-      // aren't sending along Application parameters in the URL
-      //
-      var field_ = {
-        templateId: $scope.template.id,
-        fieldId: field.id
-      };
-
-      //
       // Send the 'DELETE' method to the API so it's removed from the database
       //
-      Field.delete(field_);
+      Field.delete({
+        templateId: $scope.template.id,
+        fieldId: field.id
+      }, field).$promise.then(function(response) {
+        $rootScope.alerts.push({
+          'type': 'success',
+          'title': '',
+          'details': 'Your Field was deleted!'
+        });
+        $scope.fields.pop(field);
+        $scope.editField = {};
+        $scope.FieldEdit = false;
 
-      $scope.fields.pop(field);
-      $scope.editField = {};
-      $scope.FieldEdit = false;
+        if ($scope.fields.length) {
+          $scope.FieldAdd = true;
+        }
+      }, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind trying that again? It looks like we couldn\'t delete that Field for you.'
+        });
+      });
 
-      if ($scope.fields.length) {
-        $scope.FieldAdd = true;
-      }
-
-      // $location.path('/applications/' + $scope.application.id + '/templates/' + $scope.template.id + '/fields');
-
-      //
-      // @todo
-      //
-      // We need to make sure that we aren't removing the Application from the
-      // user interface, unless it's really been deleted from the database. I
-      // don't believe the API is returning the appropriate response, and
-      // therefore we have no way to catch it
-      //
     };
 
     $scope.CreateFeature = function () {
@@ -591,105 +596,83 @@ angular.module('commonsCloudAdminApp')
 
     $scope.getEditableMap = function () {
 
-      // leafletData.getMap().then(function(map) {
+      leafletData.getMap().then(function(map) {
 
-      //   //
-      //   // Prepare a drawing layer for our FeatureGroup
-      //   //
-      //   var featureGroup = L.featureGroup();
-      //   map.addLayer(featureGroup);
+        console.log('getEditableMap > $scope.feature', $scope.feature);
 
-      //   //
-      //   //
-      //   // Enable Drawing Controls
-      //   var drawControl = new L.Control.Draw({
+        var featureGroup = new L.FeatureGroup();
+        map.addLayer(featureGroup);
 
-      //     edit: {
-      //       featureGroup: featureGroup,
-      //       remove: true
-      //     }
-      //   });
+        //
+        // Check to see if existing map layers exist for this API Feature
+        //
+        if ($scope.feature.geometry) {
+          console.log('existing features', $scope.feature.geometry);
+          $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
+          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+        }
 
-      //   map.addControl(drawControl);
+        //
+        // On Drawing Complete add it to our FeatureGroup
+        //
+        map.on('draw:created', function (e) {
+          var newLayer = e.layer;
+          featureGroup.addLayer(newLayer);
 
-      //   //
-      //   // Check to see if existing map layers exist for this API Feature
-      //   //
-      //   if ($scope.feature.geometry) {
-      //     $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
-      //     $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
-      //   }
+          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+        });
 
-      //   //
-      //   // On Drawing Complete add it to our FeatureGroup
-      //   //
-      //   map.on('draw:created', function (e) {
-      //     var newLayer = e.layer;
-      //     featureGroup.addLayer(newLayer);
+        map.on('draw:edited', function (e) {
+          var editedLayers = e.layers;
+          editedLayers.eachLayer(function (layer) {
+            featureGroup.addLayer(layer);
+          });
 
-      //     $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
-      //   });
+          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+        });
 
-      //   map.on('draw:edited', function (e) {
-      //     var editedLayers = e.layers;
-      //     editedLayers.eachLayer(function (layer) {
-      //       featureGroup.addLayer(layer);
-      //     });
+        map.on('draw:deleted', function (e) {
+          var deletedLayers = e.layers;
+          deletedLayers.eachLayer(function (layer) {
+            featureGroup.removeLayer(layer);
+          });
 
-      //     $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
-      //   });
+          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+        });
 
-      //   map.on('draw:deleted', function (e) {
-      //     var deletedLayers = e.layers;
-      //     deletedLayers.eachLayer(function (layer) {
-      //       featureGroup.removeLayer(layer);
-      //     });
+        //
+        // Load and Prepare the Mapbox Basemap Tiles
+        //
+        var MapboxBasemap = L.tileLayer('https://{s}.tiles.mapbox.com/v3/developedsimple.hl46o07c/{z}/{x}/{y}.png', {
+          attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+        });
 
-      //     $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
-      //   });
-
-      //   //
-      //   // Load and Prepare the Mapbox Basemap Tiles
-      //   //
-      //   var MapboxBasemap = L.tileLayer('https://{s}.tiles.mapbox.com/v3/developedsimple.hl46o07c/{z}/{x}/{y}.png', {
-      //     attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-      //   });
-
-      //   map.addLayer(MapboxBasemap);
+        map.addLayer(MapboxBasemap);
 
 
-      //   //
-      //   // We need to invalidate the size of the Mapbox container so that it
-      //   // displays properly. This is annoying and ugly ... timeouts are evil.
-      //   // However, it serves as a temporary solution until we can figure out
-      //   // something better.
-      //   //
-      //   $timeout(function () {
-      //     map.invalidateSize();
-      //   }, 500);
+        //
+        // We need to invalidate the size of the Mapbox container so that it
+        // displays properly. This is annoying and ugly ... timeouts are evil.
+        // However, it serves as a temporary solution until we can figure out
+        // something better.
+        //
+        $timeout(function () {
+          map.invalidateSize();
+        }, 500);
         
-      //   //
-      //   // Listen for changes to the GeoJSON Editor
-      //   //
-      //   // $scope.$watch('feature.geometry', function(){
-      //   //   if ($scope.feature.geometry) {
-      //   //     $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
-      //   //     $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
-      //   //   }
-      //   // });
-      // });
+      });
 
-      // $scope.MapLoaded = true;
+      $scope.MapLoaded = true;
     };
 
 
-    // $scope.geojsonToLayer = function (geojson, layer) {
-    //   layer.clearLayers();
-    //   function add(l) {
-    //     l.addTo(layer);
-    //   }
-    //   L.geoJson(geojson).eachLayer(add);
-    // };
+    $scope.geojsonToLayer = function (geojson, layer) {
+      layer.clearLayers();
+      function add(l) {
+        l.addTo(layer);
+      }
+      L.geoJson(geojson).eachLayer(add);
+    };
 
     //
     // Build enumerated values for drop downs

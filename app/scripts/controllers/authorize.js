@@ -9,6 +9,7 @@ angular.module('commonsCloudAdminApp').controller('AuthorizeCtrl', ['$scope', '$
       var cleanToken = accessToken.replace('access_token=', '');
 
       var cookieOptions = {
+        path: '/',
         expires: 2
       };
 

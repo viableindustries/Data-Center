@@ -19,8 +19,17 @@ angular.module('commonsCloudAdminApp')
     $scope.statistics = [];
     $scope.statistic = {};
 
+    var featureGroup = new L.FeatureGroup();
+
     $scope.controls = {
-      draw: {}
+      draw: {
+        options: {
+          edit: {
+            'featureGroup': featureGroup,
+            'remove': true
+          }
+        }
+      }
     };
 
     //
@@ -598,18 +607,16 @@ angular.module('commonsCloudAdminApp')
 
       leafletData.getMap().then(function(map) {
 
-        console.log('getEditableMap > $scope.feature', $scope.feature);
-
-        var featureGroup = new L.FeatureGroup();
+        // var featureGroup = new L.FeatureGroup();
         map.addLayer(featureGroup);
 
         //
         // Check to see if existing map layers exist for this API Feature
         //
         if ($scope.feature.geometry) {
-          console.log('existing features', $scope.feature.geometry);
+          console.error('existing features', $scope.feature.geometry, featureGroup);
           $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
-          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+          // $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
         }
 
         //

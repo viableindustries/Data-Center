@@ -1,8 +1,6 @@
 <div class="row">
 
-  <nav data-ng-show="$root.navigation" class="col-xs-10 col-sm-3 sidebar"></nav>
-
-  <section class="col-xs-12 col-sm-9 page-content">
+  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
     <header>
       <div class="row">
         <div class="col-sm-10">
@@ -14,14 +12,7 @@
         <div class="col-sm-2 text-right">
           <ul class="nav account">
             <li><a href="" class="notifications"><span class="glyphicon glyphicon-bell"></span></a></li>
-            <li data-ng-mouseleave="UserAccount=!UserAccount" class="dropdown">
-              <a data-ng-click="UserAccount=!UserAccount" class="user dropdown-toggle"><img gravatar-src="'joshua@viableindustries.com'" gravatar-size="24" /></a>
-              <ul data-ng-show="UserAccount" class="dropdown-menu dropdown-menu-right">
-                <li><a href="//api.commonscloud.org/user/profile/" target="_blank">Account Settings</a></li>
-                <li><a href="//api.commonscloud.org/user/password/" target="_blank">Change Password</a></li>
-                <li><a href="//api.commonscloud.org/logout">Logout</a></li>
-              </ul>
-            </li>
+            <li><a href="//api.commonscloud.org/user/profile" class="user"><img data-ng-if="user.email" gravatar-src="'{{ user.email }}'" gravatar-size="24" /></a></li>
           </ul>
         </div>
       </div>

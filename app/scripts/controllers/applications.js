@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationsCtrl', ['$rootScope', '$scope', '$route', 'Application', 'ipCookie', '$location', function ($rootScope, $scope, $route, Application, ipCookie, $location) {
+  .controller('ApplicationsCtrl', ['$rootScope', '$scope', '$route', 'Application', 'User', 'ipCookie', '$location', function ($rootScope, $scope, $route, Application, User, ipCookie, $location) {
 
     //
     // Instantiate an Application object so that we can perform all necessary
@@ -19,6 +19,18 @@ angular.module('commonsCloudAdminApp')
     // Hide the New Application form by default
     //
     $scope.NewApplication = false;
+
+    $scope.GetUser = function() {
+      User.get().$promise.then(function(response) {
+        $scope.user = response.response;
+        console.log('User', $scope.user);
+      });
+    };
+
+    //
+    //
+    //
+    $scope.GetUser();
 
     //
     // Save a new Application to the API Database

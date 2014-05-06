@@ -1,14 +1,20 @@
 //
 // Import Dependencies
 //
+
+$icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
+
+@import 'bootstrap-sass-official/vendor/assets/stylesheets/bootstrap';
+
+// bower:scss
+@import "../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
+// endbower
+
 @import "_base";
 @import "_typography";
 @import "_forms";
 @import "_content";
-@import "respond@1200";
-@import "respond@979";
-@import "respond@767";
-@import "respond@640";
+@import "_respond@767";
 
 
 //

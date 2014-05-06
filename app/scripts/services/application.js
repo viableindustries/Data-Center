@@ -1,18 +1,17 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .provider('Application', function () {
+  .provider('Application', function() {
 
-    // Method for instantiating
-    this.$get = ['$resource', function ($resource) {
+    this.$get = ['$resource', '$location', function($resource, $location) {
 
-      var Application = $resource('//api.commonscloud.org/v2/applications/:id.json', {
+      var base_resource_url = '//api.commonscloud.org/v2/applications/:id.json';
 
-      }, {
+      var Application = $resource(base_resource_url, {}, {
         query: {
           method: 'GET',
           isArray: true,
-          transformResponse: function (data, headersGetter) {
+          transformResponse: function(data, headersGetter) {
 
             var applications = angular.fromJson(data);
 

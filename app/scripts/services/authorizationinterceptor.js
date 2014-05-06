@@ -13,32 +13,36 @@ angular.module('commonsCloudAdminApp')
     // We set the default value to `false` and then check if the
     // session cookie for our domain exists.
     //
-    $rootScope.auth = {
+    $rootScope.user = {
       'is_authenticated': false
     };
-
-    if (ipCookie('session')) {
-      $rootScope.auth.is_authenticated = true;
-    }
 
 
     return {
       request: function(config) {
         var sessionCookie = ipCookie('session');
+
+        if (config.url !== "/views/authorize.html" && (sessionCookie === 'undefined' || sessionCookie === undefined)) {
+          $location.hash('');
+          $location.path('/');
+          return config || $q.when(config);;
+        }
+
         config.headers = config.headers || {};
         if (sessionCookie) {
           config.headers.Authorization = 'Bearer ' + sessionCookie;
         }
         config.headers['Content-Type'] = 'application/json';
-        console.info('AuthorizationInterceptor::Request', config || $q.when(config));
+        console.debug('AuthorizationInterceptor::Request', config || $q.when(config));
         return config || $q.when(config);
       },
       response: function(response) {
         if (response.status === 401 || response.status === 403) {
           $location.hash('');
-          $location.path('/login');
+          $location.path('/');
+          return response || $q.when(response);
         }
-        console.info('AuthorizationInterceptor::Response', response || $q.when(response));
+        console.debug('AuthorizationInterceptor::Response', response || $q.when(response));
         return response || $q.when(response);
       }
     };

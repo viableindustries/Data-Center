@@ -1,13 +1,11 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationSingleCtrl', ['$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'Template', 'Feature', 'Field', 'Statistic', 'leafletData', function ($rootScope, $scope, $routeParams, $location, $timeout, Application, Template, Feature, Field, Statistic, leafletData) {
+  .controller('ApplicationSingleCtrl', ['$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'Template', 'Feature', 'Field', 'Statistic', 'User', 'leafletData', function ($rootScope, $scope, $routeParams, $location, $timeout, Application, Template, Feature, Field, Statistic, User, leafletData) {
 
   //
   // VARIABLES
   //
-
-    console.log('$routeParams', $routeParams);
 
     //
     // Placeholders for our on-screen content
@@ -28,6 +26,7 @@ angular.module('commonsCloudAdminApp')
     $scope.newField = new Field();
     $scope.newStatistic = new Statistic();
     $scope.feature = new Feature();
+    $scope.user = new User();
     // $scope.newTemplate = {
     //   'is_public': true,
     //   'is_crowdsourced': true,
@@ -56,68 +55,62 @@ angular.module('commonsCloudAdminApp')
   // CONTENT
   //
 
-    //
-    // Get the single application that the user wants to view
-    //
-    Application.get({
-        id: $routeParams.applicationId
-      }).$promise.then(function(response) {
-        $scope.application = response.response;
-        $scope.loading = false;
+    $scope.GetUser = function() {
+      User.get().$promise.then(function(response) {
+        $scope.user = response.response;
+        console.log('User', $scope.user);
       });
+    };
 
-    //
-    // Get a list of templates associated with the current application
-    //
-    Template.query({
-        applicationId: $routeParams.applicationId
-      }).$promise.then(function(response) {
-        $scope.templates = response;
+    $scope.GetTemplateList = function() {
+      //
+      // Get a list of templates associated with the current application
+      //
+      Template.query({
+          applicationId: $routeParams.applicationId
+        }).$promise.then(function(response) {
+          $scope.templates = response;
 
-        angular.forEach($scope.templates, function (template, index) {
+          angular.forEach($scope.templates, function(template, index) {
 
-          $scope.templates[index].features = [];
+            $scope.templates[index].features = [];
 
-          //
-          // Get a list of all features
-          //
-          Feature.query({
-              storage: template.storage
-            }).$promise.then(function (response) {
-              $scope.templates[index].features = response;
-            });
+            //
+            // Get a list of all features
+            //
+            Feature.query({
+                storage: template.storage
+              }).$promise.then(function(response) {
+                $scope.templates[index].features = response;
+              });
 
-          //
-          // Get a list of Features awaiting moderation
-          //
-          Feature.query({
-              storage: template.storage,
-              q: {
-                'filters': [
-                  {
-                    'name': 'status',
-                    'op': 'eq',
-                    'val': 'crowd'
-                  }
-                ]
-              }
-            }).$promise.then(function (response) {
-              $scope.templates[index].moderation = response;
-              if ($scope.templates[index].moderation.properties.total_features > 0) {
-                $scope.templates[index].moderation = true;
-              }
-            });
+            //
+            // Get a list of Features awaiting moderation
+            //
+            Feature.query({
+                storage: template.storage,
+                q: {
+                  'filters': [
+                    {
+                      'name': 'status',
+                      'op': 'eq',
+                      'val': 'crowd'
+                    }
+                  ]
+                }
+              }).$promise.then(function(response) {
+                $scope.templates[index].moderation = response;
+                if ($scope.templates[index].moderation.properties.total_features > 0) {
+                  $scope.templates[index].moderation = true;
+                }
+              });
+
+          });
 
         });
+    };
 
-      });
-
-    //
-    // When the URL contains a Template ID that means we need to load the
-    // template and all of it's associated realtionships, such as Fields
-    // and Features
-    //
-    if ($routeParams.templateId) {
+    $scope.GetTemplate = function(template_id) {
       Template.get({
           id: $routeParams.templateId
         }).$promise.then(function(response) {
@@ -128,16 +121,14 @@ angular.module('commonsCloudAdminApp')
             Feature.query({
               storage: $scope.template.storage,
               page: $routeParams.page
-            }).$promise.then(function (response) {
-              console.log('Feature', response);
+            }).$promise.then(function(response) {
               $scope.featureproperties = response.properties;
               $scope.features = response.response.features;
             });
           } else {
             Feature.query({
               storage: $scope.template.storage
-            }).$promise.then(function (response) {
-              console.log('Feature', response);
+            }).$promise.then(function(response) {
               $scope.featureproperties = response.properties;
               $scope.features = response.response.features;
             });
@@ -145,7 +136,7 @@ angular.module('commonsCloudAdminApp')
 
           Field.query({
             templateId: $scope.template.id
-          }).$promise.then(function (response) {
+          }).$promise.then(function(response) {
             $scope.fields = response;
             $scope.getEnumeratedValues($scope.fields);
 
@@ -153,7 +144,7 @@ angular.module('commonsCloudAdminApp')
               Feature.get({
                 storage: $scope.template.storage,
                 featureId: $routeParams.featureId
-              }).$promise.then(function (response) {
+              }).$promise.then(function(response) {
                 $scope.feature = response;
               });
             }
@@ -162,25 +153,58 @@ angular.module('commonsCloudAdminApp')
 
           Statistic.query({
             templateId: $scope.template.id
-          }).$promise.then(function (response) {
+          }).$promise.then(function(response) {
             $scope.statistics = response;
           });
         });
-    }
+    };
 
-    if ($routeParams.statisticId) {
-      Statistic.get({
-        templateId: $routeParams.templateId,
-        statisticId: $routeParams.statisticId
-      }).$promise.then(function (response) {
-        $scope.statistic = response;
-      });
-    }
+    $scope.GetApplicationPage = function() {
 
+      //
+      // Get the User's information
+      //
+      $scope.GetUser();
+
+      //
+      // Get a list of Templates belonging to this Application
+      //
+      $scope.GetTemplateList();
+
+      //
+      // If we're viewing a single Template, get more information about it
+      //
+      if ($routeParams.templateId) {
+        $scope.GetTemplate();
+      }
+
+      //
+      // If we're viewing a single Statistic, get more information about it
+      //
+      if ($routeParams.statisticId) {
+        $scope.GetStatistic();
+      }
+
+    };
 
   //
   // CONTENT MUTATIONS
   //
+
+    $scope.GetApplication = function() {
+      //
+      // Get the single application that the user wants to view
+      //
+      Application.get({
+          id: $routeParams.applicationId
+        }).$promise.then(function(response) {
+
+          $scope.application = response.response;
+          $scope.loading = false;
+
+          $scope.GetApplicationPage();
+        });
+    };
 
     //
     // Save a new Application to the API Database
@@ -461,6 +485,15 @@ angular.module('commonsCloudAdminApp')
       //
     };
 
+    $scope.GetStatistic = function() {
+      Statistic.get({
+        templateId: $routeParams.templateId,
+        statisticId: $routeParams.statisticId
+      }).$promise.then(function (response) {
+        $scope.statistic = response;
+      });
+    };
+
     $scope.CreateStatistic = function (statistic) {
       $scope.newStatistic.$save({
         templateId: $routeParams.templateId
@@ -662,4 +695,9 @@ angular.module('commonsCloudAdminApp')
       return NewFeatureCollection;
     };
 
+    //
+    // Now that we've got the everything prepared, let's go ahead and start
+    // the controller by instantiating the GetApplication method
+    //
+    $scope.GetApplication();
   }]);

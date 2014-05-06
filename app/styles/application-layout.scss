@@ -24,36 +24,10 @@ body.modal-open {
   width: 100%;
 }
 
-.sidebar {
-  background-color: rgb(33,39,41);
-  border-right: 8px solid rgb(23,29,31);
-  height: 100%;
-  min-height: 100%;
-  height: auto;
-  position: fixed;
-  z-index: 9;
-}
-
-.sidebar-false .sidebar,
-.hidden-sidebar .sidebar {
-  left: -999999px;
-}
-
-.visible-sidebar .sidebar {
-  left: 0;
-}
-
 .page-content {
-  margin-left: 25%;
   padding-left: 0;
   padding-right: 0;
   position: relative;
-}
-
-.sidebar-false .page-content,
-.hidden-sidebar .page-content {
-  margin-left: 0;
-  width: 100%;
 }
 
 .page-content > header {

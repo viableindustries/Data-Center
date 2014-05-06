@@ -14,6 +14,7 @@ angular.module('commonsCloudAdminApp')
     // Hide the navigation/sidebar by default (Cloud icon in top/left)
     //
     $rootScope.navigation = false;
+    $scope.alerts = [];
 
     //
     // Hide the New Application form by default
@@ -23,7 +24,20 @@ angular.module('commonsCloudAdminApp')
     $scope.GetUser = function() {
       User.get().$promise.then(function(response) {
         $scope.user = response.response;
-        console.log('User', $scope.user);
+      }, function (error) {
+        //
+        // Once the template has been updated successfully we should give the
+        // user some on-screen feedback and then remove it from the screen after
+        // a few seconds as not to confuse them or force them to reload the page
+        // to dismiss the message
+        //
+        var alert = {
+          'type': 'error',
+          'title': 'Oops!',
+          'details': 'Looks like your user information is missing in action. Try reloading the page or logging in again.'
+        };
+
+        $scope.alerts.push(alert);
       });
     };
 
@@ -45,6 +59,29 @@ angular.module('commonsCloudAdminApp')
       //
       $scope.application.$save().then(function (response) {
         $scope.applications.push(response.response);
+
+        var alert = {
+          'type': 'success',
+          'title': 'Sweet!',
+          'details': 'Your new Application was created, go add some stuff to it.'
+        };
+
+        $scope.alerts.push(alert);
+
+      }, function (error) {
+        //
+        // Once the template has been updated successfully we should give the
+        // user some on-screen feedback and then remove it from the screen after
+        // a few seconds as not to confuse them or force them to reload the page
+        // to dismiss the message
+        //
+        var alert = {
+          'type': 'error',
+          'title': 'Oops!',
+          'details': 'Looks like we couldn\'t create that Application, mind trying again?'
+        };
+
+        $scope.alerts.push(alert);
       });
 
       //

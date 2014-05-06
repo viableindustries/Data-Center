@@ -10,6 +10,8 @@ $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/
 @import "../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
 // endbower
 
+@import "/bower_components/leaflet-dist/leaflet.css";
+
 @import "_base";
 @import "_typography";
 @import "_forms";
@@ -20,18 +22,21 @@ $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/
 //
 // Bootstrap Overrides
 //
+.alerts {
+  padding-top: 32px;
+}
+
 .alert {
-    font-size: 1.3em;
+  border-width: 0;
+  border-bottom-width: 4px;
+  border-radius: 0;
+  font-size: 13px;
 }
 
 .alert-error{
     background-color:#f2dede;
     border-color:#eed3d7;
     color:#b94a48;
-}
-
-.alert-error hr{
-    border-top-color:#e6c1c7;
 }
 
 .alert-error .alert-link{

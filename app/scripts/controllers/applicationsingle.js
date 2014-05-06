@@ -38,8 +38,8 @@ angular.module('commonsCloudAdminApp')
     // Controls for showing/hiding specific page elements that may not be
     // fully loaded or when a specific user interaction has not yet happened
     //
+    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
     $scope.loading = true;
-    $scope.alerts = [];
     $rootScope.navigation = false;
     $scope.EditApplication = false;
     $scope.AddTemplate = false;
@@ -54,6 +54,13 @@ angular.module('commonsCloudAdminApp')
   //
   // CONTENT
   //
+
+    //
+    // Make sure all of our alerts go away after a few seconds
+    //
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 4000);
 
     $scope.GetUser = function() {
       User.get().$promise.then(function(response) {
@@ -203,6 +210,12 @@ angular.module('commonsCloudAdminApp')
           $scope.loading = false;
 
           $scope.GetApplicationPage();
+        }, function(error) {
+          $rootScope.alerts.push({
+            'type': 'error',
+            'title': 'Uh-oh!',
+            'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
+          });
         });
     };
 
@@ -215,7 +228,19 @@ angular.module('commonsCloudAdminApp')
         $scope.EditApplication = false;
         Application.update({
           id: $scope.application.id
-        }, $scope.application);
+        }, $scope.application).$promise.then(function(response) {
+          $rootScope.alerts.push({
+            'type': 'success',
+            'title': 'Awesome!',
+            'details': 'We saved your Application updates for you.'
+          });
+        }, function(error) {
+          $rootScope.alerts.push({
+            'type': 'error',
+            'title': 'Uh-oh!',
+            'details': 'Mind trying that again? It looks like we couldn\'t save those Application updates for you.'
+          });
+        });
       }
 
     };
@@ -236,56 +261,68 @@ angular.module('commonsCloudAdminApp')
       //
       // Send the 'DELETE' method to the API so it's removed from the database
       //
-      Application.delete(application_);
+      Application.delete({
+        id: application_.id
+      }, application_).$promise.then(function(response) {
+        $rootScope.alerts.push({
+          'type': 'success',
+          'title': 'Deleted!',
+          'details': 'Your Application was deleted successfully!'
+        });
 
-      $location.path('/applications');
-
-      //
-      // @todo
-      //
-      // We need to make sure that we aren't removing the Application from the
-      // user interface, unless it's really been deleted from the database. I
-      // don't believe the API is returning the appropriate response, and
-      // therefore we have no way to catch it
-      //
+        $location.path('/applications');
+      }, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind trying that again? It looks like we couldn\'t delete that Application for you.'
+        });
+      });
+      
     };
 
     //
     // Create a new Template that does not yet exist in the API database
     //
-    $scope.CreateTemplate = function () {
+    $scope.CreateTemplate = function() {
       $scope.newTemplate.$save({
         applicationId: $scope.application.id
-      }).then(function (response) {
+      }).then(function(response) {
+        $scope.AddTemplate = false;
         $scope.templates.push(response.response);
+        $rootScope.alerts.push({
+          'type': 'success',
+          'title': 'Great!',
+          'details': 'We built that Template for you, now add some Fields to it.'
+        });
+      }, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind trying that again? It looks like we couldn\'t save that Template for you.'
+        });
       });
     };
 
     //
     // Update the attributes of an existing Template
     //
-    $scope.UpdateTemplate = function () {
+    $scope.UpdateTemplate = function() {
       Template.update({
         id: $scope.template.id
-      }, $scope.template);
-
-      //
-      // Once the template has been updated successfully we should give the
-      // user some on-screen feedback and then remove it from the screen after
-      // a few seconds as not to confuse them or force them to reload the page
-      // to dismiss the message
-      //
-      var alert = {
-        'type': 'success',
-        'title': 'Updated',
-        'details': 'Your template updates were saved successfully!'
-      };
-
-      $scope.alerts.push(alert);
-
-      $timeout(function () {
-        $scope.alerts = [];
-      }, 3000);
+      }, $scope.template).$promise.then(function(response) {
+        $rootScope.alerts.push({
+          'type': 'success',
+          'title': 'Updated',
+          'details': 'Your template updates were saved successfully!'
+        });
+      }, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind trying that again? It looks like we couldn\'t update that Template for you.'
+        });
+      });
 
     };
 
@@ -305,18 +342,23 @@ angular.module('commonsCloudAdminApp')
       //
       // Send the 'DELETE' method to the API so it's removed from the database
       //
-      Template.delete(template_);
+      Template.delete({
+        id: template_.id
+      }, template_).$promise.then(function(response) {
+        $rootScope.alerts.push({
+          'type': 'success',
+          'title': 'Updated',
+          'details': 'Your template was deleted!'
+        });
 
-      $location.path('/applications/' + $scope.application.id + '/templates');
-
-      //
-      // @todo
-      //
-      // We need to make sure that we aren't removing the Application from the
-      // user interface, unless it's really been deleted from the database. I
-      // don't believe the API is returning the appropriate response, and
-      // therefore we have no way to catch it
-      //
+        $location.path('/applications/' + $scope.application.id + '/templates');
+      }, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind trying that again? It looks like we couldn\'t delete that Template for you.'
+        });
+      });
     };
 
     //
@@ -357,10 +399,10 @@ angular.module('commonsCloudAdminApp')
         'details': 'Your field updates were saved successfully!'
       };
 
-      $scope.alerts.push(alert);
+      $rootScope.alerts.push(alert);
 
       $timeout(function () {
-        $scope.alerts = [];
+        $rootScope.alerts = [];
       }, 3000);
 
       $scope.editField = {};
@@ -442,10 +484,10 @@ angular.module('commonsCloudAdminApp')
         'details': 'Your feature updates were saved successfully!'
       };
 
-      $scope.alerts.push(alert);
+      $rootScope.alerts.push(alert);
 
       $timeout(function () {
-        $scope.alerts = [];
+        $rootScope.alerts = [];
       }, 3000);
 
     };
@@ -520,10 +562,10 @@ angular.module('commonsCloudAdminApp')
         'details': 'We saved the updates you made to your statistic!'
       };
 
-      $scope.alerts.push(alert);
+      $rootScope.alerts.push(alert);
 
       $timeout(function () {
-        $scope.alerts = [];
+        $rootScope.alerts = [];
       }, 3000);
     };
 

@@ -1,3 +1,57 @@
+@import "base";
+
+//
+// Generic
+//
+body {
+  background-color: $color-brand-black-lighter;
+  color: $color-brand-white-base;
+  font-family: $font-sans;
+  font-size: 100%;
+  margin: 0 auto 60px;
+}
+
+.site-content {
+  margin: 0;
+  padding: 0;
+}
+
+.site-content .row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.site-map {
+  float: left;
+  height: 425px;
+  min-height: 425px;
+  width: 100%;
+}
+
+.page-content {
+  padding-left: 0;
+  padding-right: 0;
+  position: relative;
+}
+
+.page-content > header {
+  background-color: rgb(23, 29, 31);
+  background-color: rgba(23, 29, 31, 0.9);
+  position: fixed;
+  width: 100%;
+  z-index: 9;
+}
+
+.page-content > .inner {
+  margin: 0 auto;
+  max-width: 75%;
+  padding-top: 64px;
+}
+
+.page-content > .inner.wide {
+  max-width: 95%;
+}
+
 //
 // Application List
 //

@@ -1,54 +1,58 @@
-$icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
-
-@import 'bootstrap-sass-official/vendor/assets/stylesheets/bootstrap';
-
-// bower:scss
-@import "../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
-// endbower
-
-.browsehappy {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
-}
-
-//
-// Brand Colors
-//
-$color-brand-blue-base: rgb(25,166,215);
-
-$color-brand-white-base: rgb(252,252,252);
-
-$color-brand-black-base: rgb(23,29,31);
-$color-brand-black-lighter: rgb(33,39,41);
-$color-brand-black-lightest: rgb(63,69,71);
-
-$color-brand-green-base: rgb(64, 172, 24);
-
-$color-brand-brown-lighter: rgb(229, 228, 224);
-$color-brand-brown-lightest: rgb(244, 241, 236);
-
-
-//
-// Brand Font Stack
-//
-$font-serif: Georgia, serif;
-$font-sans: "pragmatica-web", "Helvetica Neue", "Helvetica", Arial, sans-serif;
-
-
 //
 // Import Dependencies
 //
-@import "application-utility";
-@import "application-layout";
-@import "application-typography";
-@import "application-forms";
-@import "application-content";
+@import "_base";
+@import "_typography";
+@import "_forms";
+@import "_content";
 @import "respond@1200";
 @import "respond@979";
 @import "respond@767";
 @import "respond@640";
+
+
+//
+// Bootstrap Overrides
+//
+.alert {
+    font-size: 1.3em;
+}
+
+.alert-error{
+    background-color:#f2dede;
+    border-color:#eed3d7;
+    color:#b94a48;
+}
+
+.alert-error hr{
+    border-top-color:#e6c1c7;
+}
+
+.alert-error .alert-link{
+    color:#953b39;
+}
+
+.glyphicon {
+    top: 2px;
+}
+
+
+//
+// Utilities
+//
+.element-invisible {
+    display: none;
+}
+
+.element-hidden {
+    visibility: hidden;
+}
+
+@mixin cross-platform-border-radius($corner-radius) {
+  border-radius: $corner-radius;
+  -moz-border-radius: $corner-radius;
+  -webkit-border-radius: $corner-radius;
+}
 
 
 //

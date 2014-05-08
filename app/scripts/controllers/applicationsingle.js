@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationSingleCtrl', ['$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'Template', 'Feature', 'Field', 'Statistic', 'User', 'leafletData', function ($rootScope, $scope, $routeParams, $location, $timeout, Application, Template, Feature, Field, Statistic, User, leafletData) {
+  .controller('ApplicationSingleCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', '$timeout', '$http', 'Application', 'Template', 'Feature', 'Field', 'Statistic', 'User', 'leafletData', function ($route, $rootScope, $scope, $routeParams, $location, $timeout, $http, Application, Template, Feature, Field, Statistic, User, leafletData) {
 
   //
   // VARIABLES
@@ -24,9 +24,85 @@ angular.module('commonsCloudAdminApp')
     $scope.controls = {
       draw: {
         options: {
+          draw: {
+            circle: false,
+            rectangle: false,
+            polyline: {
+              shapeOptions: {
+                stroke: true,
+                color: '#ffffff',
+                weight: 4,
+                opacity: 0.5,
+                fill: true,
+                fillColor: null,
+                fillOpacity: 0.2,
+                clickable: true
+              }
+            },
+            polygon: {
+              shapeOptions: {
+                stroke: true,
+                color: '#ffffff',
+                weight: 4,
+                opacity: 0.5,
+                fill: true,
+                fillColor: '#ffffff',
+                fillOpacity: 0.2,
+                clickable: true
+              }
+            },
+            handlers: {
+              marker: {
+                tooltip: {
+                  start: 'Click map to place marker.'
+                }
+              },
+              polygon: {
+                tooltip: {
+                  start: 'Click to start drawing shape.',
+                  cont: 'Click to continue drawing shape.',
+                  end: 'Click first point to close this shape.'
+                }
+              },
+              polyline: {
+                error: '<strong>Error:</strong> shape edges cannot cross!',
+                tooltip: {
+                  start: 'Click to start drawing line.',
+                  cont: 'Click to continue drawing line.',
+                  end: 'Click last point to finish line.'
+                }
+              },
+              simpleshape: {
+                tooltip: {
+                  end: 'Release mouse to finish drawing.'
+                }
+              }
+            }
+          },
           edit: {
+            selectedPathOptions: {
+              color: '#ffffff',
+              opacity: 0.6,
+              dashArray: '10, 10',
+              fill: true,
+              fillColor: '#ffffff',
+              fillOpacity: 0.1
+            },
             'featureGroup': featureGroup,
-            'remove': true
+            'remove': true,
+            handlers: {
+              edit: {
+                tooltip: {
+                  text: 'Drag handles, or marker to edit feature.',
+                  subtext: 'Click cancel to undo changes.'
+                }
+              },
+              remove: {
+                tooltip: {
+                  text: 'Click on a feature to remove'
+                }
+              }
+            }
           }
         }
       }
@@ -78,7 +154,6 @@ angular.module('commonsCloudAdminApp')
     $scope.GetUser = function() {
       User.get().$promise.then(function(response) {
         $scope.user = response.response;
-        console.log('User', $scope.user);
       });
     };
 
@@ -140,14 +215,30 @@ angular.module('commonsCloudAdminApp')
           if ($routeParams.page) {
             Feature.query({
               storage: $scope.template.storage,
-              page: $routeParams.page
+              page: $routeParams.page,
+              q: {
+                'order_by': [
+                  {
+                    'field': 'created',
+                    'direction': 'desc'
+                  }
+                ]
+              }
             }).$promise.then(function(response) {
               $scope.featureproperties = response.properties;
               $scope.features = response.response.features;
             });
           } else {
             Feature.query({
-              storage: $scope.template.storage
+              storage: $scope.template.storage,
+              q: {
+                'order_by': [
+                  {
+                    'field': 'created',
+                    'direction': 'desc'
+                  }
+                ]
+              }
             }).$promise.then(function(response) {
               $scope.featureproperties = response.properties;
               $scope.features = response.response.features;
@@ -167,8 +258,9 @@ angular.module('commonsCloudAdminApp')
               }).$promise.then(function(response) {
                 $scope.feature = response;
                 $scope.getEditableMap();
-                console.log('$scope.feature', $scope.feature);
               });
+            } else {
+              $scope.getEditableMap();
             }
           });
 
@@ -469,11 +561,47 @@ angular.module('commonsCloudAdminApp')
         $scope.feature.geometry = $scope.convertFeatureCollectionToGeometryCollection($scope.feature.geometry);
       }
 
+      angular.forEach($scope.fields, function(field, index) {
+        if (field.data_type === 'relationship') {
+          if (angular.isArray($scope.feature[field.relationship]) && $scope.feature[field.relationship].length >= 1) {
+            
+            var relationship_array_ = [];
+
+            angular.forEach($scope.feature[field.relationship], function (value, index) {
+              relationship_array_.push({
+                'id': value
+              });
+            });
+
+            $scope.feature[field.relationship] = relationship_array_;
+          } else if (angular.isNumber($scope.feature[field.relationship])) {
+
+            var value = $scope.feature[field.relationship];
+
+            $scope.feature[field.relationship] = [{
+              'id': value
+            }];
+
+          }
+        }
+      });
+
       $scope.feature.$save({
         storage: $scope.template.storage
-      }).then(function (response) {
-        leafletData.unresolveMap();
+      }).then(function(response) {
+        $rootScope.alerts.push({
+          'type': 'success',
+          'title': 'Yes!',
+          'details': 'Your new Features created.'
+        });
+
         $location.path('/applications/' + $scope.application.id + '/templates/' + $scope.template.id + '/features');
+      }, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind trying that again? It looks like we couldn\'t create that Feature for you.'
+        });
       });
     };
 
@@ -481,29 +609,55 @@ angular.module('commonsCloudAdminApp')
     // Update the attributes of an existing Template
     //
     $scope.UpdateFeature = function () {
+
+      if ($scope.feature.geometry) {
+        $scope.feature.geometry = $scope.convertFeatureCollectionToGeometryCollection($scope.feature.geometry);
+      }
+
+      angular.forEach($scope.fields, function(field, index) {
+        if (field.data_type === 'relationship') {
+          if (angular.isArray($scope.feature[field.relationship]) && $scope.feature[field.relationship].length >= 1) {
+            
+            var relationship_array_ = [];
+
+            angular.forEach($scope.feature[field.relationship], function (value, index) {
+              relationship_array_.push({
+                'id': value
+              });
+            });
+
+            $scope.feature[field.relationship] = relationship_array_;
+          } else if (angular.isNumber($scope.feature[field.relationship])) {
+
+            var value = $scope.feature[field.relationship];
+
+            $scope.feature[field.relationship] = [{
+              'id': value
+            }];
+
+          }
+        }
+      });
+
       Feature.update({
         storage: $scope.template.storage,
         featureId: $scope.feature.id
-      }, $scope.feature);
+      }, $scope.feature).$promise.then(function(response) {
 
-      //
-      // Once the template has been updated successfully we should give the
-      // user some on-screen feedback and then remove it from the screen after
-      // a few seconds as not to confuse them or force them to reload the page
-      // to dismiss the message
-      //
-      var alert = {
-        'type': 'success',
-        'title': 'Updated',
-        'details': 'Your feature updates were saved successfully!'
-      };
+        $rootScope.alerts.push({
+          'type': 'success',
+          'title': 'Awesome!',
+          'details': 'Your Feature updates were saved successfully!'
+        });
 
-      $rootScope.alerts.push(alert);
-
-      $timeout(function () {
-        $rootScope.alerts = [];
-      }, 3000);
-
+        $route.reload();
+      }, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind trying that again? It looks like we couldn\'t update that Feature for you.'
+        });
+      });
     };
 
     //
@@ -614,9 +768,10 @@ angular.module('commonsCloudAdminApp')
         // Check to see if existing map layers exist for this API Feature
         //
         if ($scope.feature.geometry) {
-          console.error('existing features', $scope.feature.geometry, featureGroup);
+          $scope.feature.geometry = $scope.convertGeometryCollectionToFeatureCollection($scope.feature.geometry);
           $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
-          // $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+
+          map.fitBounds(featureGroup.getBounds());
         }
 
         //
@@ -692,11 +847,40 @@ angular.module('commonsCloudAdminApp')
               storage: field_.relationship
             }).$promise.then(function (response) {
               $scope.fields[index].values = response.response.features;
+              var values_ = $scope.getDefaultEnumeratedValue(field_.relationship);
+            }, function(error) {
+              $rootScope.alerts.push({
+                'type': 'error',
+                'title': 'Uh-oh!',
+                'details': 'Something stranged happened, please reload the page.'
+              });
             });
         }
       });
 
     };
+
+    $scope.getDefaultEnumeratedValue = function (relationship) {
+      $http({
+        method: 'GET',
+        url: '//api.commonscloud.org/v2/' + $scope.template.storage + '/' + $routeParams.featureId + '/' + relationship + '.json'
+      }).success(function(data, status, headers, config) {
+
+          var default_values = [];
+
+          angular.forEach(data.response.features, function (feature, index) {
+            default_values.push(feature.id);
+          });
+
+          $scope.feature[relationship] = default_values;
+
+          return default_values;
+        }).
+        error(function(data, status, headers, config) {
+          console.log('data', data, status);
+        });
+    };
+
 
     //
     // Update how Features are sorted based on Field/Header clicked and
@@ -722,6 +906,31 @@ angular.module('commonsCloudAdminApp')
 
       angular.forEach(ExistingCollection.features, function (feature, index) {
         NewFeatureCollection.geometries.push(feature.geometry);
+      });
+
+      return NewFeatureCollection;
+    };
+
+    //
+    // Convert a GeometryCollection to a FeatureCollection so that it can be
+    // saved to a Geometry field within the CommonsCloud Admin UI
+    //
+    $scope.convertGeometryCollectionToFeatureCollection = function (geometryCollection) {
+
+      var ExistingCollection = angular.fromJson(geometryCollection);
+
+      var NewFeatureCollection = {
+        'type': 'FeatureCollection',
+        'features': []
+      };
+
+      angular.forEach(ExistingCollection.geometries, function (feature, index) {
+        var geometry_ = {
+          'type': 'Feature',
+          'geometry': feature
+        };
+
+        NewFeatureCollection.features.push(geometry_);
       });
 
       return NewFeatureCollection;

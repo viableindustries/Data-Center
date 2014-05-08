@@ -22,10 +22,10 @@ angular.module('commonsCloudAdminApp')
       request: function(config) {
         var sessionCookie = ipCookie('session');
 
-        if (config.url !== "/views/authorize.html" && (sessionCookie === 'undefined' || sessionCookie === undefined)) {
+        if (config.url !== '/views/authorize.html' && (sessionCookie === 'undefined' || sessionCookie === undefined)) {
           $location.hash('');
           $location.path('/');
-          return config || $q.when(config);;
+          return config || $q.when(config);
         }
 
         config.headers = config.headers || {};

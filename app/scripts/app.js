@@ -8,9 +8,10 @@ angular
     'ngRoute',
     'ngAnimate',
     'ui.gravatar',
-    'leaflet-directive'
+    'leaflet-directive',
+    'flow'
   ])
-  .config(function($routeProvider, $locationProvider, $httpProvider) {
+  .config(['$routeProvider', '$locationProvider', '$httpProvider', 'flowFactoryProvider', function($routeProvider, $locationProvider, $httpProvider, flowFactoryProvider) {
 
     // Setup routes for our application
     $routeProvider
@@ -87,4 +88,13 @@ angular
     // $httpProvider.defaults.useXDomain = true;
     // $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-  });
+    flowFactoryProvider.defaults = {
+      target: '',
+      permanentErrors: [500, 501],
+      maxChunkRetries: 1,
+      chunkRetryInterval: 5000,
+      simultaneousUploads: 1
+    };
+    // Can be used with different implementations of Flow.js
+    flowFactoryProvider.factory = fustyFlowFactory;
+  }]);

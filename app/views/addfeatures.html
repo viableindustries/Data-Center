@@ -87,7 +87,6 @@
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'phone'" class="form-control" type="tel" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'date'" class="form-control" class="form-control" type="date" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'time'" class="form-control" type="time" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
-                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'file'" class="form-control" type="file" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'whole_number' || field.data_type === 'float'" class="form-control" type="number" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
 
                       <textarea data-ng-model="feature[field.name]" class="form-control" data-ng-if="field.data_type === 'textarea'" id="{{ field.name }}" name="{{ field.name }}">{{ feature[field.name] }}</textarea>
@@ -97,6 +96,44 @@
                         </select>
                       </div>
 
+                      <div data-ng-if="field.data_type === 'file'">
+                        <div flow-init flow-files-submitted="FilesToBeUploaded($flow.files)" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]">
+                          <div class="drop" flow-drop ng-class="dropClass">
+                            <span class="btn btn-default" flow-btn>Upload Image</span>
+                            <span class="btn btn-default" flow-btn flow-directory ng-show="$flow.supportDirectory">Upload Folder of Images</span>
+                            <b>OR</b>
+                            Drag And Drop your images here
+                          </div>
+
+                          <br/>
+
+                          <div class="row">
+                            <div>
+                              <div class="col-sm-4" style="margin-bottom: 16px;" ng-repeat="file in $flow.files" class="gallery-box">
+                                <span class="title">{{file.name}}</span>
+                                <div class="thumbnail" ng-show="$flow.files.length">
+                                  <img flow-img="file" />
+                                </div>
+<!--                                 <div class="progress progress-striped" ng-class="{active: file.isUploading()}">
+                                  <div class="progress-bar" role="progressbar"
+                                       aria-valuenow="{{file.progress() * 100}}"
+                                       aria-valuemin="0"
+                                       aria-valuemax="100"
+                                       ng-style="{width: (file.progress() * 100) + '%'}">
+                                    <span class="sr-only">{{file.progress()}}% Complete</span>
+                                  </div>
+                                </div> -->
+                                <div class="btn-group">
+                                  <a class="btn btn-xs btn-danger" ng-click="file.cancel()">
+                                    Remove
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
                     </div>
                   </fieldset>
                   <hr />

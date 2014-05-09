@@ -36,6 +36,7 @@
                     <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}" />
                     <textarea rows="6" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description">{{ application.description }}</textarea>
                     <input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" placeholder="Website" value="{{ application.url }}" />
+                    <a href="javascript:void()" data-ng-click="DeleteApplication(application)" class="btn btn-link pull-right">Delete Application</a>
                     <input type="submit" data-ng-click="UpdateApplication(application)" class="button" value="Save Changes" />
                   </form>
                 </div>

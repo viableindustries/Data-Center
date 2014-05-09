@@ -1,5 +1,328 @@
 'use strict';
 
+angular
+  .module('commonsCloudAdminApp', [
+    'ivpusic.cookie',
+    'ngResource',
+    'ngSanitize',
+    'ngRoute',
+    'ngAnimate',
+    'ui.gravatar',
+    'leaflet-directive',
+    'angularFileUpload'
+  ])
+  .config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
+
+    // Setup routes for our application
+    $routeProvider
+      .when('/', {
+        templateUrl: '/views/main.html',
+        controller: 'MainCtrl'
+      })
+      .when('/authorize', {
+        templateUrl: '/views/authorize.html',
+        controller: 'AuthorizeCtrl'
+      })
+      .when('/applications', {
+        templateUrl: '/views/applications.html',
+        controller: 'ApplicationsCtrl'
+      })
+      .when('/applications/:applicationId', {
+        templateUrl: '/views/applicationsingle.html',
+        controller: 'ApplicationSingleCtrl'
+      })
+      .when('/applications/:applicationId/templates', {
+        redirectTo: '/applications/:applicationId'
+      })
+      .when('/applications/:applicationId/collaborators', {
+        templateUrl: '/views/collaborators.html',
+        controller: 'ApplicationSingleCtrl'
+      })
+      .when('/applications/:applicationId/templates/:templateId/features', {
+        templateUrl: '/views/templatessingle.html',
+        controller: 'ApplicationSingleCtrl'
+      })
+      .when('/applications/:applicationId/templates/:templateId/features/add', {
+        templateUrl: '/views/addfeatures.html',
+        controller: 'ApplicationSingleCtrl'
+      })
+      .when('/applications/:applicationId/templates/:templateId/features/:featureId', {
+        templateUrl: '/views/editfeature.html',
+        controller: 'ApplicationSingleCtrl'
+      })
+      .when('/applications/:applicationId/templates/:templateId', {
+        redirectTo: '/applications/:applicationId/templates/:templateId/features'
+      })
+      .when('/applications/:applicationId/templates/:templateId/statistics', {
+        templateUrl: '/views/statistics.html',
+        controller: 'ApplicationSingleCtrl'
+      })
+      .when('/applications/:applicationId/templates/:templateId/statistics/add', {
+        templateUrl: '/views/addstatistics.html',
+        controller: 'ApplicationSingleCtrl'
+      })
+      .when('/applications/:applicationId/templates/:templateId/statistics/:statisticId', {
+        templateUrl: '/views/editstatistics.html',
+        controller: 'ApplicationSingleCtrl'
+      })
+      .when('/applications/:applicationId/templates/:templateId/fields', {
+        templateUrl: '/views/fields.html',
+        controller: 'ApplicationSingleCtrl'
+      })
+      .when('/applications/:applicationId/templates/:templateId/settings', {
+        templateUrl: '/views/settings.html',
+        controller: 'ApplicationSingleCtrl'
+      })
+      .when('/applications/:applicationId/templates/:templateId/developers', {
+        templateUrl: '/views/developers.html',
+        controller: 'ApplicationSingleCtrl'
+      })
+      .otherwise({
+        redirectTo: '/'
+      });
+
+    // If you remove this, you break the whole application
+    $locationProvider.html5Mode(true).hashPrefix('!');
+
+  }]);
+
+'use strict';
+
+angular.module('commonsCloudAdminApp')
+  .controller('MainCtrl', ['$rootScope', '$scope', 'ipCookie', '$location', '$window', function($rootScope, $scope, ipCookie, $location, $window) {
+
+    var session_cookie = ipCookie('session');
+
+    if (!session_cookie) {
+      $window.location.href = 'http://api.commonscloud.org/oauth/authorize?response_type=token&client_id=PGvNp0niToyRspXaaqx3PiQBMn66QXyAq5yrNHpz&redirect_uri=http%3A%2F%2F127.0.0.1%3A9000%2Fauthorize&scope=user applications';
+    } else {
+      $location.hash('');
+      $location.path('/applications');
+    }
+
+  }]);
+
+'use strict';
+
+angular.module('commonsCloudAdminApp').controller('AuthorizeCtrl', ['$scope', '$rootScope', '$location', 'ipCookie', function($scope, $rootScope, $location, ipCookie) {
+
+    $scope.getAccessToken = function() {
+
+      var locationHash = $location.hash();
+      var accessToken = locationHash.substring(0, locationHash.indexOf('&'));
+      var cleanToken = accessToken.replace('access_token=', '');
+
+      var cookieOptions = {
+        path: '/',
+        expires: 2
+      };
+
+      $rootScope.user.is_authenticated = true;
+      return ipCookie('session', cleanToken, cookieOptions);
+    };
+
+    $scope.getAccessToken();
+
+    $location.hash('');
+    $location.path('/applications');
+  }]);
+
+'use strict';
+
+angular.module('commonsCloudAdminApp')
+  .factory('AuthorizationInterceptor', ['$rootScope', '$q', 'ipCookie', '$location', function ($rootScope, $q, ipCookie, $location) {
+
+    //
+    // Before we do anything else we should check to make sure
+    // the users is authenticated with the CommonsCloud, otherwise
+    // the this Client Application will not work properly. We must
+    // have already authenticated the user (Resource Owner) with
+    // the API through OAuth 2.0
+    //
+    // We set the default value to `false` and then check if the
+    // session cookie for our domain exists.
+    //
+    $rootScope.user = {
+      'is_authenticated': false
+    };
+
+
+    return {
+      request: function(config) {
+        var sessionCookie = ipCookie('session');
+
+        if (config.url !== '/views/authorize.html' && (sessionCookie === 'undefined' || sessionCookie === undefined)) {
+          $location.hash('');
+          $location.path('/');
+          return config || $q.when(config);
+        }
+
+        config.headers = config.headers || {};
+        if (sessionCookie) {
+          config.headers.Authorization = 'Bearer ' + sessionCookie;
+        }
+        config.headers['Content-Type'] = 'application/json';
+        console.debug('AuthorizationInterceptor::Request', config || $q.when(config));
+        return config || $q.when(config);
+      },
+      response: function(response) {
+        if (response.status === 401 || response.status === 403) {
+          $location.hash('');
+          $location.path('/');
+          return response || $q.when(response);
+        }
+        console.debug('AuthorizationInterceptor::Response', response || $q.when(response));
+        return response || $q.when(response);
+      }
+    };
+
+  }]).config(function ($httpProvider) {
+    $httpProvider.interceptors.push('AuthorizationInterceptor');
+  });
+'use strict';
+
+angular.module('commonsCloudAdminApp')
+  .controller('ApplicationsCtrl', ['$rootScope', '$scope', '$route', 'Application', 'User', 'ipCookie', '$location', function ($rootScope, $scope, $route, Application, User, ipCookie, $location) {
+
+    //
+    // Instantiate an Application object so that we can perform all necessary
+    // functionality against our Application resource
+    //
+    $scope.application = new Application();
+    $scope.applications = Application.query();
+
+    //
+    // Hide the navigation/sidebar by default (Cloud icon in top/left)
+    //
+    $rootScope.navigation = false;
+    $scope.alerts = [];
+
+    //
+    // Hide the New Application form by default
+    //
+    $scope.NewApplication = false;
+
+    $scope.GetUser = function() {
+      User.get().$promise.then(function(response) {
+        $scope.user = response.response;
+      }, function (error) {
+        //
+        // Once the template has been updated successfully we should give the
+        // user some on-screen feedback and then remove it from the screen after
+        // a few seconds as not to confuse them or force them to reload the page
+        // to dismiss the message
+        //
+        var alert = {
+          'type': 'error',
+          'title': 'Oops!',
+          'details': 'Looks like your user information is missing in action. Try reloading the page or logging in again.'
+        };
+
+        $scope.alerts.push(alert);
+      });
+    };
+
+    //
+    //
+    //
+    $scope.GetUser();
+
+    //
+    // Save a new Application to the API Database
+    //
+    $scope.save = function () {
+
+      console.log($scope.application);
+
+      //
+      // Save the Application via a post to the API and then push it onto the
+      // Applications array, so that it appears in the user interface
+      //
+      $scope.application.$save().then(function (response) {
+        $scope.applications.push(response.response);
+
+        var alert = {
+          'type': 'success',
+          'title': 'Sweet!',
+          'details': 'Your new Application was created, go add some stuff to it.'
+        };
+
+        $scope.alerts.push(alert);
+
+      }, function (error) {
+        //
+        // Once the template has been updated successfully we should give the
+        // user some on-screen feedback and then remove it from the screen after
+        // a few seconds as not to confuse them or force them to reload the page
+        // to dismiss the message
+        //
+        var alert = {
+          'type': 'error',
+          'title': 'Oops!',
+          'details': 'Looks like we couldn\'t create that Application, mind trying again?'
+        };
+
+        $scope.alerts.push(alert);
+      });
+
+      //
+      // Empty the form fields and hide the form
+      //
+      $scope.application = new Application();
+      $scope.NewApplication = false;
+    };
+
+  }]);
+
+'use strict';
+
+angular.module('commonsCloudAdminApp')
+  .factory('CommonsCloudAPI', function ($http) {
+    // Service logic
+    // ...
+
+    var meaningOfLife = 42;
+
+    // Public API here
+    return {
+      getApplications: function () {
+        
+        return true;
+      }
+    };
+  });
+
+'use strict';
+
+angular.module('commonsCloudAdminApp')
+  .provider('Application', function() {
+
+    this.$get = ['$resource', '$location', function($resource, $location) {
+
+      var base_resource_url = '//api.commonscloud.org/v2/applications/:id.json';
+
+      var Application = $resource(base_resource_url, {}, {
+        query: {
+          method: 'GET',
+          isArray: true,
+          transformResponse: function(data, headersGetter) {
+
+            var applications = angular.fromJson(data);
+
+            return applications.response.applications;
+          }
+        },
+        update: {
+          method: 'PATCH'
+        }
+      });
+
+      return Application;
+    }];
+  });
+
+'use strict';
+
 angular.module('commonsCloudAdminApp')
   .controller('ApplicationSingleCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', '$timeout', '$http', 'Application', 'Template', 'Feature', 'Field', 'Statistic', 'User', 'leafletData', function ($route, $rootScope, $scope, $routeParams, $location, $timeout, $http, Application, Template, Feature, Field, Statistic, User, leafletData) {
 
@@ -986,3 +1309,195 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.GetApplication();
   }]);
+
+'use strict';
+
+angular.module('commonsCloudAdminApp')
+  .provider('Template', function () {
+
+    this.$get = ['$resource', function ($resource) {
+
+      var Template = $resource('//api.commonscloud.org/v2/templates/:id.json', {
+
+      }, {
+        query: {
+          method: 'GET',
+          isArray: true,
+          url: '//api.commonscloud.org/v2/applications/:applicationId/templates.json',
+          transformResponse: function (data, headersGetter) {
+
+            var templates = angular.fromJson(data);
+
+            return templates.response.templates;
+          }
+        },
+        save: {
+          method: 'POST',
+          url: '//api.commonscloud.org/v2/applications/:applicationId/templates.json'
+        },
+        update: {
+          method: 'PATCH'
+        }
+      });
+
+      return Template;
+    }];
+
+  });
+
+'use strict';
+
+angular.module('commonsCloudAdminApp')
+  .provider('Feature', function () {
+
+    this.$get = ['$resource', function ($resource) {
+
+      var Feature = $resource('//api.commonscloud.org/v2/:storage.json', {
+
+      }, {
+        query: {
+          method: 'GET',
+          isArray: false,
+          transformResponse: function (data, headersGetter) {
+            return angular.fromJson(data);
+          }
+        },
+        save: {
+          method: 'POST',
+          transformRequest: function (data, headersGetter) {
+            var feature = angular.fromJson(data);
+
+            //
+            // We have to make sure that our previously Stringified GeoJSON
+            // is converted back to an object prior to submission
+            //            
+            feature.geometry = angular.fromJson(feature.geometry);
+
+            //
+            // Make sure all of our feature data is converted back toJson
+            // prior before submitting it to the API.
+            //
+            data = angular.toJson(feature);
+
+            return data;
+          }
+        },
+        get: {
+          method: 'GET',
+          url: '//api.commonscloud.org/v2/:storage/:featureId.json',
+          transformResponse: function (data, headersGetter) {
+
+            var feature = angular.fromJson(data);
+
+            return feature.response;
+          }
+
+        },
+        update: {
+          method: 'PATCH',
+          url: '//api.commonscloud.org/v2/:storage/:featureId.json'
+        },
+        delete: {
+          method: 'DELETE',
+          url: '//api.commonscloud.org/v2/:storage/:featureId.json'
+        }
+      });
+
+      return Feature;
+    }];
+
+  });
+
+'use strict';
+
+angular.module('commonsCloudAdminApp')
+  .provider('Field', function () {
+
+    this.$get = ['$resource', function ($resource) {
+
+      var Field = $resource('//api.commonscloud.org/v2/templates/:templateId/fields/:fieldId.json', {
+
+      }, {
+        query: {
+          method: 'GET',
+          isArray: true,
+          url: '//api.commonscloud.org/v2/templates/:templateId/fields.json',
+          transformResponse: function (data, headersGetter) {
+
+            var fields = angular.fromJson(data);
+
+            return fields.response.fields;
+          }
+        },
+        save: {
+          method: 'POST',
+          url: '//api.commonscloud.org/v2/templates/:templateId/fields.json'
+        },
+        update: {
+          method: 'PATCH'
+        }
+      });
+
+      return Field;
+    }];
+
+  });
+
+'use strict';
+
+angular.module('commonsCloudAdminApp')
+  .provider('Statistic', function () {
+
+    this.$get = ['$resource', function ($resource) {
+
+      var Statistic = $resource('//api.commonscloud.org/v2/templates/:templateId/statistics/:statisticId.json', {
+
+      }, {
+        get: {
+          method: 'GET',
+          transformResponse: function (data, headersGetter) {
+
+            var statistic = angular.fromJson(data);
+
+            return statistic.response;
+          }
+
+        },
+        query: {
+          method: 'GET',
+          isArray: true,
+          url: '//api.commonscloud.org/v2/templates/:templateId/statistics.json',
+          transformResponse: function (data, headersGetter) {
+
+            var statistics = angular.fromJson(data);
+
+            return statistics.response.statistics;
+          }
+        },
+        save: {
+          method: 'POST',
+          url: '//api.commonscloud.org/v2/templates/:templateId/statistics.json'
+        },
+        update: {
+          method: 'PATCH'
+        }
+      });
+
+      return Statistic;
+    }];
+
+  });
+
+'use strict';
+
+angular.module('commonsCloudAdminApp')
+  .provider('User', function() {
+
+    this.$get = ['$resource', function($resource) {
+
+      var User = $resource('//api.commonscloud.org/v2/user/me.json');
+
+      return User;
+    }];
+
+  });

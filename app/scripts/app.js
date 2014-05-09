@@ -9,9 +9,9 @@ angular
     'ngAnimate',
     'ui.gravatar',
     'leaflet-directive',
-    'flow'
+    'angularFileUpload'
   ])
-  .config(['$routeProvider', '$locationProvider', '$httpProvider', 'flowFactoryProvider', function($routeProvider, $locationProvider, $httpProvider, flowFactoryProvider) {
+  .config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
 
     // Setup routes for our application
     $routeProvider
@@ -84,17 +84,4 @@ angular
     // If you remove this, you break the whole application
     $locationProvider.html5Mode(true).hashPrefix('!');
 
-    // $httpProvider.defaults.withCredentials = true;
-    // $httpProvider.defaults.useXDomain = true;
-    // $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-    flowFactoryProvider.defaults = {
-      target: '',
-      permanentErrors: [500, 501],
-      maxChunkRetries: 1,
-      chunkRetryInterval: 5000,
-      simultaneousUploads: 1
-    };
-    // Can be used with different implementations of Flow.js
-    flowFactoryProvider.factory = fustyFlowFactory;
   }]);

@@ -193,6 +193,44 @@ input::-webkit-inner-spin-button {
     background: #5CB85C;
     color: #fff
 }
+
+.drop .btn {
+  position: relative;
+}
+
+.drop .upload {
+  color: darken($color-brand-white-base, 5%);
+  display: block;
+  font-size: 64px;
+  line-height: 1.2;
+}
+
+.drop .label-dragdrop {
+  font-size: 16px;
+  font-weight: 200;
+  line-height: 1;
+  margin-top: 16px;
+}
+
+.drop .label-or {
+  font-family: $font-serif;
+  font-size: 12px;
+  font-weight: 200;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.drop .btn input {
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  -khtml-opacity: 0;
+  -moz-opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
 .transfer-box {
     margin-bottom: 5px;
 }
@@ -201,34 +239,28 @@ input::-webkit-inner-spin-button {
 }
 
 .thumbnail {
-    line-height: 20px;
-    margin-bottom: 5px;
-    overflow: hidden;
-    word-break: normal;
+  border: 0;
+  line-height: 20px;
+  margin-bottom: 5px;
+  overflow: hidden;
+  word-break: normal;
 }
 .thumbnail img {
-    max-width: 200px;
-    max-height: 150px;
+  max-width: 200px;
+  max-height: 150px;
 }
 
-.gallery-box {
-    width: 200px;
+.upload-list {
     padding: 5px;
     margin: 7px;
-    float: left;
-    min-height: 200px;
-    border: 1px solid #ddd;
-    overflow: hidden;
+    border-bottom: 1px solid darken($color-brand-white-base, 5%);
 }
-.gallery-box .progress {
-    margin-bottom: 0;
+
+.upload-list .form-group {
+  margin-bottom: 4px;
 }
-.gallery-box .thumbnail {
-    height: 188px;
-    width: 188px;
+
+.upload-list label {
+  font-size: 12px;
 }
-.gallery-box .title {
-    height: 22px;
-    overflow: hidden;
-    display: block;
-}
+

@@ -324,7 +324,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationSingleCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', '$timeout', '$http', 'Application', 'Template', 'Feature', 'Field', 'Statistic', 'User', 'leafletData', function ($route, $rootScope, $scope, $routeParams, $location, $timeout, $http, Application, Template, Feature, Field, Statistic, User, leafletData) {
+  .controller('ApplicationSingleCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', '$timeout', '$http', '$upload', 'Application', 'Template', 'Feature', 'Field', 'Statistic', 'User', 'leafletData', function ($route, $rootScope, $scope, $routeParams, $location, $timeout, $http, $upload, Application, Template, Feature, Field, Statistic, User, leafletData) {
 
   //
   // VARIABLES
@@ -344,6 +344,10 @@ angular.module('commonsCloudAdminApp')
 
     var featureGroup = new L.FeatureGroup();
 
+    $scope.defaults = {
+      tileLayer: 'https://{s}.tiles.mapbox.com/v3/developedsimple.hl46o07c/{z}/{x}/{y}.png',
+      scrollWheelZoom: false
+    };
     $scope.controls = {
       draw: {
         options: {
@@ -438,6 +442,7 @@ angular.module('commonsCloudAdminApp')
     $scope.newField = new Field();
     $scope.newStatistic = new Statistic();
     $scope.feature = new Feature();
+    $scope.files = [];
     $scope.user = new User();
     // $scope.newTemplate = {
     //   'is_public': true,
@@ -1134,11 +1139,11 @@ angular.module('commonsCloudAdminApp')
         //
         // Load and Prepare the Mapbox Basemap Tiles
         //
-        var MapboxBasemap = L.tileLayer('https://{s}.tiles.mapbox.com/v3/developedsimple.hl46o07c/{z}/{x}/{y}.png', {
-          attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-        });
+        // var MapboxBasemap = L.tileLayer('https://{s}.tiles.mapbox.com/v3/developedsimple.hl46o07c/{z}/{x}/{y}.png', {
+        //   attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+        // });
 
-        map.addLayer(MapboxBasemap);
+        // map.addLayer(MapboxBasemap);
 
 
         //
@@ -1269,39 +1274,81 @@ angular.module('commonsCloudAdminApp')
 
     $scope.file_list = [];
 
-    $scope.onFileSelect = function($files) {
-      //$files: an array of files selected, each file has name, size, and type.
-      for (var i = 0; i < $files.length; i++) {
-        var file = $files[i];
-
-        $scope.file_list.push(file);
-
-        $scope.upload = $upload.upload({
-          url: 'server/upload/url', //upload.php script, node.js route, or servlet url
-          // method: 'POST' or 'PUT',
-          // headers: {'header-key': 'header-value'},
-          // withCredentials: true,
-          data: {myObj: $scope.myModelObj},
-          file: file, // or list of files: $files for html5 only
-          /* set the file formData name ('Content-Desposition'). Default is 'file' */
-          //fileFormDataName: myFile, //or a list of names for multiple files (html5).
-          /* customize how data is added to formData. See #40#issuecomment-28612000 for sample code */
-          //formDataAppender: function(formData, key, val){}
-        }).progress(function(evt) {
-          console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-        }).success(function(data, status, headers, config) {
-          // file is uploaded successfully
-          console.log(data);
-        });
-        //.error(...)
-        //.then(success, error, progress); 
-        //.xhr(function(xhr){xhr.upload.addEventListener(...)})// access and attach any event listener to XMLHttpRequest.
-      }
-      /* alternative way of uploading, send the file binary with the file's content-type.
-         Could be used to upload files to CouchDB, imgur, etc... html5 FileReader is needed. 
-         It could also be used to monitor the progress of a normal http post/put request with large data*/
-      // $scope.upload = $upload.http({...})  see 88#issuecomment-31366487 for sample code.
+    $scope.onFileRemove = function(file, index) {
+      $scope.files.splice(index, 1);
     };
+
+    $scope.onFileSelect = function(files) {
+
+      angular.forEach(files, function(file, index) {
+        // Check to see if we can load previews
+        if (window.FileReader && file.type.indexOf('image') > -1) {
+
+          var fileReader = new FileReader();
+          fileReader.readAsDataURL(file);
+          fileReader.onload = function (event) {
+            file.preview = event.target.result;
+            $scope.files.push(file);
+            $scope.$apply();
+          };
+        } else {
+          $scope.files.push(file);
+          $scope.$apply();
+        };
+      });
+
+      console.log('files', $scope.files);
+
+
+      // $scope.dataUrls = [];
+      // $scope.file_list = [];
+      //$files: an array of files selected, each file has name, size, and type.
+      // for (var i = 0; i < $files.length; i++) {
+      //   var $file = $files[i];
+      //   $scope.file_list.push($file);
+      //   if (window.FileReader && $file.type.indexOf('image') > -1) {
+      //     var fileReader = new FileReader();
+      //     fileReader.readAsDataURL($files[i]);
+      //     var loadFile = function(fileReader, index) {
+      //       fileReader.onload = function(e) {
+      //         $timeout(function() {
+      //           $scope.dataUrls[index] = e.target.result;
+      //         });
+      //       }
+      //     }(fileReader, i);
+      //   }
+      //   // $scope.progress[i] = -1;
+      //   // if ($scope.uploadRightAway) {
+      //   //   $scope.start(i);
+      //   // }
+
+      //   // $scope.upload = $upload.upload({
+      //   //   url: 'server/upload/url', //upload.php script, node.js route, or servlet url
+      //   //   // method: 'POST' or 'PUT',
+      //   //   // headers: {'header-key': 'header-value'},
+      //   //   // withCredentials: true,
+      //   //   data: {myObj: $scope.myModelObj},
+      //   //   file: file, // or list of files: $files for html5 only
+      //   //   /* set the file formData name ('Content-Desposition'). Default is 'file' */
+      //   //   //fileFormDataName: myFile, //or a list of names for multiple files (html5).
+      //   //   /* customize how data is added to formData. See #40#issuecomment-28612000 for sample code */
+      //   //   //formDataAppender: function(formData, key, val){}
+      //   // }).progress(function(evt) {
+      //   //   console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+      //   // }).success(function(data, status, headers, config) {
+      //   //   // file is uploaded successfully
+      //   //   console.log(data);
+      //   // });
+      //   //.error(...)
+      //   //.then(success, error, progress); 
+      //   //.xhr(function(xhr){xhr.upload.addEventListener(...)})// access and attach any event listener to XMLHttpRequest.
+      // }
+
+
+
+      console.log('$scope.files', $scope.files);
+    };
+
 
       //
     // Now that we've got the everything prepared, let's go ahead and start

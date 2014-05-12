@@ -78,7 +78,7 @@
               <div class="col-sm-6">
                 <form method="POST">
                   <fieldset>
-                    <div class="form-group" data-ng-repeat="field in fields">
+                    <div class="form-group" data-ng-repeat="field in fields | orderBy:field.weight">
                       <div data-ng-if="field.data_type === 'boolean'" class="checkbox">
                         <label>
                           <input data-ng-model="feature[field.name]" type="checkbox" id="{{ field.name }}" name="{{ field.name }}" /> {{ field.label }}

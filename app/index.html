@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -15,18 +15,14 @@
     <link type="text/css" rel="stylesheet" href="//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css" />
     <link type="text/css" rel="stylesheet" href='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.css' />
 
+    <!-- build:css({.tmp,app}) styles/main.css -->
     <link rel="stylesheet" href="/styles/vendor/bootstrap.css">
     <link rel="stylesheet" href="/styles/vendor/leaflet.css">
-    <!-- build:css({.tmp,app}) styles/main.css -->
     <link rel="stylesheet" href="/styles/main.css">
     <!-- endbuild -->
 
-    <base href="/">
   </head>
-  <body flow-prevent-drop flow-drag-enter="dropClass='drag-over'" flow-drag-leave="dropClass=''">
-    <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+  <body>
 
     <!-- Add your site or application content here -->
     <div role="main" data-ng-view="" class="site-content"></div>
@@ -65,9 +61,8 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-        <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.js'></script>
-
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.js'></script>
         <script src="/scripts/plugins/angular-file-upload/dist/angular-file-upload-html5-shim.js"></script>
         <script src="/scripts/plugins/angular-file-upload/dist/angular-file-upload-shim.js"></script>
         <script src="/scripts/plugins/angular-file-upload/dist/angular-file-upload.js"></script>
@@ -84,10 +79,9 @@
         <script src="/scripts/services/field.js"></script>
         <script src="/scripts/services/statistic.js"></script>
         <script src="/scripts/services/user.js"></script>
-        <!-- endbuild -->
-
         <script type="text/javascript" src="//use.typekit.net/ysm0jiw.js"></script>
         <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+        <!-- endbuild -->
         
 </body>
 </html>

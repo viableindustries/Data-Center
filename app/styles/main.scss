@@ -1,16 +1,15 @@
 //
 // Import Dependencies
 //
+@font-face {
+  font-family: 'Glyphicons Halflings';
 
-$icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
+  src: url('fonts/glyphicons-halflings-regular.eot');
+  src: url('fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('fonts/glyphicons-halflings-regular.woff') format('woff'), url('fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
 
-@import 'bootstrap-sass-official/vendor/assets/stylesheets/bootstrap';
-
-// bower:scss
-@import "../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
-// endbower
-
-@import "/bower_components/leaflet-dist/leaflet.css";
+@import "vendor/bootstrap.css";
+@import "vendor/leaflet.css";
 
 @import "_base";
 @import "_typography";

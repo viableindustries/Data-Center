@@ -238,9 +238,7 @@
                     </div>
                     <div class="form-group" data-ng-show="newField.data_type === 'relationship'">
                       <label for="relationship" class="control-label">Relationship</label>
-                      <select data-ng-model="newField.relationship" id="relationship" name="relationship" class="form-control">
-                        <option data-ng-repeat="template_ in templates" data-ng-if="template.name !== template_.name" value="{{ template_.id }}">{{ template_.name }}</option>
-                      </select>
+                      <select data-ng-model="newField.relationship" id="relationship" name="relationship" class="form-control" data-ng-options="template_.storage as template_.name for template_ in templates"></select>
                       <p class="help-block">The other Feature Collection you would like to relate this Feature with, for example an enumeration of other values</p>
                     </div>
                     <div class="form-group" data-ng-show="newField.data_type === 'float' || newField.data_type === 'whole_number'">

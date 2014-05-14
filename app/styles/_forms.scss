@@ -184,14 +184,13 @@ input::-webkit-inner-spin-button {
 }
 
 .drop {
-    padding: 15px;
-    border: 2px #f1f1f1 dashed;
-    border-radius: 5px;
-    line-height: 34px;
+  border: 2px darken($color-brand-white-base, 10%) dashed;
+  color: $color-brand-black-base;
+  padding: 15px;
 }
 .drop.drag-over {
-    background: #5CB85C;
-    color: #fff
+    background-color: $color-brand-blue-base;
+    color: $color-brand-white-base;
 }
 
 .drop .btn {

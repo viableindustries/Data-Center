@@ -120,7 +120,7 @@
                 </form>
               </div>
               <div class="col-sm-6" data-ng-show="ShowMap">
-                <leaflet controls="controls" width="100%" height="425"></leaflet>
+                <leaflet defaults="defaults" controls="controls" width="100%" height="425"></leaflet>
                 <a href="javascript:void(0)" data-ng-click="ShowGeoJSONEditor=!ShowGeoJSONEditor">Show GeoJSON Editor</a>
                 <textarea data-ng-model="feature.geometry" class="form-control" data-ng-if="ShowGeoJSONEditor" id="geometry" name="geometry"></textarea>
               </div>

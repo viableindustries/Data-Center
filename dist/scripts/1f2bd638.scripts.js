@@ -1297,9 +1297,6 @@ angular.module('commonsCloudAdminApp')
         };
       });
 
-      console.log('files', $scope.files);
-
-
       // $scope.dataUrls = [];
       // $scope.file_list = [];
       //$files: an array of files selected, each file has name, size, and type.
@@ -1343,10 +1340,6 @@ angular.module('commonsCloudAdminApp')
       //   //.then(success, error, progress); 
       //   //.xhr(function(xhr){xhr.upload.addEventListener(...)})// access and attach any event listener to XMLHttpRequest.
       // }
-
-
-
-      console.log('$scope.files', $scope.files);
     };
 
 

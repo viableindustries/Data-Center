@@ -61,8 +61,17 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.js'></script>
+
+        <script type="text/javascript" src="//use.typekit.net/ysm0jiw.js"></script>
+        <script type="text/javascript">
+            try {
+                Typekit.load();
+            } catch (e) {
+            }
+        </script>
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="/scripts/plugins/angular-file-upload/dist/angular-file-upload-html5-shim.js"></script>
         <script src="/scripts/plugins/angular-file-upload/dist/angular-file-upload-shim.js"></script>
         <script src="/scripts/plugins/angular-file-upload/dist/angular-file-upload.js"></script>
@@ -79,8 +88,6 @@
         <script src="/scripts/services/field.js"></script>
         <script src="/scripts/services/statistic.js"></script>
         <script src="/scripts/services/user.js"></script>
-        <script type="text/javascript" src="//use.typekit.net/ysm0jiw.js"></script>
-        <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
         <!-- endbuild -->
         
 </body>

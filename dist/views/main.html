@@ -1,1 +1,25 @@
-<div class="row"><section class="col-xs-12 col-sm-12 page-content"><header><div class="row"><div class="col-sm-10"><ol class="breadcrumb"><li class="front-page"><a title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li></ol></div><div class="col-sm-2 text-right"><ul class="nav account"></ul></div></div></header><div data-ng-show="!loading" class="inner wide"><div class="row"><div class="col-xs-12"><a data-ng-if="!auth.is_authenticated" href="http://api.commonscloud.org/oauth/authorize?response_type=token&client_id=PGvNp0niToyRspXaaqx3PiQBMn66QXyAq5yrNHpz&redirect_uri=http%3A%2F%2F127.0.0.1%3A9000%2Fauthorize&scope=user applications">You should login</a></div></div></div></section></div>
+<div class="row">
+
+  <section class="col-xs-12 col-sm-12 page-content">
+    <header>
+      <div class="row">
+        <div class="col-sm-10">
+          <ol class="breadcrumb">
+            <li class="front-page"><a title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li>
+          </ol>
+        </div>
+        <div class="col-sm-2 text-right">
+          <ul class="nav account"></ul>
+        </div>
+      </div>
+    </header>
+
+    <div data-ng-show="!loading" class="inner wide">
+      <div class="row">
+        <div class="col-xs-12"> 
+        <a data-ng-if="!auth.is_authenticated" href="http://api.commonscloud.org/oauth/authorize?response_type=token&client_id=PGvNp0niToyRspXaaqx3PiQBMn66QXyAq5yrNHpz&redirect_uri=http%3A%2F%2F127.0.0.1%3A9000%2Fauthorize&scope=user applications">You should login</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

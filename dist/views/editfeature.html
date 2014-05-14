@@ -1,1 +1,133 @@
-<div class="row"><section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content"><header><div class="row"><div class="col-sm-10"><ol class="breadcrumb"><li class="front-page"><a title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li><li><a href="/applications" title="">Applications</a></li><li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li><li><a href="/applications/{{ application.id }}/templates" title="">Templates</a></li><li><a href="/applications/{{ application.id }}/templates/{{ template.id }}" title="">{{ template.name }}</a></li><li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features/{{ feature.id }}" title="">Edit Feature</a></li></ol></div><div class="col-sm-2 text-right"><ul class="nav account"><li><a href="" class="notifications"><span class="glyphicon glyphicon-bell"></span></a></li><li><a href="//api.commonscloud.org/user/profile" class="user"><img data-ng-if="user.email" gravatar-src="'{{ user.email }}'" gravatar-size="24"></a></li></ul></div></div></header><div data-ng-show="!loading" class="inner wide"><div class="row"><div class="col-xs-12"><header class="application"><div class="row"><div class="col-sm-11"><div data-ng-show="!EditApplication"><h1 class="short">{{ application.name }}</h1></div><div data-ng-show="EditApplication"><form method="PUT"><input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}"><textarea rows="6" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description">{{ application.description }}</textarea><input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" placeholder="Website" value="{{ application.url }}"> <input type="submit" data-ng-click="UpdateApplication(application)" class="button" value="Save Changes"></form></div></div><div class="col-xs-1 text-right"><a data-ng-show="!EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-pencil"></span></a> <a data-ng-show="EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-remove"></span></a></div></div></header><nav class="application-navigation navbar navbar-default"><ul class="nav navbar-nav"><li class="active"><a href="/applications/{{ application.id }}/templates">Templates</a></li><li><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li></ul></nav><article class="application single template-nested"><div class="row"><div class="col-sm-5"><h1>{{ template.name }}</h1></div><div class="col-sm-7"><ul class="nav nav-pills pull-right"><li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features">Features</a></li><li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/statistics">Statistics</a></li><li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/fields">Fields</a></li><li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/settings">Settings</a></li><li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/developers">Developers</a></li></ul></div></div><div data-ng-show="alerts.length !== 0" class="row alerts"><div class="col-sm-6 col-sm-offset-3"><p data-ng-repeat="alert in alerts" class="alert alert-{{ alert.type }}"><strong>{{ alert.title }}</strong> {{ alert.details }}</p></div></div><div class="row"><div class="col-sm-6"><form method="POST"><fieldset><div class="form-group" data-ng-repeat="field in fields | orderBy:field.weight"><div data-ng-if="field.data_type === 'boolean'" class="checkbox"><label><input data-ng-model="feature[field.name]" type="checkbox" id="{{ field.name }}" name="{{ field.name }}"> {{ field.label }}</label></div><label data-ng-if="field.data_type !== 'boolean'" for="{{ field.name }}" class="control-label">{{ field.label }}</label><input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'text'" class="form-control" type="text" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}"> <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'email'" class="form-control" type="email" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}"> <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'url'" class="form-control" type="url" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}"> <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'phone'" class="form-control" type="tel" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}"> <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'date'" class="form-control" class="form-control" type="date" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}"> <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'time'" class="form-control" type="time" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}"> <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'file'" class="form-control" type="file" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}"> <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'whole_number' || field.data_type === 'float'" class="form-control" type="number" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}"><textarea data-ng-model="feature[field.name]" class="form-control" data-ng-if="field.data_type === 'textarea'" id="{{ field.name }}" name="{{ field.name }}">{{ feature[field.name] }}</textarea><div data-ng-if="field.data_type === 'relationship' && field.values.length > 0"><select multiple data-ng-model="feature[field.relationship]" class="form-control" id="{{ field.relationship }}" name="{{ field.relationship }}" data-ng-options="value_.id as value_.name for value_ in field.values"><option data-ng-if="!field.is_required" value="">-- Choose {{ field.label }} --</select></div></div></fieldset><div class="form-group"><label for="status">Feature Status</label><select class="form-control" data-ng-model="feature.status" id="status" name="status" required><option selected value="">--Choose a status--<option value="draft">Draft<option value="crowd">Crowd Sourced<option value="private">Private<option value="public">Public</select><br><a href="javascript:void()" data-ng-click="DeleteFeature(feature)" class="btn btn-link">Delete Feature</a> <input type="submit" id="update" name="update" data-ng-click="UpdateFeature(feature)" class="button pull-right" value="Update Feature"></div></form></div><div class="col-sm-6" data-ng-show="ShowMap"><leaflet defaults="defaults" controls width="100%" height="425"></leaflet><a href="javascript:void(0)" data-ng-click="ShowGeoJSONEditor=!ShowGeoJSONEditor">Show GeoJSON Editor</a><textarea data-ng-model="feature.geometry" class="form-control" data-ng-if="ShowGeoJSONEditor" id="geometry" name="geometry"></textarea></div></div></article></div></div></div></section></div>
+<div class="row">
+
+  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
+    <header>
+      <div class="row">
+        <div class="col-sm-10">
+          <ol class="breadcrumb">
+            <li class="front-page"><a title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li>
+            <li><a href="/applications" title="">Applications</a></li>
+            <li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
+            <li><a href="/applications/{{ application.id }}/templates" title="">Templates</a></li>
+            <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}" title="">{{ template.name }}</a></li>
+            <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features/{{ feature.id }}" title="">Edit Feature</a></li>
+          </ol>
+        </div>
+        <div class="col-sm-2 text-right">
+          <ul class="nav account">
+            <li><a href="" class="notifications"><span class="glyphicon glyphicon-bell"></span></a></li>
+            <li><a href="//api.commonscloud.org/user/profile" class="user"><img data-ng-if="user.email" gravatar-src="'{{ user.email }}'" gravatar-size="24" /></a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div data-ng-show="!loading" class="inner wide">
+      <div class="row">
+        <div class="col-xs-12">  
+          <header class="application">
+            <div class="row">
+              <div class="col-sm-11">
+                <div data-ng-show="!EditApplication">
+                  <h1 class="short">{{ application.name }}</h1>
+                </div>
+                <div data-ng-show="EditApplication">
+                  <form method="PUT">
+                    <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}" />
+                    <textarea rows="6" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description">{{ application.description }}</textarea>
+                    <input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" placeholder="Website" value="{{ application.url }}" />
+                    <input type="submit" data-ng-click="UpdateApplication(application)" class="button" value="Save Changes" />
+                  </form>
+                </div>
+              </div>
+              <div class="col-xs-1 text-right">
+                <a data-ng-show="!EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a data-ng-show="EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-remove"></span></a>
+              </div>
+            </div>
+          </header>
+
+          <nav class="application-navigation navbar navbar-default">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="/applications/{{ application.id }}/templates">Templates</a></li>
+              <li><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li>
+            </ul>
+          </nav>
+
+          <article class="application single template-nested">
+            <div class="row">
+              <div class="col-sm-5">
+                <h1>{{ template.name }}</h1>
+              </div>
+              <div class="col-sm-7">
+                <ul class="nav nav-pills pull-right">
+                  <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features">Features</a></li>
+                  <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/statistics">Statistics</a></li>
+                  <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/fields">Fields</a></li>
+                  <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/settings">Settings</a></li>
+                  <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/developers">Developers</a></li>
+                </ul>
+              </div>
+            </div>            
+            <div data-ng-show="alerts.length !== 0" class="row alerts">
+              <div class="col-sm-6 col-sm-offset-3">
+                <p data-ng-repeat="alert in alerts" class="alert alert-{{ alert.type }}"><strong>{{ alert.title }}</strong> {{ alert.details }}</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <form method="POST">
+                  <fieldset>
+                    <div class="form-group" data-ng-repeat="field in fields | orderBy:field.weight">
+                      <div data-ng-if="field.data_type === 'boolean'" class="checkbox">
+                        <label>
+                          <input data-ng-model="feature[field.name]" type="checkbox" id="{{ field.name }}" name="{{ field.name }}" /> {{ field.label }}
+                        </label>
+                      </div>
+                      <label data-ng-if="field.data_type !== 'boolean'" for="{{ field.name }}" class="control-label">{{ field.label }}</label>
+
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'text'" class="form-control" type="text" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'email'" class="form-control" type="email" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'url'" class="form-control" type="url" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'phone'" class="form-control" type="tel" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'date'" class="form-control" class="form-control" type="date" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'time'" class="form-control" type="time" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'file'" class="form-control" type="file" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'whole_number' || field.data_type === 'float'" class="form-control" type="number" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
+
+                      <textarea data-ng-model="feature[field.name]" class="form-control" data-ng-if="field.data_type === 'textarea'" id="{{ field.name }}" name="{{ field.name }}">{{ feature[field.name] }}</textarea>
+                      <div data-ng-if="field.data_type === 'relationship' && field.values.length > 0">
+                        <select multiple="" data-ng-model="feature[field.relationship]" class="form-control" id="{{ field.relationship }}" name="{{ field.relationship }}" data-ng-options="value_.id as value_.name for value_ in field.values">
+                          <option data-ng-if="!field.is_required" value="">-- Choose {{ field.label }} --</option>
+                        </select>
+                      </div>
+
+                    </div>
+                  </fieldset>
+                  <div class="form-group">
+                    <label for="status">Feature Status</label>
+                    <select class="form-control" data-ng-model="feature.status" id="status" name="status" required="required">
+                      <option selected="selected" value="">--Choose a status--</option>
+                      <option value="draft">Draft</option>
+                      <option value="crowd">Crowd Sourced</option>
+                      <option value="private">Private</option>
+                      <option value="public">Public</option>
+                    </select>
+                    <br />
+                    <a href="javascript:void()" data-ng-click="DeleteFeature(feature)" class="btn btn-link">Delete Feature</a>
+                    <input type="submit" id="update" name="update" data-ng-click="UpdateFeature(feature)" class="button pull-right" value="Update Feature" />
+                  </div>
+                </form>
+              </div>
+              <div class="col-sm-6" data-ng-show="ShowMap">
+                <leaflet defaults="defaults" controls="controls" width="100%" height="425"></leaflet>
+                <a href="javascript:void(0)" data-ng-click="ShowGeoJSONEditor=!ShowGeoJSONEditor">Show GeoJSON Editor</a>
+                <textarea data-ng-model="feature.geometry" class="form-control" data-ng-if="ShowGeoJSONEditor" id="geometry" name="geometry"></textarea>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

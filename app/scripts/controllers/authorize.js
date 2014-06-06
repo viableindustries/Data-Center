@@ -14,7 +14,7 @@ angular.module('commonsCloudAdminApp').controller('AuthorizeCtrl', ['$scope', '$
       };
 
       $rootScope.user.is_authenticated = true;
-      return ipCookie('session', cleanToken, cookieOptions);
+      return ipCookie('ccapi_session', cleanToken, cookieOptions);
     };
 
     $scope.getAccessToken();

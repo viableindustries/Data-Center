@@ -20,7 +20,7 @@ angular.module('commonsCloudAdminApp')
 
     return {
       request: function(config) {
-        var sessionCookie = ipCookie('session');
+        var sessionCookie = ipCookie('ccapi_session');
 
         if (config.url !== '/views/authorize.html' && (sessionCookie === 'undefined' || sessionCookie === undefined)) {
           $location.hash('');

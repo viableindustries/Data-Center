@@ -8,10 +8,10 @@ angular
     'ngRoute',
     'ngAnimate',
     'ui.gravatar',
-    'ui.directives',
-    'leaflet-directive'
+    'leaflet-directive',
+    'angularFileUpload'
   ])
-  .config(function ($routeProvider, $locationProvider, $httpProvider) {
+  .config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
 
     // Setup routes for our application
     $routeProvider
@@ -84,8 +84,4 @@ angular
     // If you remove this, you break the whole application
     $locationProvider.html5Mode(true).hashPrefix('!');
 
-    // $httpProvider.defaults.withCredentials = true;
-    // $httpProvider.defaults.useXDomain = true;
-    // $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-  });
+  }]);

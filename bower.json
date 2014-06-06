@@ -14,10 +14,10 @@
     "angular-route": "1.2.16",
     "angular-gravatar": "0.1.4",
     "angular-animate": "1.2.16",
-    "angular-ui": "0.4.0",
-    "leaflet-dist": "0.7.0",
-    "leaflet.markerclusterer": "latest",
-    "angular-leaflet-directive": "0.7.6"
+    "leaflet-dist": "0.7.x",
+    "angular-leaflet-directive": "0.7.6",
+    "leaflet.markerclusterer": "0.4",
+    "leaflet.draw": "0.2.2"
   },
   "devDependencies": {
     "angular-mocks": "1.2.16",

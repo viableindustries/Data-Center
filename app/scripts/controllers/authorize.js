@@ -9,11 +9,12 @@ angular.module('commonsCloudAdminApp').controller('AuthorizeCtrl', ['$scope', '$
       var cleanToken = accessToken.replace('access_token=', '');
 
       var cookieOptions = {
+        path: '/',
         expires: 2
       };
 
       $rootScope.user.is_authenticated = true;
-      return ipCookie('session', cleanToken, cookieOptions);
+      return ipCookie('ccapi_session', cleanToken, cookieOptions);
     };
 
     $scope.getAccessToken();

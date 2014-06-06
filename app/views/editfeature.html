@@ -78,7 +78,7 @@
               <div class="col-sm-6">
                 <form method="POST">
                   <fieldset>
-                    <div class="form-group" data-ng-repeat="field in fields">
+                    <div class="form-group" data-ng-repeat="field in fields | orderBy:field.weight">
                       <div data-ng-if="field.data_type === 'boolean'" class="checkbox">
                         <label>
                           <input data-ng-model="feature[field.name]" type="checkbox" id="{{ field.name }}" name="{{ field.name }}" /> {{ field.label }}
@@ -97,7 +97,7 @@
 
                       <textarea data-ng-model="feature[field.name]" class="form-control" data-ng-if="field.data_type === 'textarea'" id="{{ field.name }}" name="{{ field.name }}">{{ feature[field.name] }}</textarea>
                       <div data-ng-if="field.data_type === 'relationship' && field.values.length > 0">
-                        <select data-ng-model="feature[field.name]" class="form-control" id="{{ field.name }}" name="{{ field.name }}" data-ng-options="value_.id as value_.name for value_ in field.values">
+                        <select multiple="" data-ng-model="feature[field.relationship]" class="form-control" id="{{ field.relationship }}" name="{{ field.relationship }}" data-ng-options="value_.id as value_.name for value_ in field.values">
                           <option data-ng-if="!field.is_required" value="">-- Choose {{ field.label }} --</option>
                         </select>
                       </div>
@@ -120,10 +120,10 @@
                 </form>
               </div>
               <div class="col-sm-6" data-ng-show="ShowMap">
-                <leaflet width="100%" height="425"></leaflet>
-<!--                 <a href="javascript:void(0)" data-ng-click="ShowGeoJSONEditor=!ShowGeoJSONEditor">Show GeoJSON Editor</a>
+                <leaflet defaults="defaults" controls="controls" width="100%" height="425"></leaflet>
+                <a href="javascript:void(0)" data-ng-click="ShowGeoJSONEditor=!ShowGeoJSONEditor">Show GeoJSON Editor</a>
                 <textarea data-ng-model="feature.geometry" class="form-control" data-ng-if="ShowGeoJSONEditor" id="geometry" name="geometry"></textarea>
- -->              </div>
+              </div>
             </div>
           </article>
         </div>

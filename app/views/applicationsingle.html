@@ -36,6 +36,7 @@
                     <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}" />
                     <textarea rows="6" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description">{{ application.description }}</textarea>
                     <input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" placeholder="Website" value="{{ application.url }}" />
+                    <a href="javascript:void()" data-ng-click="DeleteApplication(application)" class="btn btn-link pull-right">Delete Application</a>
                     <input type="submit" data-ng-click="UpdateApplication(application)" class="button" value="Save Changes" />
                   </form>
                 </div>
@@ -55,6 +56,15 @@
           </nav>
 
           <article class="template single">
+            <div class="row">
+              <div class="col-xs-12">
+                <div data-ng-show="$root.alerts.length !== 0" class="row alerts">
+                  <div class="col-sm-6 col-sm-offset-3">
+                    <p data-ng-repeat="alert in $root.alerts" class="alert alert-{{ alert.type }}"><strong>{{ alert.title }} </strong> {{ alert.details }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="row">
               <div class="col-sm-12">
                 <a data-ng-show="!AddTemplate" href="javascript:void();" class="button pull-right" data-ng-click="AddTemplate=!AddTemplate">Create a new template</a>
@@ -77,7 +87,7 @@
                     </p>
                   </div>
                   <div class="col-sm-3 text-right">
-                    <h3>{{ template.features.properties.total_features | number:0 }} <small>features</small></h3>
+                    <h3 data-ng-if="template.features.properties.total_features >= 0">{{ template.features.properties.total_features | number:0 }} <small>features</small></h3>
                   </div>
                 </div>                   
               </article>

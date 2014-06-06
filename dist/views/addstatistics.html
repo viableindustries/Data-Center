@@ -1,1 +1,112 @@
-<div class="row"><nav data-ng-show="$root.navigation" class="col-xs-10 col-sm-3 sidebar"></nav><section data-ng-show="!loading" class="col-xs-12 col-sm-9 page-content"><header><div class="row"><div class="col-sm-10"><ol class="breadcrumb"><li class="front-page"><a title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li><li><a href="/applications" title="">Applications</a></li><li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li><li><a href="/applications/{{ application.id }}/templates" title="">Templates</a></li><li><a href="/applications/{{ application.id }}/templates/{{ template.id }}" title="">{{ template.name }}</a></li><li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features/add" title="">New Feature</a></li></ol></div><div class="col-sm-2 text-right"><ul class="nav account"><li><a href="" class="notifications"><span class="glyphicon glyphicon-bell"></span></a></li><li><a href="//api.commonscloud.org/user/profile" class="user"><img gravatar-src="'joshua@viableindustries.com'" gravatar-size="24"></a></li></ul></div></div></header><div data-ng-show="!loading" class="inner wide"><div class="row"><div class="col-xs-12"><header class="application"><div class="row"><div class="col-sm-11"><div data-ng-show="!EditApplication"><h1 class="short">{{ application.name }}</h1></div><div data-ng-show="EditApplication"><form method="PUT"><input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}"><textarea rows="6" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description">{{ application.description }}</textarea><input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" placeholder="Website" value="{{ application.url }}"><input type="submit" data-ng-click="UpdateApplication(application)" class="button" value="Save Changes"></form></div></div><div class="col-xs-1 text-right"><a data-ng-show="!EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-pencil"></span></a> <a data-ng-show="EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-remove"></span></a></div></div></header><nav class="application-navigation navbar navbar-default"><ul class="nav navbar-nav"><li class="active"><a href="/applications/{{ application.id }}/templates">Templates</a></li><li><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li></ul></nav><article class="application single template-nested"><div class="row"><div class="col-sm-5"><h1>{{ template.name }}</h1></div><div class="col-sm-7"><ul class="nav nav-pills pull-right"><li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features">Features</a></li><li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/statistics">Statistics</a></li><li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/fields">Fields</a></li><li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/settings">Settings</a></li><li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/developers">Developers</a></li></ul></div></div><div class="row"><div class="col-sm-6 col-sm-offset-3"><form method="POST"><fieldset><div class="form-group"><label for="name">Name</label><input type="text" class="form-control" data-ng-model="newStatistic.name" id="name" name="name"></div><div class="form-group"><label for="units">Units</label><input type="text" class="form-control" data-ng-model="newStatistic.units" id="units" name="units"><p class="help-block">A simple label to use along side of your rolled-up statistic (e.g., $, %, gal., lbs.)</p></div><div class="form-group"><label for="function">Function</label><select class="form-control" data-ng-model="newStatistic.function" id="function" name="function" required><option selected value="sum">Sum</select><p class="help-block">The function you'd like to perform on the Field you define next</p></div><div class="form-group"><label for="field_id">Field</label><select class="form-control" data-ng-model="newStatistic.field_id" id="field_id" name="field_id" required data-ng-options="value_.id as value_.label for value_ in fields"><option>--Choose a field</select><p class="help-block">This would be the field you like to perform the Function above (e.g., {{ newStatistic.function }} )</p></div></fieldset><hr><div class="form-group"><input type="submit" id="save" name="save" data-ng-click="CreateStatistic(newStatistic)" class="button pull-right" value="Create Statistic"></div></form></div></div></article></div></div></div></section></div>
+<div class="row">
+
+  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
+    <header>
+      <div class="row">
+        <div class="col-sm-10">
+          <ol class="breadcrumb">
+            <li class="front-page"><a title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li>
+            <li><a href="/applications" title="">Applications</a></li>
+            <li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
+            <li><a href="/applications/{{ application.id }}/templates" title="">Templates</a></li>
+            <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}" title="">{{ template.name }}</a></li>
+            <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features/add" title="">New Feature</a></li>
+          </ol>
+        </div>
+        <div class="col-sm-2 text-right">
+          <ul class="nav account">
+            <li><a href="" class="notifications"><span class="glyphicon glyphicon-bell"></span></a></li>
+            <li><a href="//api.commonscloud.org/user/profile" class="user"><img data-ng-if="user.email" gravatar-src="'{{ user.email }}'" gravatar-size="24" /></a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div data-ng-show="!loading" class="inner wide">
+      <div class="row">
+        <div class="col-xs-12">  
+          <header class="application">
+            <div class="row">
+              <div class="col-sm-11">
+                <div data-ng-show="!EditApplication">
+                  <h1 class="short">{{ application.name }}</h1>
+                </div>
+                <div data-ng-show="EditApplication">
+                  <form method="PUT">
+                    <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}" />
+                    <textarea rows="6" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description">{{ application.description }}</textarea>
+                    <input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" placeholder="Website" value="{{ application.url }}" />
+                    <input type="submit" data-ng-click="UpdateApplication(application)" class="button" value="Save Changes" />
+                  </form>
+                </div>
+              </div>
+              <div class="col-xs-1 text-right">
+                <a data-ng-show="!EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a data-ng-show="EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-remove"></span></a>
+              </div>
+            </div>
+          </header>
+
+          <nav class="application-navigation navbar navbar-default">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="/applications/{{ application.id }}/templates">Templates</a></li>
+              <li><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li>
+            </ul>
+          </nav>
+
+          <article class="application single template-nested">
+            <div class="row">
+              <div class="col-sm-5">
+                <h1>{{ template.name }}</h1>
+              </div>
+              <div class="col-sm-7">
+                <ul class="nav nav-pills pull-right">
+                  <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/features">Features</a></li>
+                  <li class="active"><a href="/applications/{{ application.id }}/templates/{{ template.id }}/statistics">Statistics</a></li>
+                  <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/fields">Fields</a></li>
+                  <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/settings">Settings</a></li>
+                  <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/developers">Developers</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6 col-sm-offset-3">
+                <form method="POST">
+                  <fieldset>
+                    <div class="form-group">
+                      <label for="name">Name</label>
+                      <input type="text" class="form-control" data-ng-model="newStatistic.name" id="name" name="name" />
+                    </div>
+                    <div class="form-group">
+                      <label for="units">Units</label>
+                      <input type="text" class="form-control" data-ng-model="newStatistic.units" id="units" name="units" />
+                      <p class="help-block">A simple label to use along side of your rolled-up statistic (e.g., $, %, gal., lbs.)</p>
+                    </div>
+                    <div class="form-group">
+                      <label for="function">Function</label>
+                      <select class="form-control" data-ng-model="newStatistic.function" id="function" name="function" required="required">
+                        <option selected="selected" value="sum">Sum</option>
+                      </select>
+                      <p class="help-block">The function you'd like to perform on the Field you define next</p>
+                    </div>
+                    <div class="form-group">
+                      <label for="field_id">Field</label>
+                      <select class="form-control" data-ng-model="newStatistic.field_id" id="field_id" name="field_id" required="required" data-ng-options="value_.id as value_.label for value_ in fields">
+                        <option>--Choose a field</option>
+                      </select>
+                      <p class="help-block">This would be the field you like to perform the Function above (e.g., {{ newStatistic.function }} )</p>
+                    </div>
+                  </fieldset>
+                  <hr />
+                  <div class="form-group">
+                    <input type="submit" id="save" name="save" data-ng-click="CreateStatistic(newStatistic)" class="button pull-right" value="Create Statistic" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

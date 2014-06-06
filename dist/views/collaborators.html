@@ -1,1 +1,69 @@
-<div class="row"><nav data-ng-show="$root.navigation" class="col-xs-10 col-sm-3 sidebar"></nav><section data-ng-show="!loading" class="col-xs-12 col-sm-9 page-content"><header><div class="row"><div class="col-sm-10"><ol class="breadcrumb"><li class="front-page"><a title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li><li><a href="/applications" title="">Applications</a></li><li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li><li class="active"><a href="/applications/{{ application.id }}/collaborators" title="">Collaborators</a></li></ol></div><div class="col-sm-2 text-right"><ul class="nav account"><li><a href="" class="notifications"><span class="glyphicon glyphicon-bell"></span></a></li><li><a href="//api.commonscloud.org/user/profile" class="user"><img gravatar-src="'joshua@viableindustries.com'" gravatar-size="24"></a></li></ul></div></div></header><div data-ng-show="!loading" class="inner wide"><div class="row"><div class="col-xs-12"><header class="application"><div class="row"><div class="col-sm-11"><div data-ng-show="!EditApplication"><h1>{{ application.name }}</h1><p data-ng-show="application.description">{{ application.description }}</p><p data-ng-show="application.url"><a href="{{ application.url }}" target="_blank">{{ application.url }}</a> <span class="glyphicon glyphicon-link"></span></p></div><div data-ng-show="EditApplication"><form method="PUT"><input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}"><textarea rows="6" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description">{{ application.description }}</textarea><input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" placeholder="Website" value="{{ application.url }}"><input type="submit" data-ng-click="UpdateApplication(application)" class="button" value="Save Changes"></form></div></div><div class="col-xs-1 text-right"><a data-ng-show="!EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-pencil"></span></a> <a data-ng-show="EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-remove"></span></a></div></div></header><nav class="application-navigation navbar navbar-default"><ul class="nav navbar-nav"><li><a href="/applications/{{ application.id }}/templates">Templates</a></li><li class="active"><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li></ul></nav><article class="application single"><div class="row"><article class="col-sm-12 text-center"><h1><span style="font-size: 128px; color: rgb(232,232,232)" class="glyphicon glyphicon-flag"></span></h1><h1 style="color: rgb(111,111,111)">We're still working on this page.</h1></article></div></article></div></div></div></section></div>
+<div class="row">
+
+  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
+    <header>
+      <div class="row">
+        <div class="col-sm-10">
+          <ol class="breadcrumb">
+            <li class="front-page"><a title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li>
+            <li><a href="/applications" title="">Applications</a></li>
+            <li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
+            <li class="active"><a href="/applications/{{ application.id }}/collaborators" title="">Collaborators</a></li>
+          </ol>
+        </div>
+        <div class="col-sm-2 text-right">
+          <ul class="nav account">
+            <li><a href="" class="notifications"><span class="glyphicon glyphicon-bell"></span></a></li>
+            <li><a href="//api.commonscloud.org/user/profile" class="user"><img data-ng-if="user.email" gravatar-src="'{{ user.email }}'" gravatar-size="24" /></a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div data-ng-show="!loading" class="inner wide">
+      <div class="row">
+        <div class="col-xs-12">  
+          <header class="application">
+            <div class="row">
+              <div class="col-sm-11">
+                <div data-ng-show="!EditApplication">
+                  <h1>{{ application.name }}</h1>
+                  <p data-ng-show="application.description">{{ application.description }}</p>
+                  <p data-ng-show="application.url"><a href="{{ application.url }}" target="_blank">{{ application.url }}</a> <span class="glyphicon glyphicon-link"></span></p>
+                </div>
+                <div data-ng-show="EditApplication">
+                  <form method="PUT">
+                    <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}" />
+                    <textarea rows="6" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description">{{ application.description }}</textarea>
+                    <input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" placeholder="Website" value="{{ application.url }}" />
+                    <input type="submit" data-ng-click="UpdateApplication(application)" class="button" value="Save Changes" />
+                  </form>
+                </div>
+              </div>
+              <div class="col-xs-1 text-right">
+                <a data-ng-show="!EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a data-ng-show="EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-remove"></span></a>
+              </div>
+            </div>
+          </header>
+
+          <nav class="application-navigation navbar navbar-default">
+            <ul class="nav navbar-nav">
+              <li><a href="/applications/{{ application.id }}/templates">Templates</a></li>
+              <li class="active"><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li>
+            </ul>
+          </nav>
+
+          <article class="application single">
+            <div class="row">          
+                  <article class="col-sm-12 text-center">
+                    <h1><span style="font-size: 128px; color: rgb(232,232,232);" class="glyphicon glyphicon-flag"></span></h1>
+                    <h1 style="color: rgb(111,111,111);">We're still working on this page.</h1>
+                  </article>
+                </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

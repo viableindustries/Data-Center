@@ -1,0 +1,314 @@
+//
+// Generic Typography
+//
+// Any element specific typography should be kept in either the 
+// application-content stylesheet or another, relevant stylesheet 
+//
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 0.0125em;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+  h1.short {
+    margin-bottom: 0;
+  }
+
+  h1 a,
+  h1 a:hover {
+    color: rgb(64,64,64);
+  }
+
+
+h2 {
+  font-size: 16px;
+  font-weight: 300;
+  margin-bottom: 16px;
+}
+
+h3 {
+  font-size: 48px;
+  font-weight: 700;
+}
+
+h3 .stat-label {
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0;
+  text-transform: lowercase;
+}
+
+h5, p, li, main {
+  font-size: 14px;
+}
+
+a {
+  color: $color-brand-blue-base;
+  text-decoration: none;
+}
+
+a:hover {
+  color: darken($color-brand-blue-base, 5%);
+  text-decoration: underline;
+}
+
+.inline-label {
+    font-weight: 400;
+}
+
+.sidebar hr {
+  border: 0;
+  border-top: 1px solid $color-brand-black-base;
+}
+
+.sidebar p.heading {
+  color: rgb(79, 94, 99);
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+
+.breadcrumb,
+.account.nav {
+  background-color: transparent;
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.breadcrumb > li,
+.account.nav > li {
+  font-size: 14px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  vertical-align: middle;
+}
+
+.account.nav > li {
+  display: inline;
+  display: inline-block;
+}
+
+.breadcrumb > li > a,
+.account.nav > li > a {
+  background-color: transparent;
+  color: $color-brand-brown-lighter;
+  padding: 0;
+}
+
+.breadcrumb > li > a:hover,
+.account.nav > li > a:hover {
+  color: $color-brand-white-base;
+  text-decoration: none;
+}
+
+.account.nav > li > a:hover {
+  background-color: $color-brand-black-lighter;
+}
+
+.breadcrumb > li.front-page,
+.account.nav > li {
+  font-size: 20px;
+}
+
+.account > li .glyphicon {
+  font-size: 16px;
+  margin-right: 8px;
+}
+
+.breadcrumb > li .glyphicon {
+  top: 5px;
+}
+
+.account.nav .user img {
+  border-radius: 24px;
+  -moz-border-radius: 24px;
+  -webkit-border-radius: 24px;
+  margin-top: 2px;
+  vertical-align: text-top;
+}
+
+.breadcrumb > li.active,
+.account.nav > li.active {
+  font-weight: 700;
+}
+
+.breadcrumb > li + li:before,
+.account.nav > li + li:before {
+  color: $color-brand-black-lightest;
+}
+
+table {}
+    
+    .table > thead > tr > th,
+    .table > tbody > tr > th,
+    .table > tfoot > tr > th {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .table > thead > tr > th.edit,
+    .table > tbody > tr > th.edit,
+    .table > tfoot > tr > th.edit {
+      width: 32px;
+    }
+
+    .table > thead > tr > td,
+    .table > tbody > tr > td,
+    .table > tfoot > tr > td {
+      font-size: 13px;
+      padding: 16px 8px;
+    }
+
+
+//
+// Navigation and Navigation Bars
+//
+.nav.stacked {
+  margin:40px 20px;
+}
+.nav.stacked li {
+  border-top: 2px solid darken(rgb(13,160,198),3%);
+  display: block;
+  float: left;
+  clear: left;
+  width: 240px;
+}
+.nav.stacked li a:hover {
+  border-bottom: 0;
+}
+
+
+.application-navigation.navbar,
+.application-navigation.navbar-default {
+  background-color: $color-brand-brown-lighter;
+  border: none;
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  margin-bottom: 0;
+  padding: 0 32px;
+
+  .navbar-nav > .active > a, 
+  .navbar-nav > .active > a:hover, 
+  .navbar-nav > .active > a:focus {
+  }
+
+  .navbar-nav > .active > a::after, 
+  .navbar-nav > .active > a:hover::after, 
+  .navbar-nav > .active > a:focus::after {
+    border-right: 8px solid transparent;
+    border-top: 8px solid $color-brand-brown-lighter;
+    border-left: 8px solid transparent;
+    content: '';
+    display: inline-block;
+    left: 50%;
+    margin-left: -8px;
+    position: absolute;
+    bottom: -8px;
+  }
+
+  .navbar-nav > li > a, 
+  .navbar-nav > li > a:hover, 
+  .navbar-nav > li > a:focus {
+    background-color: $color-brand-brown-lighter;
+    color: $color-brand-black-lightest;
+  }
+
+}
+
+.nav-pills > li > a,
+.nav-pills > li > a:hover,
+.nav-pills > li > a:focus {
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  color: $color-brand-blue-base;
+}
+
+.nav-pills > li > a:hover {
+  background-color: $color-brand-brown-lighter;
+  color: $color-brand-black-lighter;
+}
+
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  background-color: $color-brand-blue-base;
+  color: $color-brand-white-base;
+}
+
+.sortable {
+  padding-left: 0;
+}
+
+.sortable li {
+  list-style: none;
+}
+
+.sortable .ui-state-highlight {
+  background-color: rgb(255,255,55);
+  height: 108px;
+}
+
+tr.ui-sortable-helper td {
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  -khtml-opacity: 0.8;
+  -moz-opacity: 0.8;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+}
+
+
+.site-navigation {
+  border: 0;
+  border-radius: 7px;
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+  top: -10px;
+  left: -20px;
+  min-width: 50px;
+}
+
+.site-navigation > li {
+  text-align:center;
+}
+
+.site-navigation > li > a {
+  border-radius: 7px;
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+  clear: both;
+  color: rgb(51, 51, 51);
+  display: block;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1.428571429;
+  margin: 0 4px;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.site-navigation > li > a:hover,
+.site-navigation > li > a:focus {
+  background-color: rgb(66, 139, 202);
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+}
+
+.dropdown-menu {
+  display: block;
+}

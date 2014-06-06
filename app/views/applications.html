@@ -37,10 +37,21 @@
             </form>
           </article>
         </div>
-      </div>      
+      </div>  
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div data-ng-show="alerts.length !== 0" class="row alerts">
+            <div class="col-sm-6 col-sm-offset-3">
+              <p data-ng-repeat="alert in alerts" class="alert alert-{{ alert.type }}"><strong>{{ alert.title }} </strong> {{ alert.details }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="row">
         <div data-ng-repeat="application in applications | orderBy:'name'" class="col-xs-12">          
-          <article class="application row">
+              <article class="application row">
             <div class="col-sm-1 col-sm-offset-2 hidden-xs edit-settings">
               <p><a href="/applications/{{ application.id }}"><span class="glyphicon glyphicon-pencil"></span></a></p>
             </div>

@@ -48,20 +48,7 @@ angular.module('commonsCloudAdminApp')
         },
         update: {
           method: 'PATCH',
-          url: '//api.commonscloud.org/v2/:storage/:featureId.json',
-          transformRequest: function (data, headersGetter) {
-            var feature = angular.fromJson(data);
-
-            //
-            // We have to make sure that our previously Stringified GeoJSON
-            // is converted back to an object prior to submission
-            //
-            feature.geometry = angular.fromJson(feature.geometry);
-
-            console.log(angular.toJson(feature));
-
-            return feature;
-          }
+          url: '//api.commonscloud.org/v2/:storage/:featureId.json'
         },
         delete: {
           method: 'DELETE',

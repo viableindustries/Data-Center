@@ -40,7 +40,7 @@ angular
       })
       .when('/applications/:applicationId/templates/:templateId/features', {
         templateUrl: '/views/templatessingle.html',
-        controller: 'ApplicationSingleCtrl'
+        controller: 'TemplateSingleCtrl'
       })
       .when('/applications/:applicationId/templates/:templateId/features/add', {
         templateUrl: '/views/addfeatures.html',

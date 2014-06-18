@@ -100,11 +100,6 @@ angular.module('commonsCloudAdminApp')
         });
     };
 
-
-  //
-  // CONTENT MUTATIONS
-  //
-
     $scope.GetApplication = function() {
       //
       // Get the single application that the user wants to view

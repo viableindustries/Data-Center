@@ -1,0 +1,85 @@
+<div class="row">
+
+  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
+
+    <div data-ng-include="'/views/includes/header.html'"></div>
+
+    <div data-ng-show="!loading" class="inner wide">
+      <div class="row">
+        <div class="col-xs-12">  
+          <header class="application">
+            <div class="row">
+              <div class="col-sm-11">
+                <h1 class="short">{{ application.name }}</h1>
+              </div>
+              <div class="col-xs-1 text-right">
+                <a href="/applications/{{ application.id }}/edit"><span class="glyphicon glyphicon-pencil"></span></a>
+              </div>
+            </div>
+          </header>
+
+          <nav class="application-navigation navbar navbar-default">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="/applications/{{ application.id }}/collections">Feature Collections</a></li>
+              <li><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li>
+            </ul>
+          </nav>
+
+          <article class="application single template-nested">
+            <div class="row">
+              <div class="col-sm-5">
+                <h1>{{ template.name }}</h1>
+              </div>
+              <div class="col-sm-7">
+                <ul class="nav nav-pills pull-right">
+                  <li class="active"><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features">Features</a></li>
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/statistics">Statistics</a></li>
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/fields">Fields</a></li>
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/settings">Settings</a></li>
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/developers">Developers</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <a class="button pull-right" href="/applications/{{ application.id }}/collections/{{ template.id }}/features/add">New Feature</a>
+                  </div>
+                </div>
+
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th class="edit">&nbsp;</th>
+                      <th data-ng-repeat="field in fields" data-ng-if="field.is_listed && field.data_type === 'text'">
+                        <a href="javascript:void()" data-ng-click="ChangeOrder(field.name)">
+                          {{ field.label }} <span data-ng-show="orderByField == '{{ field.name }}'"><span data-ng-show="!reverseSort" class="glyphicon glyphicon-arrow-down"></span><span data-ng-show="reverseSort" class="glyphicon glyphicon-arrow-up"></span></span>
+                        </a>
+                      </th>
+                      <th>Created</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr data-ng-repeat="feature in features | orderBy:orderByField:reverseSort">
+                      <td><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features/{{ feature.id }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                      <td data-ng-repeat="field in fields" data-ng-if="field.is_listed && (field.data_type === 'text' || field.data_type === 'date')">
+                        <span data-ng-if="field.data_type === 'date'">{{ feature[field.name] | date : 'MMM d, y @ h:mm a' }}</span>
+                        <span data-ng-if="field.data_type !== 'date'">{{ feature[field.name] }}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <ul class="pager">
+                  <li data-ng-if="featureproperties.current_page !== 1" class="previous"><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features?page={{ featureproperties.current_page-1 }}">&larr; Newer</a></li>
+                  <li data-ng-if="featureproperties.current_page !== featureproperties.total_pages" class="next"><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features?page={{ featureproperties.current_page+1 }}">Older &rarr;</a></li>
+                </ul>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

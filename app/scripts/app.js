@@ -51,8 +51,8 @@ angular
         controller: 'TemplateCreateCtrl'
       })
       .when('/applications/:applicationId/collections/:templateId/features', {
-        templateUrl: '/views/template.html',
-        controller: 'TemplateCtrl'
+        templateUrl: '/views/features.html',
+        controller: 'FeaturesCtrl'
       })
       .when('/applications/:applicationId/collections/:templateId/features/add', {
         templateUrl: '/views/addfeatures.html',

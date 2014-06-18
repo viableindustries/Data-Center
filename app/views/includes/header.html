@@ -1,0 +1,16 @@
+    <header>
+      <div class="row">
+        <div class="col-sm-10">
+          <ol class="breadcrumb">
+            <li class="front-page"><a href="javascript:void();" title="Return to your dashboard" target="_self"><span class="glyphicon glyphicon-cloud"></span></a></li>
+            <li data-ng-repeat="breadcrumb in breadcrumbs" class="{{ breadcrumb.class }}"><a href="{{ breadcrumb.url }}" title="{{ breadcrumb.title }}">{{ breadcrumb.label }}</a></li>
+          </ol>
+        </div>
+        <div class="col-sm-2 text-right">
+          <ul class="nav account">
+            <li><a href="" class="notifications"><span class="glyphicon glyphicon-bell"></span></a></li>
+            <li><a href="//api.commonscloud.org/user/profile" class="user"><img data-ng-if="$root.user.email" gravatar-src="'{{ $root.user.email }}'" gravatar-size="24" /></a></li>
+          </ul>
+        </div>
+      </div>
+    </header>

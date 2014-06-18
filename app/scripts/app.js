@@ -90,7 +90,7 @@ angular
         controller: 'ApplicationSingleCtrl'
       })
       .otherwise({
-        redirectTo: '/'
+        templateUrl: '/views/errors/404.html'
       });
 
     // If you remove this, you break the whole application

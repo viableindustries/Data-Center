@@ -145,8 +145,7 @@ a:hover {
   font-weight: 700;
 }
 
-.breadcrumb > li + li:before,
-.account.nav > li + li:before {
+.breadcrumb > li + li:before {
   color: darken($color-brand-white-base, 16%);
   content: "\00bb";
 }

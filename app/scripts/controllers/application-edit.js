@@ -11,7 +11,6 @@ angular.module('commonsCloudAdminApp')
     // Placeholders for our existing content
     //
     $scope.application = {};
-    $scope.user = new User();
 
     //
     // Controls for showing/hiding specific page elements that may not be
@@ -26,17 +25,6 @@ angular.module('commonsCloudAdminApp')
   //
   // CONTENT
   //
-    $scope.GetUser = function() {
-      User.get().$promise.then(function(response) {
-        $scope.user = response.response;
-      });
-    };
-
-
-  //
-  // CONTENT MUTATIONS
-  //
-
     //
     // Get the application the user has selected and begin loading the rest of
     // the application page

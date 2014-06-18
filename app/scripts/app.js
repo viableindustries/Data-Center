@@ -16,8 +16,8 @@ angular
     // Setup routes for our application
     $routeProvider
       .when('/', {
-        templateUrl: '/views/main.html',
-        controller: 'MainCtrl'
+        templateUrl: '/views/index.html',
+        controller: 'IndexCtrl'
       })
       .when('/authorize', {
         templateUrl: '/views/authorize.html',
@@ -28,8 +28,12 @@ angular
         controller: 'ApplicationsCtrl'
       })
       .when('/applications/:applicationId', {
-        templateUrl: '/views/applicationsingle.html',
-        controller: 'ApplicationSingleCtrl'
+        templateUrl: '/views/application.html',
+        controller: 'ApplicationCtrl'
+      })
+      .when('/applications/:applicationId/edit', {
+        templateUrl: '/views/application-edit.html',
+        controller: 'ApplicationEditCtrl'
       })
       .when('/applications/:applicationId/templates', {
         redirectTo: '/applications/:applicationId'
@@ -39,8 +43,8 @@ angular
         controller: 'ApplicationSingleCtrl'
       })
       .when('/applications/:applicationId/templates/:templateId/features', {
-        templateUrl: '/views/templatessingle.html',
-        controller: 'TemplateSingleCtrl'
+        templateUrl: '/views/template.html',
+        controller: 'TemplateCtrl'
       })
       .when('/applications/:applicationId/templates/:templateId/features/add', {
         templateUrl: '/views/addfeatures.html',

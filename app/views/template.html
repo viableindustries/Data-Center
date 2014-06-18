@@ -28,21 +28,10 @@
           <header class="application">
             <div class="row">
               <div class="col-sm-11">
-                <div data-ng-show="!EditApplication">
-                  <h1 class="short">{{ application.name }}</h1>
-                </div>
-                <div data-ng-show="EditApplication">
-                  <form method="PUT">
-                    <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}" />
-                    <textarea rows="6" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description">{{ application.description }}</textarea>
-                    <input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" placeholder="Website" value="{{ application.url }}" />
-                    <input type="submit" data-ng-click="UpdateApplication(application)" class="button" value="Save Changes" />
-                  </form>
-                </div>
+                <h1 class="short">{{ application.name }}</h1>
               </div>
               <div class="col-xs-1 text-right">
-                <a data-ng-show="!EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-pencil"></span></a>
-                <a data-ng-show="EditApplication" data-ng-click="EditApplication=!EditApplication"><span class="glyphicon glyphicon-remove"></span></a>
+                <a href="/applications/{{ application.id }}/edit"><span class="glyphicon glyphicon-pencil"></span></a>
               </div>
             </div>
           </header>

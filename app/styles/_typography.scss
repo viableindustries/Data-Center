@@ -147,7 +147,8 @@ a:hover {
 
 .breadcrumb > li + li:before,
 .account.nav > li + li:before {
-  color: $color-brand-black-lightest;
+  color: darken($color-brand-white-base, 16%);
+  content: "\00bb";
 }
 
 table {}
@@ -226,6 +227,10 @@ table {}
   .navbar-nav > li > a:focus {
     background-color: $color-brand-brown-lighter;
     color: $color-brand-black-lightest;
+  }
+
+  .button {
+    margin-top: 8px;
   }
 
 }

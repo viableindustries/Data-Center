@@ -1,24 +1,8 @@
 <div class="row">
 
   <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
-    <header>
-      <div class="row">
-        <div class="col-sm-10">
-          <ol class="breadcrumb">
-            <li class="front-page"><a title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li>
-            <li><a href="/applications" title="">Applications</a></li>
-            <li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
-            <li class="active"><a href="/applications/{{ application.id }}/templates" title="">Templates</a></li>
-          </ol>
-        </div>
-        <div class="col-sm-2 text-right">
-          <ul class="nav account">
-            <li><a href="" class="notifications"><span class="glyphicon glyphicon-bell"></span></a></li>
-            <li><a href="//api.commonscloud.org/user/profile" class="user"><img data-ng-if="user.email" gravatar-src="'{{ user.email }}'" gravatar-size="24" /></a></li>
-          </ul>
-        </div>
-      </div>
-    </header>
+
+    <div data-ng-include="'/views/includes/header.html'"></div>
 
     <div data-ng-show="!loading" class="inner wide">
       <div class="row">
@@ -38,117 +22,39 @@
 
           <nav class="application-navigation navbar navbar-default">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="/applications/{{ application.id }}/templates">Feature Collections</a></li>
+              <li class="active"><a href="/applications/{{ application.id }}/collections">Feature Collections</a></li>
               <li><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li>
             </ul>
+            <a href="/applications/{{ application.id }}/collections/new" class="button pull-right">Add a Feature Collection</a>
           </nav>
 
-          <article class="template single">
-            <div class="row">
-              <div class="col-xs-12">
-                <div data-ng-show="$root.alerts.length !== 0" class="row alerts">
-                  <div class="col-sm-6 col-sm-offset-3">
-                    <p data-ng-repeat="alert in $root.alerts" class="alert alert-{{ alert.type }}"><strong>{{ alert.title }} </strong> {{ alert.details }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div data-ng-show="!AddTemplate" class="row">          
+          <div class="template single">
+
+            <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
+
+            <div class="row">          
               <article class="col-sm-12">
                 <div class="row">
                   <div class="template col-sm-4 text-center pending-moderation-{{ template.moderation }}" data-ng-repeat="template in templates | orderBy:orderByField:reverseSort">
                     <h3 data-ng-if="template.features.properties.total_features >= 0">{{ template.features.properties.total_features | number:0 }}</h3>
-                    <h1><a href="/applications/{{ application.id }}/templates/{{ template.id }}">{{ template.name }}</a></h1>
+                    <h1><a href="/applications/{{ application.id }}/collections/{{ template.id }}">{{ template.name }}</a></h1>
                     <ul class="services">
                       <li data-ng-show="template.is_public"><span title="Visible to the public" class="service icon retinaicon-essentials-021"></span><!-- <br /><small>Open</small> --></li>
                       <li data-ng-show="template.is_crowdsourced"><span title="Crowd-sourcing is enabled" class="service icon retinaicon-business-011"></span><!-- <br /><small>Crowd Sourced</small> --></li>
                       <li data-ng-show="template.is_geospatial"><span title="This is geo-spatial data" class="service icon retinaicon-essentials-042"></span><!-- <br /><small>Geo-spatial</small> --></li>
                       <li data-ng-show="template.is_moderated"><span title="Moderation and Notification are enabled" class="service icon retinaicon-essentials-119"></span><!-- <br /><small>Moderated</small> --></li>
-                      <li><a href="/applications/{{ application.id }}/templates/{{ template.id }}/settings"><span class="icon retinaicon-essentials-113"></span></a></li>
+                      <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/settings"><span class="icon retinaicon-essentials-113"></span></a></li>
                     </ul>
                   </div>
                 </div>  
-                <div class="row">
-                  <div class="col-sm-4 col-sm-offset-4 text-center">
-                    <a href="javascript:void();" class="button" data-ng-click="AddTemplate=!AddTemplate">Add a Feature Collection</a>
-                  </div>
-                </div>                 
               </article>
             </div>
-            <div class="row" data-ng-show="AddTemplate">          
-              <article class="template col-sm-12">
-                <form method="POST" class="form-narrow">
-                  <fieldset>
-                    <legend>New Template</legend>
-                    <div class="form-group">
-                      <label class="control-label" for="name">Template Name</label>
-                      <input class="form-control input-lg" data-ng-model="newTemplate.name" id="name" name="name" type="text" autofocus="">
-                      <p class="help-block">This is the name of the Feature Type, it's what others will see</p>
 
-                      <label class="control-label" for="help">Help text</label>
-                      <input class="form-control" data-ng-model="newTemplate.help" id="help" name="help" type="text">
-                      <p class="help-block">Provide users with the context of this Feature Type or guidlines on proper submission</p>
-                    </div>
-                    
-                    <hr>
-          
-                    <div class="form-group">
-                      <div class="checkbox">
-                        <label for="publicly_viewable" class="control-label">
-                          <input data-ng-model="newTemplate.is_public" id="publicly_viewable" name="publicly_viewable" type="checkbox" /> <strong>Public</strong>
-                        </label>
-                        <p class="help-block">When a Feature Type is marked as public, we will display content with a status of 'public' or content that has been moderated to the public and it will be accessible via the API as well.</p>
-                      </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="form-group">
-                      <div class="checkbox">
-                        <label for="crowd_sourcing" class="control-label">
-                          <input data-ng-model="newTemplate.is_crowdsourced" id="crowd_sourcing" name="crowd_sourcing" type="checkbox" /> <strong>Crowd-sourcing</strong>
-                        </label>
-                        <p class="help-block">When Crowd-sourcing is enabled, the public will be allowed to submit content via the API or via an HTML Form.</p>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="checkbox">
-                        <label for="moderate">
-                          <input data-ng-model="newTemplate.is_moderated" id="moderate" name="moderate" type="checkbox" /> <strong>Moderate crowd-sourced content</strong>
-                        </label>
-                        <p class="help-block">By default we recommend that all crowd-sourced content be put into a "moderation" status when it is submitted.</p>
-                      </div>
-                    </div>
-
-                    <hr />
-
-                    <div class="form-group">
-                      <div class="checkbox">
-                        <label for="geospatial">
-                          <input data-ng-model="newTemplate.is_geospatial" id="geospatial" name="geospatial" type="checkbox" /> <strong>GeoSpatial Data</strong>
-                        </label>
-                        <p class="help-block">This will vary from type to type, only you know if this feature type should contain geographiclly specific data.</p>
-                      </div>
-                    </div>
-                  </fieldset>
-
-                  <hr>
-
-                  <div class="form-group">
-                    <a data-ng-show="AddTemplate" href="javascript:void();" data-ng-click="AddTemplate=!AddTemplate" class="btn btn-link">Nevermind</a>
-                    <input data-ng-click="CreateTemplate()" id="save" name="save" type="submit" class="button pull-right" value="Create Template" />
-                  </div>
-                </form>
-              </article>
-            </div>
-          </article>
+          </div>
         </div>
       </div>
     </div>
   </section>
 </div>
-<div class="row text-center">
-  <div class="col-sm-12">
-    <img class="security-label" src="/images/CommonsCloudSecuredByKeyhole-LightTranslucent.png" alt="" title="">
-  </div>
-</div>
+
+<div data-ng-include="'/views/includes/footer.html'"></div>

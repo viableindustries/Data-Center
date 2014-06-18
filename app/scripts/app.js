@@ -27,6 +27,10 @@ angular
         templateUrl: '/views/applications.html',
         controller: 'ApplicationsCtrl'
       })
+      .when('/applications/new', {
+        templateUrl: '/views/application-create.html',
+        controller: 'ApplicationCreateCtrl'
+      })
       .when('/applications/:applicationId', {
         templateUrl: '/views/application.html',
         controller: 'ApplicationCtrl'
@@ -35,49 +39,53 @@ angular
         templateUrl: '/views/application-edit.html',
         controller: 'ApplicationEditCtrl'
       })
-      .when('/applications/:applicationId/templates', {
+      .when('/applications/:applicationId/collections', {
         redirectTo: '/applications/:applicationId'
       })
       .when('/applications/:applicationId/collaborators', {
         templateUrl: '/views/collaborators.html',
         controller: 'ApplicationSingleCtrl'
       })
-      .when('/applications/:applicationId/templates/:templateId/features', {
+      .when('/applications/:applicationId/collections/new', {
+        templateUrl: '/views/template-create.html',
+        controller: 'TemplateCreateCtrl'
+      })
+      .when('/applications/:applicationId/collections/:templateId/features', {
         templateUrl: '/views/template.html',
         controller: 'TemplateCtrl'
       })
-      .when('/applications/:applicationId/templates/:templateId/features/add', {
+      .when('/applications/:applicationId/collections/:templateId/features/add', {
         templateUrl: '/views/addfeatures.html',
         controller: 'ApplicationSingleCtrl'
       })
-      .when('/applications/:applicationId/templates/:templateId/features/:featureId', {
+      .when('/applications/:applicationId/collections/:templateId/features/:featureId', {
         templateUrl: '/views/editfeature.html',
         controller: 'ApplicationSingleCtrl'
       })
-      .when('/applications/:applicationId/templates/:templateId', {
-        redirectTo: '/applications/:applicationId/templates/:templateId/features'
+      .when('/applications/:applicationId/collections/:templateId', {
+        redirectTo: '/applications/:applicationId/collections/:templateId/features'
       })
-      .when('/applications/:applicationId/templates/:templateId/statistics', {
+      .when('/applications/:applicationId/collections/:templateId/statistics', {
         templateUrl: '/views/statistics.html',
         controller: 'ApplicationSingleCtrl'
       })
-      .when('/applications/:applicationId/templates/:templateId/statistics/add', {
+      .when('/applications/:applicationId/collections/:templateId/statistics/add', {
         templateUrl: '/views/addstatistics.html',
         controller: 'ApplicationSingleCtrl'
       })
-      .when('/applications/:applicationId/templates/:templateId/statistics/:statisticId', {
+      .when('/applications/:applicationId/collections/:templateId/statistics/:statisticId', {
         templateUrl: '/views/editstatistics.html',
         controller: 'ApplicationSingleCtrl'
       })
-      .when('/applications/:applicationId/templates/:templateId/fields', {
+      .when('/applications/:applicationId/collections/:templateId/fields', {
         templateUrl: '/views/fields.html',
         controller: 'ApplicationSingleCtrl'
       })
-      .when('/applications/:applicationId/templates/:templateId/settings', {
+      .when('/applications/:applicationId/collections/:templateId/settings', {
         templateUrl: '/views/settings.html',
         controller: 'ApplicationSingleCtrl'
       })
-      .when('/applications/:applicationId/templates/:templateId/developers', {
+      .when('/applications/:applicationId/collections/:templateId/developers', {
         templateUrl: '/views/developers.html',
         controller: 'ApplicationSingleCtrl'
       })

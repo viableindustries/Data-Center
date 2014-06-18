@@ -1,56 +1,30 @@
 <div class="row">
 
   <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
-    <header>
+
+    <div data-ng-include="'/views/includes/header.html'"></div>
+
+    <div class="inner wide">
+
       <div class="row">
-        <div class="col-sm-10">
-          <ol class="breadcrumb">
-            <li class="front-page"><a data-ng-click="$root.navigation=!$root.navigation" title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li>
-            <li class="active"><a href="/applications" title="">Applications</a></li>
-          </ol>
-        </div>
-        <div class="col-sm-2 text-right">
-          <ul class="nav account">
-            <li><a href="" class="notifications"><span class="glyphicon glyphicon-bell"></span></a></li>
-            <li><a href="//api.commonscloud.org/user/profile" class="user"><img data-ng-if="user.email" gravatar-src="'{{ user.email }}'" gravatar-size="24" /></a></li>
-          </ul>
+        <div class="col-xs-12">  
+          <header class="application">
+            <h1>My Applications</h1>
+          </header>        
         </div>
       </div>
-    </header>
-
-    <div class="inner wide" data-ng-show="applications.length">
       <div class="row">
         <div class="col-xs-12">          
-          <article class="application new">
-            <div data-ng-show="!NewApplication">
-              <p class="placeholder" data-ng-click="NewApplication=!NewApplication"><span class="glyphicon glyphicon-plus"></span> New Application</p>
-            </div>
-            <form data-ng-show="NewApplication" method="POST" data-ng-submit="save(application)">
-              <div class="form-group row">
-                <div class="col-sm-10">
-                  <input type="text" id="name" value="name" data-ng-model="application.name" class="form-control input-lg" autofocus="autofocus" placeholder="Enter your application name" required="required" />
-                </div>
-                <div class="col-sm-2 submit">
-                  <input type="submit" id="submit" name="submit" value="Create Application" />
-                </div>
-              </div>
-            </form>
-          </article>
+          <nav class="application-navigation navbar navbar-default">
+            <a href="/applications/new" class="button pull-right">Add an Application</a>
+          </nav>
         </div>
       </div>  
 
       <div class="row">
         <div class="col-xs-12">
-          <div data-ng-show="alerts.length !== 0" class="row alerts">
-            <div class="col-sm-6 col-sm-offset-3">
-              <p data-ng-repeat="alert in alerts" class="alert alert-{{ alert.type }}"><strong>{{ alert.title }} </strong> {{ alert.details }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-xs-12">
+          <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
+          
           <article data-ng-repeat="application in applications | orderBy:'name'" class="application row">
             <div class="col-sm-1 col-sm-offset-2 hidden-xs edit-settings">
               <p><a href="/applications/{{ application.id }}/edit"><span class="glyphicon glyphicon-pencil"></span></a></p>
@@ -62,15 +36,13 @@
             </div>
           </article>
         </div>
-      </div>
+      </div>               
+
     </div>
+    <!-- /.inner.wide -->
 
   </section>
 
 </div>
 
-<div class="row text-center">
-  <div class="col-sm-12">
-    <img class="security-label" src="/images/CommonsCloudSecuredByKeyhole-LightTranslucent.png" alt="" title="">
-  </div>
-</div>
+<div data-ng-include="'/views/includes/footer.html'"></div>

@@ -1,10 +1,11 @@
 <div class="row">
 
-  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
+  <section class="col-xs-12 col-sm-12 page-content">
 
     <div data-ng-include="'/views/includes/header.html'"></div>
 
-    <div data-ng-show="!loading" class="inner wide">
+    <div class="inner wide">
+
       <div class="row">
         <div class="col-xs-12">  
           <header class="application">
@@ -28,10 +29,13 @@
             <a href="/applications/{{ application.id }}/collections/new" class="button pull-right">Add a Feature Collection</a>
           </nav>
 
-          <div class="template single">
+          <div class="loading-page"></div>
 
+          <div class="template single">
+            <!-- Alerts -->
             <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
 
+            <!-- Page Content -->
             <div class="row">          
               <article class="col-sm-12">
                 <div class="row">

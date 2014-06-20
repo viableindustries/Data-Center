@@ -48,6 +48,15 @@
     visibility: hidden;
 }
 
+#loading-bar .bar {
+  background: $color-brand-blue-base;
+  position: relative;
+}
+
+.loading-page {
+  height: 2px;
+}
+
 @mixin cross-platform-border-radius($corner-radius) {
   border-radius: $corner-radius;
   -moz-border-radius: $corner-radius;

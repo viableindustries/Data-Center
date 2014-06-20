@@ -9,7 +9,8 @@ angular
     'ngAnimate',
     'ui.gravatar',
     'leaflet-directive',
-    'angularFileUpload'
+    'angularFileUpload',
+    'angular-loading-bar'
   ])
   .config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
 
@@ -79,7 +80,7 @@ angular
       })
       .when('/applications/:applicationId/collections/:templateId/fields', {
         templateUrl: '/views/fields.html',
-        controller: 'ApplicationSingleCtrl'
+        controller: 'FieldsCtrl'
       })
       .when('/applications/:applicationId/collections/:templateId/settings', {
         templateUrl: '/views/settings.html',

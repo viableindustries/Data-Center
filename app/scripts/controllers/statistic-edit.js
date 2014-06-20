@@ -131,55 +131,48 @@ angular.module('commonsCloudAdminApp')
       $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics');
     };
 
-    $scope.GetApplication = function() {
-      //
-      // Get the single application that the user wants to view
-      //
-      Application.get({
-          id: $routeParams.applicationId
-        }).$promise.then(function(response) {
 
-          //
-          // Assign the response to the Application object and end loading
-          //
-          $scope.application = response.response;
-          $scope.loading = false;
+    //
+    // Get the single application that the user wants to view
+    //
+    Application.get({
+        id: $routeParams.applicationId
+      }).$promise.then(function(response) {
 
-          //
-          // Update the breadcrumbs based on the response from the application
-          //
-          $scope.breadcrumbs.push({
-            'label': $scope.application.name,
-            'title': 'View ' + $scope.application.name,
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
+        //
+        // Assign the response to the Application object and end loading
+        //
+        $scope.application = response.response;
+        $scope.loading = false;
 
-          $scope.breadcrumbs.push({
-            'label': 'Feature Collections',
-            'title': 'View all of ' + $scope.application.name + '\'s feature collections',
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          //
-          // Return the requested Statistic after the Template is loaded
-          //
-          if ($routeParams.templateId) {
-            $scope.GetTemplate($routeParams.templateId);
-          }
-        }, function(error) {
-          $rootScope.alerts.push({
-            'type': 'error',
-            'title': 'Uh-oh!',
-            'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
-          });
+        //
+        // Update the breadcrumbs based on the response from the application
+        //
+        $scope.breadcrumbs.push({
+          'label': $scope.application.name,
+          'title': 'View ' + $scope.application.name,
+          'url': '/applications/' + $scope.application.id,
+          'class': ''
         });
-    };
-    //
-    // Now that we've got the everything prepared, let's go ahead and start
-    // the controller by instantiating the GetApplication method
-    //
-    $scope.GetApplication();
 
+        $scope.breadcrumbs.push({
+          'label': 'Feature Collections',
+          'title': 'View all of ' + $scope.application.name + '\'s feature collections',
+          'url': '/applications/' + $scope.application.id,
+          'class': ''
+        });
+
+        //
+        // Return the requested Statistic after the Template is loaded
+        //
+        if ($routeParams.templateId) {
+          $scope.GetTemplate($routeParams.templateId);
+        }
+      }, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
+        });
+      });
   }]);

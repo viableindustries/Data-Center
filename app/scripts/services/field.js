@@ -25,7 +25,12 @@ angular.module('commonsCloudAdminApp')
         },
         update: {
           method: 'PATCH'
+        },
+        delete: {
+          method: 'DELETE',
+          url: '//api.commonscloud.org/v2/templates/:templateId/fields/:fieldId.json'
         }
+
       });
 
       return Field;

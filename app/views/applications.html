@@ -1,6 +1,6 @@
 <div class="row">
 
-  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
+  <section class="col-xs-12 col-sm-12 page-content">
 
     <div data-ng-include="'/views/includes/header.html'"></div>
 
@@ -9,7 +9,7 @@
       <div class="row">
         <div class="col-xs-12">  
           <header class="application">
-            <h1>My Applications</h1>
+            <h1 class="short">My Applications</h1>
           </header>        
         </div>
       </div>
@@ -19,18 +19,21 @@
             <a href="/applications/new" class="button pull-right">Add an Application</a>
           </nav>
         </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 loading-page">
+        </div>
       </div>  
 
       <div class="row">
         <div class="col-xs-12">
+          <!-- Alerts -->
           <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
-          
+
+          <!-- Page Content -->
           <article data-ng-repeat="application in applications | orderBy:'name'" class="application row">
-            <div class="col-sm-1 col-sm-offset-2 hidden-xs edit-settings">
-              <p><a href="/applications/{{ application.id }}/edit"><span class="glyphicon glyphicon-pencil"></span></a></p>
-            </div>
-            <div class="col-sm-6 application-content">
-              <h1><a class="visible-xs" href="/applications/{{ application.id }}"><span class="glyphicon glyphicon-pencil"></span></a> <a href="/applications/{{ application.id }}">{{ application.name }}</a></h1>
+            <div class="col-sm-6 col-sm-offset-3 application-content">
+              <h1><a href="/applications/{{ application.id }}">{{ application.name }}</a></h1>
               <p data-ng-show="application.description">{{ application.description }}</p>
               <p data-ng-show="application.url"><a href="{{ application.url }}" target="_blank">{{ application.url }}</a> <span class="glyphicon glyphicon-link"></span></p>
             </div>

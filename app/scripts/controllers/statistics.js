@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FeaturesCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Feature', 'Field', function ($rootScope, $scope, $routeParams, Application, Template, Feature, Field) {
+  .controller('StatisticsCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', 'Application', 'Template', 'Statistic', 'User', function ($route, $rootScope, $scope, $routeParams, $location, Application, Template, Statistic, User) {
+
 
   //
   // VARIABLES
@@ -14,6 +15,7 @@ angular.module('commonsCloudAdminApp')
     $scope.template = {};
     $scope.features = [];
     $scope.fields = [];
+    $scope.statistics = [];
 
     //
     // Controls for showing/hiding specific page elements that may not be
@@ -35,53 +37,11 @@ angular.module('commonsCloudAdminApp')
       }
     ];
 
-    //
-    // Default query parameters
-    //
-    $scope.query_params = {
-      'order_by': [
-        {
-          'field': 'id',
-          'direction': 'desc'
-        }
-      ]
-    };
-
-  //
-  // CONTENT
-  //
-    $scope.GetFeatures = function(page) {
-      Feature.query({
-          storage: $scope.template.storage,
-          page: page,
-          q: $scope.query_params
-        }).$promise.then(function(response) {
-          $scope.featureproperties = response.properties;
-          $scope.features = response.response.features;
-        });
-    };
-
-    $scope.GetFields = function() {
-      Field.query({
-          templateId: $scope.template.id
-        }).$promise.then(function(response) {
-          $scope.fields = response;
-        });
-    };
-
     $scope.GetTemplate = function(template_id) {
       Template.get({
           id: $routeParams.templateId
         }).$promise.then(function(response) {
           $scope.template = response.response;
-
-          if ($routeParams.page) {
-            $scope.GetFeatures($routeParams.page);
-          } else {
-            $scope.GetFeatures(1);
-          }
-
-          $scope.GetFields();
 
           $scope.breadcrumbs.push({
             'label': $scope.template.name,
@@ -91,12 +51,20 @@ angular.module('commonsCloudAdminApp')
           });
 
           $scope.breadcrumbs.push({
-            'label': 'Features',
-            'title': 'Viewing all features in ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features',
+            'label': 'Statistics',
+            'title': 'Viewing all statistics for the ' + $scope.template.name + ' feature collection',
+            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics',
             'class': 'active'
           });
 
+          //
+          // Once we've returned the Template we can get the Statistics for it
+          //
+          Statistic.query({
+            templateId: $scope.template.id
+          }).$promise.then(function(response) {
+            $scope.statistics = response;
+          });
         });
     };
 
@@ -140,21 +108,10 @@ angular.module('commonsCloudAdminApp')
           });
         });
     };
-
-
-    //
-    // Update how Features are sorted based on Field/Header clicked and
-    // react to a second click by inverting the order
-    //
-    $scope.ChangeOrder = function (value) {
-      $scope.orderByField = value;
-      $scope.reverseSort =! $scope.reverseSort;
-    };
-
-
     //
     // Now that we've got the everything prepared, let's go ahead and start
     // the controller by instantiating the GetApplication method
     //
     $scope.GetApplication();
+
   }]);

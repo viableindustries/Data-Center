@@ -54,7 +54,7 @@ angular
         templateUrl: '/views/features.html',
         controller: 'FeaturesCtrl'
       })
-      .when('/applications/:applicationId/collections/:templateId/features/add', {
+      .when('/applications/:applicationId/collections/:templateId/features/new', {
         templateUrl: '/views/addfeatures.html',
         controller: 'ApplicationSingleCtrl'
       })
@@ -67,15 +67,15 @@ angular
       })
       .when('/applications/:applicationId/collections/:templateId/statistics', {
         templateUrl: '/views/statistics.html',
-        controller: 'ApplicationSingleCtrl'
+        controller: 'StatisticsCtrl'
       })
-      .when('/applications/:applicationId/collections/:templateId/statistics/add', {
-        templateUrl: '/views/addstatistics.html',
-        controller: 'ApplicationSingleCtrl'
+      .when('/applications/:applicationId/collections/:templateId/statistics/new', {
+        templateUrl: '/views/statistic-create.html',
+        controller: 'StatisticCreateCtrl'
       })
       .when('/applications/:applicationId/collections/:templateId/statistics/:statisticId', {
-        templateUrl: '/views/editstatistics.html',
-        controller: 'ApplicationSingleCtrl'
+        templateUrl: '/views/statistic-edit.html',
+        controller: 'StatisticEditCtrl'
       })
       .when('/applications/:applicationId/collections/:templateId/fields', {
         templateUrl: '/views/fields.html',

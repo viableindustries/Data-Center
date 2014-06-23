@@ -971,7 +971,7 @@ angular.module('commonsCloudAdminApp')
         } else {
           $scope.files.push(file);
           $scope.$apply();
-        };
+        }
       });
 
       // $scope.dataUrls = [];

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FieldsCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Field', '$location', '$anchorScroll', function ($rootScope, $scope, $routeParams, Application, Template, Field, $location, $anchorScroll) {
+  .controller('FeatureEditCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Feature', 'Field', function ($rootScope, $scope, $routeParams, Application, Template, Feature, Field) {
 
   //
   // VARIABLES
@@ -12,14 +12,16 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.application = {};
     $scope.template = {};
+    $scope.features = [];
     $scope.fields = [];
-
 
     //
     // Controls for showing/hiding specific page elements that may not be
     // fully loaded or when a specific user interaction has not yet happened
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+    $scope.orderByField = null;
+    $scope.reverseSort = false;
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar
@@ -33,10 +35,32 @@ angular.module('commonsCloudAdminApp')
       }
     ];
 
+    //
+    // Default query parameters
+    //
+    $scope.query_params = {
+      'order_by': [
+        {
+          'field': 'id',
+          'direction': 'desc'
+        }
+      ]
+    };
 
   //
   // CONTENT
   //
+    $scope.GetFeatures = function(page) {
+      Feature.query({
+          storage: $scope.template.storage,
+          page: page,
+          q: $scope.query_params
+        }).$promise.then(function(response) {
+          $scope.featureproperties = response.properties;
+          $scope.features = response.response.features;
+        });
+    };
+
     $scope.GetFields = function() {
       Field.query({
           templateId: $scope.template.id
@@ -51,6 +75,12 @@ angular.module('commonsCloudAdminApp')
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
+          if ($routeParams.page) {
+            $scope.GetFeatures($routeParams.page);
+          } else {
+            $scope.GetFeatures(1);
+          }
+
           $scope.GetFields();
 
           $scope.breadcrumbs.push({
@@ -61,9 +91,9 @@ angular.module('commonsCloudAdminApp')
           });
 
           $scope.breadcrumbs.push({
-            'label': 'Fields',
-            'title': 'Viewing all field for ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields',
+            'label': 'Features',
+            'title': 'Viewing all features in ' + $scope.template.name,
+            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features',
             'class': 'active'
           });
 
@@ -110,6 +140,17 @@ angular.module('commonsCloudAdminApp')
           });
         });
     };
+
+
+    //
+    // Update how Features are sorted based on Field/Header clicked and
+    // react to a second click by inverting the order
+    //
+    $scope.ChangeOrder = function (value) {
+      $scope.orderByField = value;
+      $scope.reverseSort =! $scope.reverseSort;
+    };
+
 
     //
     // Now that we've got the everything prepared, let's go ahead and start

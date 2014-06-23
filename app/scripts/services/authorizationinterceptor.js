@@ -32,7 +32,7 @@ angular.module('commonsCloudAdminApp')
         if (sessionCookie) {
           config.headers.Authorization = 'Bearer ' + sessionCookie;
         }
-        config.headers['Cache-Control'] = 'no-cache, max-age=0, must-revalidate'
+        config.headers['Cache-Control'] = 'no-cache, max-age=0, must-revalidate';
         config.headers['Content-Type'] = 'application/json';
         console.debug('AuthorizationInterceptor::Request', config || $q.when(config));
         return config || $q.when(config);

@@ -9,7 +9,8 @@ angular
     'ngAnimate',
     'ui.gravatar',
     'leaflet-directive',
-    'angularFileUpload'
+    'angularFileUpload',
+    'geolocation'
   ])
   .config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
 
@@ -55,12 +56,12 @@ angular
         controller: 'FeaturesCtrl'
       })
       .when('/applications/:applicationId/collections/:templateId/features/new', {
-        templateUrl: '/views/addfeatures.html',
-        controller: 'ApplicationSingleCtrl'
+        templateUrl: '/views/feature-create.html',
+        controller: 'FeatureCreateCtrl'
       })
       .when('/applications/:applicationId/collections/:templateId/features/:featureId', {
-        templateUrl: '/views/editfeature.html',
-        controller: 'ApplicationSingleCtrl'
+        templateUrl: '/views/feature-edit.html',
+        controller: 'FeatureEditCtrl'
       })
       .when('/applications/:applicationId/collections/:templateId', {
         redirectTo: '/applications/:applicationId/collections/:templateId/features'

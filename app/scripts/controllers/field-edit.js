@@ -91,7 +91,6 @@ angular.module('commonsCloudAdminApp')
         templateId: $scope.template.id,
         fieldId: field.id
       }, field).$promise.then(function(response) {
-        console.log('Field deleted')
         $rootScope.alerts.push({
           'type': 'success',
           'title': '',
@@ -100,7 +99,6 @@ angular.module('commonsCloudAdminApp')
 
         $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields');
       }, function(error) {
-        console.log('Field deletion failed')
         $rootScope.alerts.push({
           'type': 'error',
           'title': 'Uh-oh!',

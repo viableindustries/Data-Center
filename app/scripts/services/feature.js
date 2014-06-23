@@ -15,26 +15,26 @@ angular.module('commonsCloudAdminApp')
             return angular.fromJson(data);
           }
         },
-        save: {
-          method: 'POST',
-          transformRequest: function (data, headersGetter) {
-            var feature = angular.fromJson(data);
+        // save: {
+        //   method: 'POST',
+        //   transformRequest: function (data, headersGetter) {
+        //     var feature = angular.fromJson(data);
 
-            //
-            // We have to make sure that our previously Stringified GeoJSON
-            // is converted back to an object prior to submission
-            //            
-            feature.geometry = angular.fromJson(feature.geometry);
+        //     //
+        //     // We have to make sure that our previously Stringified GeoJSON
+        //     // is converted back to an object prior to submission
+        //     //            
+        //     feature.geometry = angular.fromJson(feature.geometry);
 
-            //
-            // Make sure all of our feature data is converted back toJson
-            // prior before submitting it to the API.
-            //
-            data = angular.toJson(feature);
+        //     //
+        //     // Make sure all of our feature data is converted back toJson
+        //     // prior before submitting it to the API.
+        //     //
+        //     data = angular.toJson(feature);
 
-            return data;
-          }
-        },
+        //     return data;
+        //   }
+        // },
         get: {
           method: 'GET',
           url: '//api.commonscloud.org/v2/:storage/:featureId.json',

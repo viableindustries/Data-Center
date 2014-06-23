@@ -11,6 +11,7 @@ angular.module('commonsCloudAdminApp')
     // Placeholders for our on-screen content
     //
     $scope.application = {};
+    $scope.templates = [];
     $scope.template = {};
     $scope.field = new Field();
 
@@ -37,6 +38,20 @@ angular.module('commonsCloudAdminApp')
   //
   // CONTENT
   //
+
+    //
+    // Get a list of templates for the relationship field type
+    //
+    $scope.GetTemplateList = function(application_id) {
+      //
+      // Get a list of templates associated with the current application
+      //
+      Template.query({
+          applicationId: application_id
+        }).$promise.then(function(response) {
+          $scope.templates = response;
+        });
+    };
     //
     // Create a new Field that does not yet exist in the API database
     //
@@ -67,7 +82,7 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          templateId: $routeParams.templateId
+          templateId: template_id
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
@@ -126,7 +141,13 @@ angular.module('commonsCloudAdminApp')
             'class': ''
           });
 
-          $scope.GetTemplate();
+          if ($routeParams.templateId) {
+            $scope.GetTemplate($routeParams.templateId);            
+          }
+
+          if ($routeParams.applicationId) {
+            $scope.GetTemplateList($routeParams.applicationId);            
+          }
         }, function(error) {
           $rootScope.alerts.push({
             'type': 'error',

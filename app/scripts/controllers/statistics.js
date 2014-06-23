@@ -39,7 +39,7 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          id: $routeParams.templateId
+          templateId: template_id
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
@@ -99,7 +99,9 @@ angular.module('commonsCloudAdminApp')
             'class': ''
           });
 
-          $scope.GetTemplate();
+          if ($routeParams.templateId) {
+            $scope.GetTemplate($routeParams.templateId);
+          }
         }, function(error) {
           $rootScope.alerts.push({
             'type': 'error',

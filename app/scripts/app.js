@@ -9,8 +9,7 @@ angular
     'ngAnimate',
     'ui.gravatar',
     'leaflet-directive',
-    'angularFileUpload',
-    'angular-loading-bar'
+    'angularFileUpload'
   ])
   .config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
 
@@ -45,7 +44,7 @@ angular
       })
       .when('/applications/:applicationId/collaborators', {
         templateUrl: '/views/collaborators.html',
-        controller: 'ApplicationSingleCtrl'
+        controller: 'CollaboratorsCtrl'
       })
       .when('/applications/:applicationId/collections/new', {
         templateUrl: '/views/template-create.html',
@@ -82,13 +81,21 @@ angular
         templateUrl: '/views/fields.html',
         controller: 'FieldsCtrl'
       })
+      .when('/applications/:applicationId/collections/:templateId/fields/new', {
+        templateUrl: '/views/field-create.html',
+        controller: 'FieldCreateCtrl'
+      })
+      .when('/applications/:applicationId/collections/:templateId/fields/:fieldId/edit', {
+        templateUrl: '/views/field-edit.html',
+        controller: 'FieldEditCtrl'
+      })
       .when('/applications/:applicationId/collections/:templateId/settings', {
-        templateUrl: '/views/settings.html',
-        controller: 'ApplicationSingleCtrl'
+        templateUrl: '/views/template-edit.html',
+        controller: 'TemplateEditCtrl'
       })
       .when('/applications/:applicationId/collections/:templateId/developers', {
-        templateUrl: '/views/developers.html',
-        controller: 'ApplicationSingleCtrl'
+        templateUrl: '/views/template-dev.html',
+        controller: 'TemplateDevCtrl'
       })
       .otherwise({
         templateUrl: '/views/errors/404.html'

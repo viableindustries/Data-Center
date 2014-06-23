@@ -71,7 +71,7 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          id: $routeParams.templateId
+          templateId: $routeParams.templateId
         }).$promise.then(function(response) {
           $scope.template = response.response;
 

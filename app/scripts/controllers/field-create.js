@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FieldsCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Field', '$location', '$anchorScroll', function ($rootScope, $scope, $routeParams, Application, Template, Field, $location, $anchorScroll) {
+  .controller('FieldCreateCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Field', '$location', function ($rootScope, $scope, $routeParams, Application, Template, Field, $location) {
 
   //
   // VARIABLES
@@ -12,9 +12,7 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.application = {};
     $scope.template = {};
-    $scope.fields = [];
-    $scope.field = {};
-    $scope.newField = new Field();
+    $scope.field = new Field();
 
 
     //
@@ -22,10 +20,6 @@ angular.module('commonsCloudAdminApp')
     // fully loaded or when a specific user interaction has not yet happened
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
-    $scope.orderByField = null;
-    $scope.reverseSort = false;
-    $scope.FieldEdit = false;
-    $scope.FieldAdd = false;
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar
@@ -43,35 +37,25 @@ angular.module('commonsCloudAdminApp')
   //
   // CONTENT
   //
-    $scope.GetFields = function() {
-      Field.query({
-          templateId: $scope.template.id
-        }).$promise.then(function(response) {
-          $scope.fields = response;
-        });
-    };
-
     //
     // Create a new Field that does not yet exist in the API database
     //
     $scope.CreateField = function () {
 
 
-      console.log('$scope.newField', $scope.newField);
+      console.log('$scope.field', $scope.field);
 
-      $scope.newField.$save({
+      $scope.field.$save({
         templateId: $scope.template.id
       }).then(function(response) {
-        $scope.fields.push(response.response);
         $rootScope.alerts.push({
           'type': 'success',
           'title': 'Great!',
           'details': 'Your new Field was added to the Template.'
         });
 
-        $location.hash('top');
+        $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields');
 
-        $anchorScroll();
       }, function(error) {
         $rootScope.alerts.push({
           'type': 'error',
@@ -81,84 +65,11 @@ angular.module('commonsCloudAdminApp')
       });
     };
 
-    $scope.ActionEditField = function (field_) {
-      $scope.editField = field_;
-      $scope.FieldEdit = true;
-      $scope.FieldAdd = false;
-    };
-
-    //
-    // Update the attributes of an existing Template
-    //
-    $scope.UpdateField = function () {
-      Field.update({
-        templateId: $scope.template.id,
-        fieldId: $scope.editField.id
-      }, $scope.editField).$promise.then(function(response) {
-        $rootScope.alerts.push({
-          'type': 'success',
-          'title': 'Updated!',
-          'details': 'Your Field updates were saved successfully!'
-        });
-      }, function(error) {
-        $rootScope.alerts.push({
-          'type': 'error',
-          'title': 'Uh-oh!',
-          'details': 'Mind trying that again? It looks like we couldn\'t update that Field for you.'
-        });
-      });
-
-      $scope.editField = {};
-      $scope.FieldEdit = false;
-      $scope.FieldAdd = true;
-    };
-
-    //
-    // Delete an existing Field from the API Database
-    //
-    $scope.DeleteField = function (field) {
-
-      console.log('Field deletion FIRED!')
-
-
-      //
-      // Send the 'DELETE' method to the API so it's removed from the database
-      //
-      Field.delete({
-        templateId: $scope.template.id,
-        fieldId: field.id
-      }, field).$promise.then(function(response) {
-        console.log('Field deleted')
-        $rootScope.alerts.push({
-          'type': 'success',
-          'title': '',
-          'details': 'Your Field was deleted!'
-        });
-        $scope.fields.pop(field);
-        $scope.editField = {};
-        $scope.FieldEdit = false;
-
-        if ($scope.fields.length) {
-          $scope.FieldAdd = true;
-        }
-      }, function(error) {
-        console.log('Field deletion failed')
-        $rootScope.alerts.push({
-          'type': 'error',
-          'title': 'Uh-oh!',
-          'details': 'Mind trying that again? It looks like we couldn\'t delete that Field for you.'
-        });
-      });
-
-    };
-
     $scope.GetTemplate = function(template_id) {
       Template.get({
           templateId: $routeParams.templateId
         }).$promise.then(function(response) {
           $scope.template = response.response;
-
-          $scope.GetFields();
 
           $scope.breadcrumbs.push({
             'label': $scope.template.name,
@@ -169,8 +80,15 @@ angular.module('commonsCloudAdminApp')
 
           $scope.breadcrumbs.push({
             'label': 'Fields',
-            'title': 'Viewing all field for ' + $scope.template.name,
+            'title': 'Viewing all fields for ' + $scope.template.name,
             'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields',
+            'class': ''
+          });
+
+          $scope.breadcrumbs.push({
+            'label': 'New',
+            'title': 'Create a new field',
+            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields/new',
             'class': 'active'
           });
 
@@ -216,16 +134,6 @@ angular.module('commonsCloudAdminApp')
             'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
           });
         });
-    };
-
-
-    //
-    // Update how Features are sorted based on Field/Header clicked and
-    // react to a second click by inverting the order
-    //
-    $scope.ChangeOrder = function (value) {
-      $scope.orderByField = value;
-      $scope.reverseSort =! $scope.reverseSort;
     };
 
 

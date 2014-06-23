@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FieldsCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Field', '$location', '$anchorScroll', function ($rootScope, $scope, $routeParams, Application, Template, Field, $location, $anchorScroll) {
+  .controller('FieldEditCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Field', '$location', function ($rootScope, $scope, $routeParams, Application, Template, Field, $location) {
 
   //
   // VARIABLES
@@ -12,9 +12,7 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.application = {};
     $scope.template = {};
-    $scope.fields = [];
     $scope.field = {};
-    $scope.newField = new Field();
 
 
     //
@@ -22,10 +20,6 @@ angular.module('commonsCloudAdminApp')
     // fully loaded or when a specific user interaction has not yet happened
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
-    $scope.orderByField = null;
-    $scope.reverseSort = false;
-    $scope.FieldEdit = false;
-    $scope.FieldAdd = false;
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar
@@ -43,48 +37,20 @@ angular.module('commonsCloudAdminApp')
   //
   // CONTENT
   //
-    $scope.GetFields = function() {
-      Field.query({
-          templateId: $scope.template.id
+    $scope.GetField = function(template_id, field_id) {
+      Field.get({
+          templateId: template_id,
+          fieldId: field_id
         }).$promise.then(function(response) {
-          $scope.fields = response;
+          $scope.field = response.response;
+
+          $scope.breadcrumbs.push({
+            'label': 'Edit',
+            'title': 'Editing the ' + $scope.field.name + ' field',
+            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields/' + $scope.field.id + '/edit',
+            'class': 'active'
+          });
         });
-    };
-
-    //
-    // Create a new Field that does not yet exist in the API database
-    //
-    $scope.CreateField = function () {
-
-
-      console.log('$scope.newField', $scope.newField);
-
-      $scope.newField.$save({
-        templateId: $scope.template.id
-      }).then(function(response) {
-        $scope.fields.push(response.response);
-        $rootScope.alerts.push({
-          'type': 'success',
-          'title': 'Great!',
-          'details': 'Your new Field was added to the Template.'
-        });
-
-        $location.hash('top');
-
-        $anchorScroll();
-      }, function(error) {
-        $rootScope.alerts.push({
-          'type': 'error',
-          'title': 'Uh-oh!',
-          'details': 'Mind trying that again? It looks like we couldn\'t create that Field for you.'
-        });
-      });
-    };
-
-    $scope.ActionEditField = function (field_) {
-      $scope.editField = field_;
-      $scope.FieldEdit = true;
-      $scope.FieldAdd = false;
     };
 
     //
@@ -93,13 +59,17 @@ angular.module('commonsCloudAdminApp')
     $scope.UpdateField = function () {
       Field.update({
         templateId: $scope.template.id,
-        fieldId: $scope.editField.id
-      }, $scope.editField).$promise.then(function(response) {
+        fieldId: $scope.field.id
+      }, $scope.field).$promise.then(function(response) {
+
         $rootScope.alerts.push({
           'type': 'success',
           'title': 'Updated!',
           'details': 'Your Field updates were saved successfully!'
         });
+
+        $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields');
+
       }, function(error) {
         $rootScope.alerts.push({
           'type': 'error',
@@ -107,19 +77,12 @@ angular.module('commonsCloudAdminApp')
           'details': 'Mind trying that again? It looks like we couldn\'t update that Field for you.'
         });
       });
-
-      $scope.editField = {};
-      $scope.FieldEdit = false;
-      $scope.FieldAdd = true;
     };
 
     //
     // Delete an existing Field from the API Database
     //
     $scope.DeleteField = function (field) {
-
-      console.log('Field deletion FIRED!')
-
 
       //
       // Send the 'DELETE' method to the API so it's removed from the database
@@ -134,13 +97,8 @@ angular.module('commonsCloudAdminApp')
           'title': '',
           'details': 'Your Field was deleted!'
         });
-        $scope.fields.pop(field);
-        $scope.editField = {};
-        $scope.FieldEdit = false;
 
-        if ($scope.fields.length) {
-          $scope.FieldAdd = true;
-        }
+        $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields');
       }, function(error) {
         console.log('Field deletion failed')
         $rootScope.alerts.push({
@@ -158,8 +116,6 @@ angular.module('commonsCloudAdminApp')
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
-          $scope.GetFields();
-
           $scope.breadcrumbs.push({
             'label': $scope.template.name,
             'title': 'View ' + $scope.template.name,
@@ -169,10 +125,14 @@ angular.module('commonsCloudAdminApp')
 
           $scope.breadcrumbs.push({
             'label': 'Fields',
-            'title': 'Viewing all field for ' + $scope.template.name,
+            'title': 'Viewing all fields for ' + $scope.template.name,
             'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields',
-            'class': 'active'
+            'class': ''
           });
+
+          if ($routeParams.templateId && $routeParams.fieldId) {
+            $scope.GetField($routeParams.templateId, $routeParams.fieldId);            
+          }
 
         });
     };
@@ -216,16 +176,6 @@ angular.module('commonsCloudAdminApp')
             'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
           });
         });
-    };
-
-
-    //
-    // Update how Features are sorted based on Field/Header clicked and
-    // react to a second click by inverting the order
-    //
-    $scope.ChangeOrder = function (value) {
-      $scope.orderByField = value;
-      $scope.reverseSort =! $scope.reverseSort;
     };
 
 

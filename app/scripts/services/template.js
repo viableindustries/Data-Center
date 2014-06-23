@@ -5,9 +5,13 @@ angular.module('commonsCloudAdminApp')
 
     this.$get = ['$resource', function ($resource) {
 
-      var Template = $resource('//api.commonscloud.org/v2/templates/:id.json', {
+      var Template = $resource('//api.commonscloud.org/v2/templates/:templateId.json', {
 
       }, {
+        get: {
+          method: 'GET',
+          url: '//api.commonscloud.org/v2/templates/:templateId.json'
+        },
         query: {
           method: 'GET',
           isArray: true,

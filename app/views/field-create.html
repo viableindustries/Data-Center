@@ -46,11 +46,12 @@
             <!-- form-preview -->
             <div class="row">
               <div class="col-xs-12  col-xs-offset-0 col-sm-6 col-sm-offset-3">
-                <form method="POST">
+                <form method="POST" class="form-narrow">
                   <fieldset>
+                    <legend>Add a new field</legend>
                     <div class="form-group">
                       <label for="label" class="control-label">Label</label>
-                      <input data-ng-model="field.label" type="text" id="label" name="label" class="form-control" value="" />
+                      <input data-ng-model="field.name" type="text" id="label" name="label" class="form-control" value="" />
                       <p class="help-block">The label that appears above or near the form field to help user identify how to complete your form.</p>
                     </div>
                     <div class="form-group">
@@ -137,8 +138,7 @@
                       </div>
                     </div>
                     <div class="form-group">
-                      <a class="btn btn-link" data-ng-click="DeleteField(field)">Delete this field</a>
-                      <input data-ng-click="UpdateField()" id="save" name="save" type="submit" class="button pull-right" value="Update Field" />
+                      <input data-ng-click="CreateField()" id="save" name="save" type="submit" class="button pull-right" value="Create Field" />
                     </div>
                   </fieldset>
                 </form>

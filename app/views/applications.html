@@ -7,26 +7,18 @@
     <div class="inner wide">
 
       <div class="row">
-        <div class="col-xs-12">  
+        <div class="col-xs-12">
+
           <header class="application">
             <h1 class="short">My Applications</h1>
-          </header>        
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-12">          
+          </header>
+          
           <nav class="application-navigation navbar navbar-default">
             <a href="/applications/new" class="button pull-right">Add an Application</a>
           </nav>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-12 loading-page">
-        </div>
-      </div>  
+          
+          <div class="loading-page"></div>
 
-      <div class="row">
-        <div class="col-xs-12">
           <!-- Alerts -->
           <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
 
@@ -38,8 +30,9 @@
               <p data-ng-show="application.url"><a href="{{ application.url }}" target="_blank">{{ application.url }}</a> <span class="glyphicon glyphicon-link"></span></p>
             </div>
           </article>
+
         </div>
-      </div>               
+      </div>
 
     </div>
     <!-- /.inner.wide -->

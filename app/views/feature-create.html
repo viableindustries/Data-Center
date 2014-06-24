@@ -66,7 +66,7 @@
                       <textarea data-ng-model="feature[field.name]" class="form-control" data-ng-if="field.data_type === 'textarea'" id="{{ field.name }}" name="{{ field.name }}">{{ feature[field.name] }}</textarea>
                       <div data-ng-if="field.data_type === 'relationship' && field.values.length > 0">
                         <select multiple="" data-ng-model="feature[field.relationship]" class="form-control" id="{{ field.relationship }}" name="{{ field.relationship }}" data-ng-options="value_.id as value_.name for value_ in field.values">
-                          <option data-ng-if="!field.is_required" value="">-- Choose {{ field.label }} --</option>
+                          <option value="">-- Choose {{ field.label }} --</option>
                         </select>
                       </div>
 

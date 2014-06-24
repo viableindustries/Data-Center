@@ -49,11 +49,12 @@
                   <thead>
                     <tr>
                       <th class="edit">&nbsp;</th>
-                      <th data-ng-repeat="field in fields" data-ng-if="field.is_listed && field.data_type === 'text'">
+                      <th data-ng-repeat="field in fields" data-ng-if="field.is_listed && (field.data_type === 'text' || field.data_type === 'date')">
                         <a href="javascript:void()" data-ng-click="ChangeOrder(field.name)">
                           {{ field.label }} <span data-ng-show="orderByField == '{{ field.name }}'"><span data-ng-show="!reverseSort" class="glyphicon glyphicon-arrow-down"></span><span data-ng-show="reverseSort" class="glyphicon glyphicon-arrow-up"></span></span>
                         </a>
                       </th>
+                      <th>Status</th>
                       <th>Created</th>
                     </tr>
                   </thead>
@@ -64,6 +65,8 @@
                         <span data-ng-if="field.data_type === 'date'">{{ feature[field.name] | date : 'MMM d, y @ h:mm a' }}</span>
                         <span data-ng-if="field.data_type !== 'date'">{{ feature[field.name] }}</span>
                       </td>
+                      <td>{{ feature.status }}</td>
+                      <td>{{ feature.created }}</td>
                     </tr>
                   </tbody>
                 </table>

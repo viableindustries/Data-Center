@@ -15,6 +15,7 @@ angular.module('commonsCloudAdminApp')
     $scope.features = [];
     $scope.fields = [];
     $scope.feature = new Feature();
+    $scope.feature.status = 'public';
     $scope.default_geometry = {};
 
     //

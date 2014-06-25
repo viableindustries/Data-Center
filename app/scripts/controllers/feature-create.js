@@ -249,7 +249,7 @@ angular.module('commonsCloudAdminApp')
           console.log('$scope.default_geometry', $scope.default_geometry);
           console.log('$scope.default_geometry', JSON.stringify($scope.default_geometry));
 
-          if ($scope.default_geometry.coordinates) {
+          if ($scope.default_geometry.hasOwnProperty('coordinates')) {
             map.setView([$scope.default_geometry.coordinates[1], $scope.default_geometry.coordinates[0]], 13);
           }
         });
@@ -320,9 +320,6 @@ angular.module('commonsCloudAdminApp')
               storage: field_.relationship
             }).$promise.then(function (response) {
               $scope.fields[index].values = response.response.features;
-              if ($routeParams.featureId) {
-                var values_ = $scope.getDefaultEnumeratedValue(field_.relationship);
-              }
             }, function(error) {
               $rootScope.alerts.push({
                 'type': 'error',
@@ -333,27 +330,6 @@ angular.module('commonsCloudAdminApp')
         }
       });
 
-    };
-
-    $scope.getDefaultEnumeratedValue = function (relationship) {
-      $http({
-        method: 'GET',
-        url: '//api.commonscloud.org/v2/' + $scope.template.storage + '/' + $routeParams.featureId + '/' + relationship + '.json'
-      }).success(function(data, status, headers, config) {
-
-          var default_values = [];
-
-          angular.forEach(data.response.features, function (feature, index) {
-            default_values.push(feature.id);
-          });
-
-          $scope.feature[relationship] = default_values;
-
-          return default_values;
-        }).
-        error(function(data, status, headers, config) {
-          console.log('data', data, status);
-        });
     };
 
     //

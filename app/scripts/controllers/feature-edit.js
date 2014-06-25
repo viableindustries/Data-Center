@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FeatureEditCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Feature', 'Field', function ($rootScope, $scope, $routeParams, Application, Template, Feature, Field) {
+  .controller('FeatureEditCtrl', ['$rootScope', '$scope', '$route', '$routeParams', '$window', '$timeout', '$location', '$http', 'Application', 'Template', 'Feature', 'Field', 'geolocation', 'leafletData', function ($rootScope, $scope, $route, $routeParams, $window, $timeout, $location, $http, Application, Template, Feature, Field, geolocation, leafletData) {
 
   //
   // VARIABLES
@@ -12,16 +12,17 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.application = {};
     $scope.template = {};
-    $scope.features = [];
     $scope.fields = [];
+    $scope.feature = {};
+    $scope.default_geometry = {};
 
     //
     // Controls for showing/hiding specific page elements that may not be
     // fully loaded or when a specific user interaction has not yet happened
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
-    $scope.orderByField = null;
-    $scope.reverseSort = false;
+    $scope.ShowMap = true;
+
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar
@@ -47,18 +48,125 @@ angular.module('commonsCloudAdminApp')
       ]
     };
 
+    //
+    // Default Map parameters and necessary variables
+    //
+    var featureGroup = new L.FeatureGroup();
+
+    $scope.defaults = {
+      tileLayer: 'https://{s}.tiles.mapbox.com/v3/developedsimple.hl46o07c/{z}/{x}/{y}.png',
+      scrollWheelZoom: false
+    };
+
+    $scope.controls = {
+      draw: {
+        options: {
+          draw: {
+            circle: false,
+            rectangle: false,
+            polyline: {
+              shapeOptions: {
+                stroke: true,
+                color: '#ffffff',
+                weight: 4,
+                opacity: 0.5,
+                fill: true,
+                fillColor: null,
+                fillOpacity: 0.2,
+                clickable: true
+              }
+            },
+            polygon: {
+              shapeOptions: {
+                stroke: true,
+                color: '#ffffff',
+                weight: 4,
+                opacity: 0.5,
+                fill: true,
+                fillColor: '#ffffff',
+                fillOpacity: 0.2,
+                clickable: true
+              }
+            },
+            handlers: {
+              marker: {
+                tooltip: {
+                  start: 'Click map to place marker.'
+                }
+              },
+              polygon: {
+                tooltip: {
+                  start: 'Click to start drawing shape.',
+                  cont: 'Click to continue drawing shape.',
+                  end: 'Click first point to close this shape.'
+                }
+              },
+              polyline: {
+                error: '<strong>Error:</strong> shape edges cannot cross!',
+                tooltip: {
+                  start: 'Click to start drawing line.',
+                  cont: 'Click to continue drawing line.',
+                  end: 'Click last point to finish line.'
+                }
+              },
+              simpleshape: {
+                tooltip: {
+                  end: 'Release mouse to finish drawing.'
+                }
+              }
+            }
+          },
+          edit: {
+            selectedPathOptions: {
+              color: '#ffffff',
+              opacity: 0.6,
+              dashArray: '10, 10',
+              fill: true,
+              fillColor: '#ffffff',
+              fillOpacity: 0.1
+            },
+            'featureGroup': featureGroup,
+            'remove': true,
+            handlers: {
+              edit: {
+                tooltip: {
+                  text: 'Drag handles, or marker to edit feature.',
+                  subtext: 'Click cancel to undo changes.'
+                }
+              },
+              remove: {
+                tooltip: {
+                  text: 'Click on a feature to remove'
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+
   //
   // CONTENT
   //
-    $scope.GetFeatures = function(page) {
-      Feature.query({
+    $scope.GetFeature = function(feature_id) {
+
+      Feature.get({
           storage: $scope.template.storage,
-          page: page,
-          q: $scope.query_params
+          featureId: feature_id
         }).$promise.then(function(response) {
-          $scope.featureproperties = response.properties;
-          $scope.features = response.response.features;
+          $scope.feature = response.response;
+          $scope.default_geometry = $scope.feature.geometry;
+          $scope.getEnumeratedValues($scope.fields);
+        }, function(error) {
+          $rootScope.alerts.push({
+            'type': 'error',
+            'title': 'Uh-oh!',
+            'details': 'Mind trying that again? We couldn\'t find the Feature you were looking for.'
+          });
+
+          $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features');
         });
+
     };
 
     $scope.GetFields = function() {
@@ -66,6 +174,11 @@ angular.module('commonsCloudAdminApp')
           templateId: $scope.template.id
         }).$promise.then(function(response) {
           $scope.fields = response;
+
+          if ($routeParams.featureId) {
+            $scope.GetFeature($routeParams.featureId);
+            $scope.getEditableMap();
+          }
         });
     };
 
@@ -74,12 +187,6 @@ angular.module('commonsCloudAdminApp')
           templateId: $routeParams.templateId
         }).$promise.then(function(response) {
           $scope.template = response.response;
-
-          if ($routeParams.page) {
-            $scope.GetFeatures($routeParams.page);
-          } else {
-            $scope.GetFeatures(1);
-          }
 
           $scope.GetFields();
 
@@ -141,14 +248,253 @@ angular.module('commonsCloudAdminApp')
         });
     };
 
+    $scope.getCurrentLocation = function () {
+      geolocation.getLocation().then(function(data){
+        $scope.default_geometry = {
+          "type": "Point",
+          "coordinates": [
+            data.coords.longitude,
+            data.coords.latitude
+          ]
+        };
+      });
+    };
+
+
+    $scope.getEditableMap = function () {
+
+      leafletData.getMap().then(function(map) {
+
+        $scope.$watch('default_geometry', function() {
+          console.log('$scope.default_geometry', $scope.default_geometry);
+          console.log('$scope.default_geometry', JSON.stringify($scope.default_geometry));
+
+          if ((!angular.isUndefined($scope.default_geometry)) && ($scope.default_geometry !== null) && ($scope.default_geometry.hasOwnProperty('coordinates'))) {
+            map.setView([$scope.default_geometry.coordinates[1], $scope.default_geometry.coordinates[0]], 13);
+          } else if (($scope.feature !== null) && ($scope.feature.hasOwnProperty('geometry'))) {
+            $scope.feature.geometry = $scope.convertGeometryCollectionToFeatureCollection($scope.feature.geometry);
+            $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
+
+            map.fitBounds(featureGroup.getBounds());
+          }
+        });
+
+        // var featureGroup = new L.FeatureGroup();
+        map.addLayer(featureGroup);
+
+        //
+        // On Drawing Complete add it to our FeatureGroup
+        //
+        map.on('draw:created', function (e) {
+          var newLayer = e.layer;
+          featureGroup.addLayer(newLayer);
+
+          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+        });
+
+        map.on('draw:edited', function (e) {
+          var editedLayers = e.layers;
+          editedLayers.eachLayer(function (layer) {
+            featureGroup.addLayer(layer);
+          });
+
+          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+        });
+
+        map.on('draw:deleted', function (e) {
+          var deletedLayers = e.layers;
+          deletedLayers.eachLayer(function (layer) {
+            featureGroup.removeLayer(layer);
+          });
+
+          $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
+        });
+
+        //
+        // We need to invalidate the size of the Mapbox container so that it
+        // displays properly. This is annoying and ugly ... timeouts are evil.
+        // However, it serves as a temporary solution until we can figure out
+        // something better.
+        //
+        $timeout(function () {
+          map.invalidateSize();
+        }, 500);
+        
+      });
+
+      $scope.MapLoaded = true;
+    };
+
+
+    $scope.geojsonToLayer = function (geojson, layer) {
+      layer.clearLayers();
+      function add(l) {
+        l.addTo(layer);
+      }
+      L.geoJson(geojson).eachLayer(add);
+    };
 
     //
-    // Update how Features are sorted based on Field/Header clicked and
-    // react to a second click by inverting the order
+    // Build enumerated values for drop downs
     //
-    $scope.ChangeOrder = function (value) {
-      $scope.orderByField = value;
-      $scope.reverseSort =! $scope.reverseSort;
+    $scope.getEnumeratedValues = function (field_list) {
+
+      angular.forEach(field_list, function (field_, index) {
+        if (field_.data_type === 'relationship') {
+          Feature.query({
+              storage: field_.relationship
+            }).$promise.then(function (response) {
+              $scope.fields[index].values = response.response.features;
+
+              var default_values = [];
+
+              angular.forEach($scope.feature[field_.relationship], function (feature, index) {
+                default_values.push(feature.id);
+              });
+
+              $scope.feature[field_.relationship] = default_values;
+
+            }, function(error) {
+              $rootScope.alerts.push({
+                'type': 'error',
+                'title': 'Uh-oh!',
+                'details': 'Something stranged happened, please reload the page.'
+              });
+            });
+        }
+      });
+
+    };
+
+    //
+    // Convert a FeatureCollection to a GeometryCollection so that it can be
+    // saved to a Geometry field within the CommonsCloud API
+    //
+    $scope.convertFeatureCollectionToGeometryCollection = function (featureCollection) {
+
+      var ExistingCollection = angular.fromJson(featureCollection);
+
+      var NewFeatureCollection = {
+        'type': 'GeometryCollection',
+        'geometries': []
+      };
+
+      angular.forEach(ExistingCollection.features, function (feature, index) {
+        NewFeatureCollection.geometries.push(feature.geometry);
+      });
+
+      return NewFeatureCollection;
+    };
+
+    //
+    // Convert a GeometryCollection to a FeatureCollection so that it can be
+    // saved to a Geometry field within the CommonsCloud Admin UI
+    //
+    $scope.convertGeometryCollectionToFeatureCollection = function (geometryCollection) {
+
+      var ExistingCollection = angular.fromJson(geometryCollection);
+
+      var NewFeatureCollection = {
+        'type': 'FeatureCollection',
+        'features': []
+      };
+
+      angular.forEach(ExistingCollection.geometries, function (feature, index) {
+        var geometry_ = {
+          'type': 'Feature',
+          'geometry': feature
+        };
+
+        NewFeatureCollection.features.push(geometry_);
+      });
+
+      return NewFeatureCollection;
+    };
+
+
+    //
+    // Update the attributes of an existing Template
+    //
+    $scope.UpdateFeature = function () {
+
+      if ($scope.feature.geometry) {
+        $scope.feature.geometry = $scope.convertFeatureCollectionToGeometryCollection($scope.feature.geometry);
+      }
+
+      angular.forEach($scope.fields, function(field, index) {
+        if (field.data_type === 'relationship') {
+          if (angular.isArray($scope.feature[field.relationship]) && $scope.feature[field.relationship].length >= 1) {
+            
+            var relationship_array_ = [];
+
+            angular.forEach($scope.feature[field.relationship], function (value, index) {
+              relationship_array_.push({
+                'id': value
+              });
+            });
+
+            $scope.feature[field.relationship] = relationship_array_;
+          } else if (angular.isNumber($scope.feature[field.relationship])) {
+
+            var value = $scope.feature[field.relationship];
+
+            $scope.feature[field.relationship] = [{
+              'id': value
+            }];
+
+          }
+        }
+      });
+
+      Feature.update({
+        storage: $scope.template.storage,
+        featureId: $scope.feature.id
+      }, $scope.feature).$promise.then(function(response) {
+
+        $rootScope.alerts.push({
+          'type': 'success',
+          'title': 'Awesome!',
+          'details': 'Your Feature updates were saved successfully!'
+        });
+
+        $route.reload();
+      }, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind trying that again? It looks like we couldn\'t update that Feature for you.'
+        });
+      });
+    };
+
+    //
+    // Delete an existing Field from the API Database
+    //
+    $scope.DeleteFeature = function () {
+
+      //
+      // Send the 'DELETE' method to the API so it's removed from the database
+      //
+      Feature.delete({
+        storage: $scope.template.storage,
+        featureId: $scope.feature.id
+      }).$promise.then(function(response) {
+  
+        $rootScope.alerts.push({
+          'type': 'success',
+          'title': 'Awesome!',
+          'details': 'Your Feature updates were saved successfully!'
+        });
+
+        $location.path('/applications/' + $scope.application.id + '/templates/' + $scope.template.id + '/features');
+      }, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind trying that again? It looks like we couldn\'t update that Feature for you.'
+        });
+      });
+
     };
 
 

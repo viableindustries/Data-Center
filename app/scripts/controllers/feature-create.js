@@ -15,6 +15,7 @@ angular.module('commonsCloudAdminApp')
     $scope.features = [];
     $scope.fields = [];
     $scope.feature = new Feature();
+    $scope.files = [];
     $scope.feature.status = 'public';
     $scope.default_geometry = {};
 
@@ -246,9 +247,6 @@ angular.module('commonsCloudAdminApp')
       leafletData.getMap().then(function(map) {
 
         $scope.$watch('default_geometry', function() {
-          console.log('$scope.default_geometry', $scope.default_geometry);
-          console.log('$scope.default_geometry', JSON.stringify($scope.default_geometry));
-
           if ($scope.default_geometry.hasOwnProperty('coordinates')) {
             map.setView([$scope.default_geometry.coordinates[1], $scope.default_geometry.coordinates[0]], 13);
           }
@@ -412,6 +410,22 @@ angular.module('commonsCloudAdminApp')
       $scope.feature.$save({
         storage: $scope.template.storage
       }).then(function(response) {
+
+        var fileData = new FormData();
+
+        angular.forEach($scope.files, function(file, index) {
+          fileData.append(file.field, file.file)
+        });
+
+        Feature.postFiles({
+          storage: $scope.template.storage,
+          featureId: response.resource_id
+        }, fileData).$promise.then(function(response) {
+          console.log('Update fired', response);
+        }, function(error) {
+          console.log('Update failed!!!!', error);
+        });
+
         $rootScope.alerts.push({
           'type': 'success',
           'title': 'Yes!',
@@ -428,6 +442,41 @@ angular.module('commonsCloudAdminApp')
       });
     };
 
+
+    $scope.onFileRemove = function(file, index) {
+      $scope.files.splice(index, 1);
+    };
+
+    $scope.onFileSelect = function(files, field_name) {
+
+      console.log('field_name', field_name);
+
+      angular.forEach(files, function(file, index) {
+        // Check to see if we can load previews
+        if (window.FileReader && file.type.indexOf('image') > -1) {
+
+          var fileReader = new FileReader();
+          fileReader.readAsDataURL(file);
+          fileReader.onload = function (event) {
+            file.preview = event.target.result;
+            $scope.files.push({
+              'field': field_name,
+              'file': file
+            });
+            $scope.$apply();
+            console.log('files', $scope.files);
+          };
+        } else {
+          $scope.files.push({
+            'field': field_name,
+            'file': file
+          });
+          $scope.$apply();
+          console.log('files', $scope.files);
+        }
+      });
+
+    };
 
     //
     // Now that we've got the everything prepared, let's go ahead and start

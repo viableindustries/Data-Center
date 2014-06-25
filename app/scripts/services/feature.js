@@ -15,6 +15,14 @@ angular.module('commonsCloudAdminApp')
             return angular.fromJson(data);
           }
         },
+        postFiles: {
+          method: 'PUT',
+          url: '//api.commonscloud.org/v2/:storage/:featureId.json',
+          transformRequest: angular.identity,
+          headers: {
+            'Content-Type': undefined
+          }
+        },
         get: {
           method: 'GET',
           url: '//api.commonscloud.org/v2/:storage/:featureId.json'

@@ -14,6 +14,7 @@ angular.module('commonsCloudAdminApp')
     $scope.template = {};
     $scope.fields = [];
     $scope.feature = {};
+    $scope.files = [];
     $scope.default_geometry = {};
 
     //
@@ -266,16 +267,16 @@ angular.module('commonsCloudAdminApp')
       leafletData.getMap().then(function(map) {
 
         $scope.$watch('default_geometry', function() {
-          console.log('$scope.default_geometry', $scope.default_geometry);
-          console.log('$scope.default_geometry', JSON.stringify($scope.default_geometry));
-
           if ((!angular.isUndefined($scope.default_geometry)) && ($scope.default_geometry !== null) && ($scope.default_geometry.hasOwnProperty('coordinates'))) {
             map.setView([$scope.default_geometry.coordinates[1], $scope.default_geometry.coordinates[0]], 13);
           } else if (($scope.feature !== null) && ($scope.feature.hasOwnProperty('geometry'))) {
             $scope.feature.geometry = $scope.convertGeometryCollectionToFeatureCollection($scope.feature.geometry);
-            $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
 
-            map.fitBounds(featureGroup.getBounds());
+            if ($scope.feature.geometry !== undefined) {
+
+              $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
+              map.fitBounds(featureGroup.getBounds());
+            }
           }
         });
 
@@ -399,16 +400,19 @@ angular.module('commonsCloudAdminApp')
         'features': []
       };
 
-      angular.forEach(ExistingCollection.geometries, function (feature, index) {
-        var geometry_ = {
-          'type': 'Feature',
-          'geometry': feature
-        };
+      if (ExistingCollection !== null && ExistingCollection !== undefined) {
+        angular.forEach(ExistingCollection.geometries, function (feature, index) {
+          var geometry_ = {
+            'type': 'Feature',
+            'geometry': feature
+          };
 
-        NewFeatureCollection.features.push(geometry_);
-      });
+          NewFeatureCollection.features.push(geometry_);
+        });
 
-      return NewFeatureCollection;
+        return NewFeatureCollection;
+      }
+
     };
 
 
@@ -451,6 +455,21 @@ angular.module('commonsCloudAdminApp')
         featureId: $scope.feature.id
       }, $scope.feature).$promise.then(function(response) {
 
+        var fileData = new FormData();
+
+        angular.forEach($scope.files, function(file, index) {
+          fileData.append(file.field, file.file)
+        });
+
+        Feature.postFiles({
+          storage: $scope.template.storage,
+          featureId: $scope.feature.id
+        }, fileData).$promise.then(function(response) {
+          console.log('Update fired', response);
+        }, function(error) {
+          console.log('Update failed!!!!', error);
+        });
+
         $rootScope.alerts.push({
           'type': 'success',
           'title': 'Awesome!',
@@ -486,13 +505,55 @@ angular.module('commonsCloudAdminApp')
           'details': 'Your Feature updates were saved successfully!'
         });
 
-        $location.path('/applications/' + $scope.application.id + '/templates/' + $scope.template.id + '/features');
+        $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features');
       }, function(error) {
         $rootScope.alerts.push({
           'type': 'error',
           'title': 'Uh-oh!',
           'details': 'Mind trying that again? It looks like we couldn\'t update that Feature for you.'
         });
+      });
+
+    };
+
+    $scope.onFileRemove = function(file, index) {
+      console.log('Need to delete', file)
+      // $scope.files.splice(index, 1);
+    };
+
+    $scope.onFileSelect = function(files, field_name) {
+
+      console.log('field_name', field_name);
+
+      angular.forEach(files, function(file, index) {
+        // Check to see if we can load previews
+        if (window.FileReader && file.type.indexOf('image') > -1) {
+
+          var fileReader = new FileReader();
+          fileReader.readAsDataURL(file);
+          fileReader.onload = function (event) {
+            file.preview = event.target.result;
+            var new_file = {
+              'field': field_name,
+              'file': file
+            };
+            $scope.files.push(new_file);
+            $scope.feature[field_name].push(new_file);
+            $scope.$apply();
+            console.log('files', $scope.files);
+            console.log('$scope.feature[' + field_name + ']', $scope.feature[field_name]);
+          };
+        } else {
+          var new_file = {
+            'field': field_name,
+            'file': file
+          };
+          $scope.files.push(new_file);
+          $scope.feature[field_name].push(new_file);
+          $scope.$apply();
+          console.log('files', $scope.files);
+          console.log('$scope.feature[' + field_name + ']', $scope.feature[field_name]);
+        }
       });
 
     };

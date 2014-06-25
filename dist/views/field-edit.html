@@ -1,0 +1,156 @@
+<div class="row">
+
+  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
+
+    <div data-ng-include="'/views/includes/header.html'"></div>
+
+    <div data-ng-show="!loading" class="inner wide">
+      <div class="row">
+        <div class="col-xs-12">  
+          <header class="application">
+            <div class="row">
+              <div class="col-sm-11">
+                <h1 class="short">{{ application.name }}</h1>
+              </div>
+              <div class="col-xs-1 text-right">
+                <a href="/applications/{{ application.id }}/edit"><span class="glyphicon glyphicon-pencil"></span></a>
+              </div>
+            </div>
+          </header>
+
+          <nav class="application-navigation navbar navbar-default">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="/applications/{{ application.id }}/collections">Feature Collections</a></li>
+              <li><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li>
+            </ul>
+          </nav>
+
+          <div class="loading-page"></div>
+
+          <article class="application single template-nested">
+            <div class="row">
+              <div class="col-sm-5">
+                <h1>{{ template.name }}</h1>
+              </div>
+              <div class="col-sm-7">
+                <ul class="nav nav-pills pull-right">
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features">Features</a></li>
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/statistics">Statistics</a></li>
+                  <li class="active"><a href="/applications/{{ application.id }}/collections/{{ template.id }}/fields">Fields</a></li>
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/settings">Settings</a></li>
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/developers">Developers</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- form-preview -->
+            <div class="row">
+              <div class="col-xs-12  col-xs-offset-0 col-sm-6 col-sm-offset-3">
+                <form method="POST">
+                  <fieldset>
+                    <div class="form-group">
+                      <label for="label" class="control-label">Label</label>
+                      <input data-ng-model="field.label" type="text" id="label" name="label" class="form-control" value="" />
+                      <p class="help-block">The label that appears above or near the form field to help user identify how to complete your form.</p>
+                    </div>
+                    <div class="form-group">
+                      <label for="help" class="control-label">Help Text</label>
+                      <input data-ng-model="field.help" type="text" id="help" name="help" class="form-control" value="" />
+                      <p class="help-block">Sometimes a one or two word label just isn't enough, help text is displayed below the field to give users just a bit more help (the sentence you're reading is help text).</p>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                      <label for="data_type" class="control-label">Data Type</label>
+                      <select data-ng-model="field.data_type" id="data_type" name="data_type" class="form-control">
+                        <optgroup label="Numeric">
+                          <option value="float">Float/Decimal</option>
+                          <option value="whole_number">Whole Number</option>
+                        </optgroup>
+
+                        <optgroup label="Text">
+                          <option value="text">Single Line Text</option>
+                          <option value="textarea">Multi-Line Text</option>
+                          <option value="email">Email</option>
+                          <option value="phone">Telephone</option>
+                          <option value="url">URL</option>
+                        </optgroup>
+
+                        <optgroup label="Date &amp; Time">
+                          <option value="date">Date</option>
+                          <option value="time">Time</option>
+                        </optgroup>
+
+                        <optgroup label="Special">
+                          <option value="relationship">Relationship</option>
+                          <option value="file">File Attachment</option>
+                          <option value="boolean">Boolean</option>
+                        </optgroup>
+                      </select>
+                    </div>
+                    <div class="form-group" data-ng-show="field.data_type === 'relationship'">
+                      <label for="relationship" class="control-label">Relationship</label>
+                      <select data-ng-model="field.relationship" id="relationship" name="relationship" class="form-control" data-ng-options="template_.storage as template_.name for template_ in templates"></select>
+                      <p class="help-block">The other Feature Collection you would like to relate this Feature with, for example an enumeration of other values</p>
+                    </div>
+                    <div class="form-group" data-ng-show="field.data_type === 'float' || field.data_type === 'whole_number'">
+                      <label for="options" class="control-label">Values</label>
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <input data-ng-model="field.options.minimum" type="text" id="options_minimum" name="options_minimum" class="form-control" />
+                          <p class="help-block">Minimum</p>
+                        </div>
+                        <div class="col-sm-6">
+                          <input data-ng-model="field.options.maximum" type="text" id="options_maximum" name="options_maximum" class="form-control" />
+                          <p class="help-block">Maximum</p>
+                        </div>
+                      </div>                      
+                    </div>
+
+                    <div class="form-group" data-ng-show="field.data_type === 'file'">
+                      <label for="options" class="control-label">Values</label>
+                      <input data-ng-model="field.options.allowed_extensions" type="text" id="options" name="options" class="form-control" />
+                      <p class="help-block">A comma separated list of values representing file extensions allowed by this field, include a dot and lower case values only (i.e., .doc, .pdf, .jpg)</p>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <label for="is_required" class="control-label">
+                          <input data-ng-model="field.is_required" id="is_required" name="is_required" type="checkbox" /> <strong>Required</strong>
+                        </label>
+                        <p class="help-block">If marked as required, the user will be forced to enter a value or not be allowed to submit the form.</p>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <label for="is_listed" class="control-label">
+                          <input data-ng-model="field.is_listed" id="is_listed" name="is_listed" type="checkbox" /> <strong>Listed</strong>
+                        </label>
+                        <p class="help-block">If checked, this field will be displayed in Feature Collections or Lists of Features, for performance reasons we advise not displaying all fields with Feature Collections.</p>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <label for="is_searchable" class="control-label">
+                          <input data-ng-model="field.is_searchable" id="is_searchable" name="is_searchable" type="checkbox" /> <strong>Searchable</strong>
+                        </label>
+                        <p class="help-block">If checked, this field will be marked as searchable, this is primarily for use in user interfaces and does not enforce any system level rules.</p>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <a class="btn btn-link" data-ng-click="DeleteField(field)">Delete this field</a>
+                      <input data-ng-click="UpdateField()" id="save" name="save" type="submit" class="button pull-right" value="Update Field" />
+                    </div>
+                  </fieldset>
+                </form>
+              </div>
+            </div>
+          <!-- form-preview -->
+
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div data-ng-include="'/views/includes/footer.html'"></div>

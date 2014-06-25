@@ -1,0 +1,65 @@
+<div class="row">
+
+  <section class="col-xs-12 col-sm-12 page-content">
+
+    <div data-ng-include="'/views/includes/header.html'"></div>
+
+    <div class="inner wide">
+
+      <div class="row">
+        <div class="col-xs-12">  
+          <header class="application">
+            <div class="row">
+              <div class="col-sm-11">
+                <h1>{{ application.name }}</h1>
+                <p data-ng-show="application.description">{{ application.description }}</p>
+                <p data-ng-show="application.url"><a href="{{ application.url }}" target="_blank">{{ application.url }}</a> <span class="glyphicon glyphicon-link"></span></p>
+              </div>
+              <div class="col-xs-1 text-right">
+                <a href="/applications/{{ application.id }}/edit"><span class="glyphicon glyphicon-pencil"></span></a>
+              </div>
+            </div>
+          </header>
+
+          <nav class="application-navigation navbar navbar-default">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="/applications/{{ application.id }}/collections">Feature Collections</a></li>
+              <li><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li>
+            </ul>
+            <a href="/applications/{{ application.id }}/collections/new" class="button pull-right">Add a Feature Collection</a>
+          </nav>
+
+          <div class="loading-page"></div>
+
+          <div class="template single">
+            <!-- Alerts -->
+            <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
+
+            <!-- Page Content -->
+            <div class="row">          
+              <article class="col-sm-12">
+                <div class="row">
+                  <div class="template col-sm-4 text-center pending-moderation-{{ template.moderation }}" data-ng-repeat="template in templates | orderBy:orderByField:reverseSort">
+                    <h3 data-ng-if="template.features.properties.total_features">{{ template.features.properties.total_features | number:0 }}</h3>
+                    <h3 data-ng-if="!template.features.properties.total_features">0</h3>
+                    <h1><a href="/applications/{{ application.id }}/collections/{{ template.id }}">{{ template.name }}</a></h1>
+                    <ul class="services">
+                      <li data-ng-show="template.is_public"><span title="Visible to the public" class="service icon retinaicon-essentials-021"></span><!-- <br /><small>Open</small> --></li>
+                      <li data-ng-show="template.is_crowdsourced"><span title="Crowd-sourcing is enabled" class="service icon retinaicon-business-011"></span><!-- <br /><small>Crowd Sourced</small> --></li>
+                      <li data-ng-show="template.is_geospatial"><span title="This is geo-spatial data" class="service icon retinaicon-essentials-042"></span><!-- <br /><small>Geo-spatial</small> --></li>
+                      <li data-ng-show="template.is_moderated"><span title="Moderation and Notification are enabled" class="service icon retinaicon-essentials-119"></span><!-- <br /><small>Moderated</small> --></li>
+                      <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/settings"><span class="icon retinaicon-essentials-113"></span></a></li>
+                    </ul>
+                  </div>
+                </div>  
+              </article>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div data-ng-include="'/views/includes/footer.html'"></div>

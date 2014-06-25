@@ -1,0 +1,122 @@
+<div class="row">
+
+  <section class="col-xs-12 col-sm-12 page-content">
+
+    <div data-ng-include="'/views/includes/header.html'"></div>
+
+    <div class="inner wide">
+
+      <div class="row">
+        <div class="col-xs-12">
+
+          <header class="application">
+            <div class="row">
+              <div class="col-sm-11">
+                <h1 class="short">{{ application.name }}</h1>
+              </div>
+              <div class="col-xs-1 text-right">
+                <a href="/applications/{{ application.id }}/edit"><span class="glyphicon glyphicon-pencil"></span></a>
+              </div>
+            </div>
+          </header>
+          
+          <nav class="application-navigation navbar navbar-default">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="/applications/{{ application.id }}/collections">Feature Collections</a></li>
+              <li><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li>
+            </ul>
+          </nav>
+
+          <div class="loading-page"></div>
+
+          <article class="application single">
+            <div class="row">
+              <div class="col-sm-5">
+                <h1>{{ template.name }}</h1>
+              </div>
+              <div class="col-sm-7">
+                <ul class="nav nav-pills pull-right">
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features">Features</a></li>
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/statistics">Statistics</a></li>
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/fields">Fields</a></li>
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/settings">Settings</a></li>
+                  <li class="active"><a href="/applications/{{ application.id }}/collections/{{ template.id }}/developers">Developers</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Alerts -->
+            <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <table class="table table-stripe">
+                  <thead>
+                    <tr>
+                      <th>Task</th>
+                      <th>Method</th>
+                      <th>Route</th>
+                      <th>Accepts</th>
+                      <th>Returns</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Listing Data</a></td>
+                      <td>GET</td>
+                      <td>/v2/{{ template.storage }}.json</td>
+                      <td><em>Nothing</em></td>
+                      <td>A list of existing features</td>
+                    </tr>
+
+                    <tr>
+                      <td>Creating a feature</td>
+                      <td>POST</td>
+                      <td>/v2/{{ template.storage }}.json</td>
+                      <td>A single feature</td>
+                      <td>The saved feature or errors</td>
+                    </tr>
+
+                    <tr>
+                      <td>Getting a feature</td>
+                      <td>GET</td>
+                      <td>/v2/{{ template.storage }}/&lt;ObjectId:feature_id&gt;.json</td>
+                      <td><em>Nothing</em></td>
+                      <td>A single feature</td>
+                    </tr>
+
+                    <tr>
+                      <td>Updating a feature</td>
+                      <td>PATCH</td>
+                      <td>/v2/{{ template.storage }}/&lt;ObjectId:feature_id&gt;.json</td>
+                      <td>A single feature</td>
+                      <td>The updated feature or errors</td>
+                    </tr>
+
+                    <tr>
+                      <td>Updating a feature</td>
+                      <td>PUT</td>
+                      <td>/v2/{{ template.storage }}/&lt;ObjectId:feature_id&gt;.json</td>
+                      <td>A single feature</td>
+                      <td>The updated feature or errors</td>
+                    </tr>
+
+                    <tr>
+                      <td>Deleting a feature</td>
+                      <td>DELETE</td>
+                      <td>/v2/{{ template.storage }}/&lt;ObjectId:feature_id&gt;/.json</td>
+                      <td>A single feature</td>
+                      <td><em>Nothing</em></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div data-ng-include="'/views/includes/footer.html'"></div>

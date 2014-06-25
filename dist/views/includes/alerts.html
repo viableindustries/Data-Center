@@ -1,0 +1,9 @@
+      <div class="row">
+        <div class="col-xs-12">
+          <div data-ng-show="alerts.length !== 0" class="row alerts">
+            <div class="col-sm-6 col-sm-offset-3">
+              <p data-ng-repeat="alert in alerts" class="alert alert-{{ alert.type }}"><strong>{{ alert.title }} </strong> {{ alert.details }}</p>
+            </div>
+          </div>
+        </div>
+      </div>

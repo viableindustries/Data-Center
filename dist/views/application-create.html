@@ -1,0 +1,55 @@
+<div class="row">
+
+  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
+
+    <div data-ng-include="'/views/includes/header.html'"></div>
+
+    <div data-ng-show="!loading" class="inner wide">
+      <div class="row">
+        <div class="col-xs-12">
+          <header class="application">
+            <div class="row">
+              <div class="col-sm-11">
+                <h1 class="short">New Application</h1>
+              </div>
+            </div>
+          </header>
+
+          <article class="application single">
+            <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <form method="POST" class="form-narrow">
+                  <div class="form-group">
+                    <label class="control-label" for="name">Application Name</label>
+                    <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" />
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label" for="description">Description</label>
+                    <textarea rows="6" id="description" name="description" class="form-control" data-ng-model="application.description"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label" for="url">URL</label>
+                    <input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" />
+                  </div>
+                  <hr />
+                  <div class="form-group text-right">
+                    <a href="/applications" class="btn btn-link pull-left">Nevermind</a>
+                    <input data-ng-click="save(application)" id="update" name="update" type="submit" class="button" value="Create Application" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </div>
+    <!-- /.inner.wide -->
+
+  </section>
+
+</div>
+
+<div data-ng-include="'/views/includes/footer.html'"></div>

@@ -1,0 +1,98 @@
+<div class="row">
+
+  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
+
+    <div data-ng-include="'/views/includes/header.html'"></div>
+
+    <div data-ng-show="!loading" class="inner wide">
+      <div class="row">
+        <div class="col-xs-12">  
+          <header class="application">
+            <div class="row">
+              <div class="col-sm-12">
+                <h1 class="short">{{ application.name }}</h1>
+              </div>
+            </div>
+          </header>
+
+          <div class="template single">
+
+            <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
+
+            <div class="row">          
+              <article class="col-sm-12">
+                <div class="row">
+                  <form method="POST" class="form-narrow">
+                    <fieldset>
+                      <legend>New Template</legend>
+                      <div class="form-group">
+                        <label class="control-label" for="name">Template Name</label>
+                        <input class="form-control input-lg" data-ng-model="newTemplate.name" id="name" name="name" type="text" autofocus="">
+                        <p class="help-block">This is the name of the Feature Type, it's what others will see</p>
+
+                        <label class="control-label" for="help">Help text</label>
+                        <input class="form-control" data-ng-model="newTemplate.help" id="help" name="help" type="text">
+                        <p class="help-block">Provide users with the context of this Feature Type or guidlines on proper submission</p>
+                      </div>
+                      
+                      <hr>
+            
+                      <div class="form-group">
+                        <div class="checkbox">
+                          <label for="publicly_viewable" class="control-label">
+                            <input data-ng-model="newTemplate.is_public" id="publicly_viewable" name="publicly_viewable" type="checkbox" /> <strong>Public</strong>
+                          </label>
+                          <p class="help-block">When a Feature Type is marked as public, we will display content with a status of 'public' or content that has been moderated to the public and it will be accessible via the API as well.</p>
+                        </div>
+                      </div>
+
+                      <hr>
+
+                      <div class="form-group">
+                        <div class="checkbox">
+                          <label for="crowd_sourcing" class="control-label">
+                            <input data-ng-model="newTemplate.is_crowdsourced" id="crowd_sourcing" name="crowd_sourcing" type="checkbox" /> <strong>Crowd-sourcing</strong>
+                          </label>
+                          <p class="help-block">When Crowd-sourcing is enabled, the public will be allowed to submit content via the API or via an HTML Form.</p>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="checkbox">
+                          <label for="moderate">
+                            <input data-ng-model="newTemplate.is_moderated" id="moderate" name="moderate" type="checkbox" /> <strong>Moderate crowd-sourced content</strong>
+                          </label>
+                          <p class="help-block">By default we recommend that all crowd-sourced content be put into a "moderation" status when it is submitted.</p>
+                        </div>
+                      </div>
+
+                      <hr />
+
+                      <div class="form-group">
+                        <div class="checkbox">
+                          <label for="geospatial">
+                            <input data-ng-model="newTemplate.is_geospatial" id="geospatial" name="geospatial" type="checkbox" /> <strong>GeoSpatial Data</strong>
+                          </label>
+                          <p class="help-block">This will vary from type to type, only you know if this feature type should contain geographiclly specific data.</p>
+                        </div>
+                      </div>
+                    </fieldset>
+
+                    <hr>
+
+                    <div class="form-group">
+                      <a href="/applications/{{ application.id }}" class="btn btn-link">Nevermind</a>
+                      <input data-ng-click="CreateTemplate()" id="save" name="save" type="submit" class="button pull-right" value="Create Template" />
+                    </div>
+                  </form>
+                </div>  
+              </article>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div data-ng-include="'/views/includes/footer.html'"></div>

@@ -122,6 +122,41 @@ angular.module('commonsCloudAdminApp')
 
     };
 
+//
+    // Delete an existing Template from the API Database
+    //
+    $scope.DeleteTemplate = function (template) {
+
+      //
+      // Construct an object containing only the Application ID so that we
+      // aren't sending along Application parameters in the URL
+      //
+      var template_ = {
+        id: template.id
+      };
+
+      //
+      // Send the 'DELETE' method to the API so it's removed from the database
+      //
+      Template.delete({
+        templateId: template_.id
+      }, template_).$promise.then(function(response) {
+        $rootScope.alerts.push({
+          'type': 'success',
+          'title': 'Updated',
+          'details': 'Your template was deleted!'
+        });
+
+        $location.path('/applications/' + $scope.application.id + '/collections');
+      }, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind trying that again? It looks like we couldn\'t delete that Template for you.'
+        });
+      });
+    };
+
     $scope.GetApplication();
 
   }]);

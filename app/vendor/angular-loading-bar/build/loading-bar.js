@@ -164,7 +164,7 @@ angular.module('cfp.loadingBar', [])
     this.includeBar = true;
     this.latencyThreshold = 100;
     this.startSize = 0.02;
-    this.parentSelector = '.loading-page';
+    this.parentSelector = 'body';
 
     this.$get = ['$document', '$timeout', '$animate', '$rootScope', function ($document, $timeout, $animate, $rootScope) {
 

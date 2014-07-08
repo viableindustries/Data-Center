@@ -15,7 +15,6 @@ angular.module('commonsCloudAdminApp')
     $scope.fields = [];
     $scope.feature = {};
     $scope.files = [];
-    $scope.default_geometry = {};
 
     //
     // Controls for showing/hiding specific page elements that may not be
@@ -156,8 +155,8 @@ angular.module('commonsCloudAdminApp')
           featureId: feature_id
         }).$promise.then(function(response) {
           $scope.feature = response.response;
-          $scope.default_geometry = $scope.feature.geometry;
           $scope.getEnumeratedValues($scope.fields);
+          $scope.getEditableMap(response.response.geometry);
         }, function(error) {
           $rootScope.alerts.push({
             'type': 'error',
@@ -178,7 +177,6 @@ angular.module('commonsCloudAdminApp')
 
           if ($routeParams.featureId) {
             $scope.GetFeature($routeParams.featureId);
-            $scope.getEditableMap();
           }
         });
     };
@@ -262,23 +260,38 @@ angular.module('commonsCloudAdminApp')
     };
 
 
-    $scope.getEditableMap = function () {
+    $scope.getEditableMap = function (default_geometry) {
 
       leafletData.getMap().then(function(map) {
 
+        if (default_geometry) {
+          console.debug('$scope.feature.geometry', $scope.feature.geometry);
+          $scope.feature.geometry = $scope.convertGeometryCollectionToFeatureCollection(default_geometry);
+          $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
+
+          console.debug('Setting default geometry with $scope.feature.geometry', $scope.feature.geometry);
+
+          map.fitBounds(featureGroup.getBounds());
+        } else {
+          console.log('No default_geometry provided', default_geometry);
+        }
+
         $scope.$watch('default_geometry', function() {
           if ((!angular.isUndefined($scope.default_geometry)) && ($scope.default_geometry !== null) && ($scope.default_geometry.hasOwnProperty('coordinates'))) {
+            console.debug('Updating to user\'s current location with $scope.default_geometry', default_geometry);
             map.setView([$scope.default_geometry.coordinates[1], $scope.default_geometry.coordinates[0]], 13);
-          } else if (($scope.feature !== null) && ($scope.feature.hasOwnProperty('geometry'))) {
-            $scope.feature.geometry = $scope.convertGeometryCollectionToFeatureCollection($scope.feature.geometry);
-
-            if ($scope.feature.geometry !== undefined) {
-
-              $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
-              map.fitBounds(featureGroup.getBounds());
-            }
           }
         });
+
+        // $scope.$watch('feature', function() {
+        //   if (($scope.feature !== null) && ($scope.feature.hasOwnProperty('geometry'))) {
+        //     $scope.feature.geometry = $scope.convertGeometryCollectionToFeatureCollection($scope.feature.geometry);
+        //     $scope.geojsonToLayer($scope.feature.geometry, featureGroup);
+        //     map.fitBounds(featureGroup.getBounds());
+        //   } else {
+        //     console.log('No $scope.feature.geometry found', $scope.feature.geometry);
+        //   }
+        // });
 
         // var featureGroup = new L.FeatureGroup();
         map.addLayer(featureGroup);
@@ -400,7 +413,8 @@ angular.module('commonsCloudAdminApp')
         'features': []
       };
 
-      if (ExistingCollection !== null && ExistingCollection !== undefined) {
+      if (ExistingCollection !== null && ExistingCollection !== undefined && ExistingCollection.hasOwnProperty('geometries')) {
+        console.log('We got a geometry collection');
         angular.forEach(ExistingCollection.geometries, function (feature, index) {
           var geometry_ = {
             'type': 'Feature',
@@ -409,9 +423,13 @@ angular.module('commonsCloudAdminApp')
 
           NewFeatureCollection.features.push(geometry_);
         });
-
-        return NewFeatureCollection;
+      } else if (ExistingCollection !== null && ExistingCollection !== undefined && ExistingCollection.hasOwnProperty('coordinates')) {
+        console.log('Better just add this to the Feature collection and call it a day');
+        NewFeatureCollection.features.push(ExistingCollection);
       }
+
+
+      return NewFeatureCollection;
 
     };
 

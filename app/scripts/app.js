@@ -10,7 +10,8 @@ angular
     'ui.gravatar',
     'leaflet-directive',
     'angularFileUpload',
-    'geolocation'
+    'geolocation',
+    'angular-loading-bar'
   ])
   .config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
 

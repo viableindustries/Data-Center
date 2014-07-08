@@ -6,7 +6,7 @@
 
     <div data-ng-show="!loading" class="inner wide">
       <div class="row">
-        <div class="col-xs-12">  
+        <div class="col-xs-12">
           <header class="application">
             <div class="row">
               <div class="col-sm-11">
@@ -68,6 +68,9 @@
                         <select multiple="" data-ng-model="feature[field.relationship]" class="form-control" id="{{ field.relationship }}" name="{{ field.relationship }}" data-ng-options="value_.id as value_.name for value_ in field.values">
                           <option value="">-- Choose {{ field.label }} --</option>
                         </select>
+                        <div class="value">
+                          <code><pre>{{ feature[field.relationship] }}</pre></code>
+                        </div>
                       </div>
 
                       <div data-ng-if="field.data_type === 'file'">
@@ -102,8 +105,7 @@
                         </div>
 
                       </div>
-
-
+                      <p class="help-block">{{ field.help }}</p>
 
                     </div>
                   </fieldset>

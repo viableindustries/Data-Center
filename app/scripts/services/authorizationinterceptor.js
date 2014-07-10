@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .factory('AuthorizationInterceptor', ['$rootScope', '$q', 'ipCookie', '$location', function ($rootScope, $q, ipCookie, $location) {
+  .factory('AuthorizationInterceptor', ['$rootScope', '$q', '$cookies', '$location', function ($rootScope, $q, $cookies, $location) {
 
     //
     // Before we do anything else we should check to make sure
@@ -20,7 +20,7 @@ angular.module('commonsCloudAdminApp')
 
     return {
       request: function(config) {
-        var sessionCookie = ipCookie('ccapi_session');
+        var sessionCookie = $cookies.ccapi_session
 
         if (config.url !== '/views/authorize.html' && (sessionCookie === 'undefined' || sessionCookie === undefined)) {
           $location.hash('');

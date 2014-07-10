@@ -38,10 +38,10 @@ module.exports = function (grunt) {
           livereload: true
         }
       },
-      jsTest: {
-        files: ['test/spec/{,*/}*.js'],
-        tasks: ['newer:jshint:test', 'karma']
-      },
+      // jsTest: {
+      //   files: ['test/spec/{,*/}*.js'],
+      //   tasks: ['newer:jshint:test', 'karma']
+      // },
       compass: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
@@ -82,16 +82,16 @@ module.exports = function (grunt) {
           ]
         }
       },
-      test: {
-        options: {
-          port: 9001,
-          base: [
-            '.tmp',
-            'test',
-            '<%= yeoman.app %>'
-          ]
-        }
-      },
+      // test: {
+      //   options: {
+      //     port: 9001,
+      //     base: [
+      //       '.tmp',
+      //       'test',
+      //       '<%= yeoman.app %>'
+      //     ]
+      //   }
+      // },
       dist: {
         options: {
           base: '<%= yeoman.dist %>'
@@ -109,12 +109,12 @@ module.exports = function (grunt) {
         'Gruntfile.js',
         '<%= yeoman.app %>/scripts/{,*/}*.js'
       ],
-      test: {
-        options: {
-          jshintrc: 'test/.jshintrc'
-        },
-        src: ['test/spec/{,*/}*.js']
-      }
+      // test: {
+      //   options: {
+      //     jshintrc: 'test/.jshintrc'
+      //   },
+      //   src: ['test/spec/{,*/}*.js']
+      // }
     },
 
     // Empties folders to start fresh
@@ -333,23 +333,23 @@ module.exports = function (grunt) {
       server: [
         'compass:server'
       ],
-      test: [
-        'compass'
-      ],
+      // test: [
+      //   'compass'
+      // ],
       dist: [
         'compass:dist',
         'imagemin',
         'svgmin'
       ]
-    },
-
-    // Test settings
-    karma: {
-      unit: {
-        configFile: 'karma.conf.js',
-        singleRun: true
-      }
     }
+
+    // // Test settings
+    // karma: {
+    //   unit: {
+    //     configFile: 'karma.conf.js',
+    //     singleRun: true
+    //   }
+    // }
   });
 
 
@@ -398,7 +398,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', [
     'newer:jshint',
-    'test',
+    // 'test',
     'build'
   ]);
 };

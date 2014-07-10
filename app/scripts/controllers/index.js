@@ -1,11 +1,22 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('IndexCtrl', ['$rootScope', '$scope', 'ipCookie', '$location', '$window', 'User', function($rootScope, $scope, ipCookie, $location, $window, User) {
+  .controller('IndexCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'User', function($rootScope, $scope, $cookieStore, $location, $window, User) {
 
-    var host = $location.host(),
-        redirect_uri;
-    var session_cookie = ipCookie('ccapi_session');
+    $scope.loginPage = function() {
+      var host = $location.host();
+      var session_cookie = $cookieStore.get('ccapi_session');
+
+      //
+      // Redirect based on current enviornment
+      //
+      if (host === 'localhost' || host === '127.0.0.1') {
+        $scope.login_url = 'http://api.commonscloud.org/oauth/authorize?response_type=token&client_id=PGvNp0niToyRspXaaqx3PiQBMn66QXyAq5yrNHpz&redirect_uri=http%3A%2F%2F127.0.0.1%3A9000%2Fauthorize&scope=user applications';
+      } else {
+        $scope.login_url = 'http://api.commonscloud.org/oauth/authorize?response_type=token&client_id=MbanCzYpm0fUW8md1cdSJjUoYI78zTbak2XhZ2hF&redirect_uri=http%3A%2F%2Fapp.commonscloud.org%2Fauthorize&scope=user applications';
+      }
+
+    };
 
     //
     // Get the User object so that we can present them with profile and other
@@ -18,39 +29,20 @@ angular.module('commonsCloudAdminApp')
       User.get().$promise.then(function(response) {
         $rootScope.user = response.response;
       }, function (error) {
-        //
-        // Once the template has been updated successfully we should give the
-        // user some on-screen feedback and then remove it from the screen after
-        // a few seconds as not to confuse them or force them to reload the page
-        // to dismiss the message
-        //
-        var alert = {
+        $rootScope.alerts.push({
           'type': 'error',
           'title': 'Oops!',
           'details': 'Looks like your user information is missing in action. Try reloading the page or logging in again.'
-        };
-
-        $scope.alerts.push(alert);
+        });
       });
     };
 
-    if (!session_cookie) {
-
-      //
-      // Redirect based on current enviornment
-      //
-      if (host === 'localhost' || host === '127.0.0.1') {
-        redirect_uri = 'http://api.commonscloud.org/oauth/authorize?response_type=token&client_id=PGvNp0niToyRspXaaqx3PiQBMn66QXyAq5yrNHpz&redirect_uri=http%3A%2F%2F127.0.0.1%3A9000%2Fauthorize&scope=user applications';
-      } else {
-        redirect_uri = 'http://api.commonscloud.org/oauth/authorize?response_type=token&client_id=MbanCzYpm0fUW8md1cdSJjUoYI78zTbak2XhZ2hF&redirect_uri=http%3A%2F%2Fapp.commonscloud.org%2Fauthorize&scope=user applications';
-      }
-
-      $window.location.href = redirect_uri;
-
-    } else {
+    if ($cookieStore.get('ccapi_session')) {
       $scope.GetUser();
       $location.hash('');
       $location.path('/applications');
+    } else {
+      $scope.loginPage();
     }
 
   }]);

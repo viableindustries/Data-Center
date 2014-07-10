@@ -2,7 +2,7 @@
 
 angular
   .module('commonsCloudAdminApp', [
-    'ivpusic.cookie',
+    'ngCookies',
     'ngResource',
     'ngSanitize',
     'ngRoute',
@@ -24,6 +24,10 @@ angular
       .when('/authorize', {
         templateUrl: '/views/authorize.html',
         controller: 'AuthorizeCtrl'
+      })
+      .when('/logout', {
+        templateUrl: '/views/index.html',
+        controller: 'LogoutCtrl'
       })
       .when('/applications', {
         templateUrl: '/views/applications.html',
@@ -98,9 +102,9 @@ angular
       .when('/applications/:applicationId/collections/:templateId/developers', {
         templateUrl: '/views/template-dev.html',
         controller: 'TemplateDevCtrl'
-      })
-      .otherwise({
-        templateUrl: '/views/errors/404.html'
+      // })
+      // .otherwise({
+      //   templateUrl: '/views/errors/404.html'
       });
 
     // If you remove this, you break the whole application

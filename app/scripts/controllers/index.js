@@ -46,6 +46,8 @@ angular.module('commonsCloudAdminApp')
       $location.hash('');
       $location.path('/applications');
     } else {
+      ipCookie.remove('COMMONS_SESSION');
+      ipCookie.remove('COMMONS_SESSION', { path: '/' });
       console.log('session_cookie from index > else', session_cookie);
       $scope.setupLoginPage();
     }

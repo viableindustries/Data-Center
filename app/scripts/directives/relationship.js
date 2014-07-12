@@ -1,29 +1,21 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .directive('featureSearch', function ($http, $timeout) {
+  .directive('relationship', function ($http, $timeout) {
 	function link(scope, el, attrs) {
 		//create variables for needed DOM elements
 		var container = el.children()[0];
 		var input = angular.element(container.children[0]);
 		scope.searchText = input[0].value;
+    scope.model_values = []
 		var dropdown = angular.element(container.children[1]);
 		var timeout;
 
 		console.log('scope', scope);
 
-		//open and close dropdown
-		// input.on('focus', function(){
-		// 	dropdown.removeClass('hidden');
-		// });
-
-		// input.on('blur', function(){
-		// 	dropdown.addClass('hidden');
-		// });
-
 		//$http request to be fired on search
 		var getFilteredResults = function(){
-			var table = scope.model.relationship;
+			var table = scope.field.relationship;
 			var url = '//api.commonscloud.org/v2/' + table + '.json';
 
 			$http({
@@ -55,6 +47,15 @@ angular.module('commonsCloudAdminApp')
 			});
 		};
 
+    var set = function(arr) {
+      return arr.reduce(function (a, val) {
+        if (a.indexOf(val) === -1) {
+            a.push(val);
+        }
+        return a;
+      }, []);
+    }
+
 		//search with timeout to prevent it from firing on every keystroke
 		scope.search = function(){
 
@@ -67,16 +68,29 @@ angular.module('commonsCloudAdminApp')
 			}
 		};
 
-		scope.createTag = function(){
-			console.log('selected');
+		scope.addFeatureToRelationships = function(feature){
+			console.log('selected', feature);
+      scope.model_values.push(feature.id);
+
+      // Remove duplicates from array
+      scope.model_values = set(scope.model_values);
+
+      // Add values to the actual field model (this is in the controller, not this directive)
+      scope.model = scope.model_values;
+
+      // Clear out input field
+      scope.searchText = '';
+      scope.features = [];
 		};
 	}
 
 	return {
 	  scope: {
-			model: '='
+			field: '=',
+      feature: '=',
+      model: '='
 	  },
-	  templateUrl: '/views/includes/featuresearch-template.html',
+	  templateUrl: '/views/includes/relationship.html',
 	  restrict: 'E',
 	  link: link
 	};

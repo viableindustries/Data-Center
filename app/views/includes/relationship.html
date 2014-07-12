@@ -1,0 +1,11 @@
+<div class="featureSearch">
+	<input type="text" placeholder="Search" data-ng-model="searchText" data-ng-change="search()" class="form-control" />
+	<div data-ng-if="features.length >= 1 && searchText.length >= 3" class="dropdown">
+		<ul>
+			<li data-ng-repeat="feature in features"><a href="javascript:void()" data-ng-click="addFeatureToRelationships(feature)">{{feature.name}}</a></li>
+		</ul>
+	</div>
+	<div class="value">
+		<code><pre>{{ model_values }}</pre></code>
+	</div>
+</div>

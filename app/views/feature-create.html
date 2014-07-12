@@ -54,8 +54,8 @@
                         </label>
                       </div>
                       <label data-ng-if="field.data_type !== 'boolean'" for="{{ field.name }}" class="control-label">{{ field.label }}</label>
-                      
-                      <feature-search model="field" data-ng-if="field.data_type === 'relationship'"></feature-search>
+
+                      <!-- <feature-search model="field" data-ng-if="field.data_type === 'relationship'"></feature-search> -->
                       
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'text'" class="form-control" type="text" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'email'" class="form-control" type="email" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />

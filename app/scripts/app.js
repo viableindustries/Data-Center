@@ -26,7 +26,7 @@ angular
         controller: 'AuthorizeCtrl'
       })
       .when('/logout', {
-        templateUrl: '/views/index.html',
+        templateUrl: '/views/logout.html',
         controller: 'LogoutCtrl'
       })
       .when('/applications', {

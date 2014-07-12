@@ -14,7 +14,10 @@ angular.module('commonsCloudAdminApp').controller('AuthorizeCtrl', ['$scope', '$
         expires: 2
       };
 
-      return ipCookie('COMMONS_SESSION', cleanToken, cookieOptions);
+      ipCookie('COMMONS_SESSION', cleanToken, cookieOptions);
+
+      $location.hash('');
+      $location.path('/applications');
     };
 
 
@@ -24,7 +27,6 @@ angular.module('commonsCloudAdminApp').controller('AuthorizeCtrl', ['$scope', '$
         $location.path('/applications');
       } else {
         $scope.saveAuthorization();
-        $scope.verifyAuthorization();
       }
     };
 

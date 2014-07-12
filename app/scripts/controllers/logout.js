@@ -1,12 +1,16 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('LogoutCtrl', ['$scope', 'ipCookie', '$route', function($scope, ipCookie, $route) {
+  .controller('LogoutCtrl', ['$scope', 'ipCookie', '$location', function($scope, ipCookie, $location) {
 
     console.log('LogoutCtrl');
 
-    ipCookie.remove('COMMONS_SESSION');
+    $scope.logout = function() {
+      ipCookie.remove('COMMONS_SESSION');
+      ipCookie.remove('COMMONS_SESSION', { path: '/' });
 
-    $route.reload();
+      $location.hash();
+      $location.path('/');
+    };
 
   }]);

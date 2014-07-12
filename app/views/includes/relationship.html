@@ -1,11 +1,18 @@
 <div class="featureSearch">
-	<input type="text" placeholder="Search" data-ng-model="searchText" data-ng-change="search()" class="form-control" />
+	<input type="text" placeholder="{{ placeholder }}" data-ng-model="searchText" data-ng-change="search()" class="form-control" />
 	<div data-ng-if="features.length >= 1 && searchText.length >= 3" class="dropdown">
 		<ul>
-			<li data-ng-repeat="feature in features"><a href="javascript:void()" data-ng-click="addFeatureToRelationships(feature)">{{feature.name}}</a></li>
+			<li data-ng-repeat="feature in features"><a href="#" data-ng-click="addFeatureToRelationships(feature)">{{ feature.name }}</a></li>
 		</ul>
 	</div>
-	<div class="value">
-		<code><pre>{{ model_values }}</pre></code>
+	<div data-ng-if="human_readable_values.length >= 1" class="relationship-values">
+		<div class="row" data-ng-repeat="option in human_readable_values">
+			<div class="col-sm-11">
+				<p>{{ option.name }}</p>
+			</div>
+			<div class="col-xs-1">
+				<p><a class="text-right" href="#" data-ng-click="removeFeatureFromRelationships($index)"><span class="icon retinaicon-essentials-068"></span></a></p>
+			</div>
+		</div>
 	</div>
 </div>

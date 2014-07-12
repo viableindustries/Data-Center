@@ -1,8 +1,8 @@
 //
 // Generic Typography
 //
-// Any element specific typography should be kept in either the 
-// application-content stylesheet or another, relevant stylesheet 
+// Any element specific typography should be kept in either the
+// application-content stylesheet or another, relevant stylesheet
 //
 h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.025em;
@@ -60,6 +60,11 @@ a {
 a:hover {
   color: darken($color-brand-blue-base, 5%);
   text-decoration: underline;
+}
+
+nav li a,
+nav li a:hover {
+  text-decoration: none;
 }
 
 .inline-label {
@@ -151,7 +156,7 @@ a:hover {
 }
 
 table {}
-    
+
     .table > thead > tr > th,
     .table > tbody > tr > th,
     .table > tfoot > tr > th {
@@ -202,13 +207,13 @@ table {}
   margin-bottom: 0;
   padding: 0 32px;
 
-  .navbar-nav > .active > a, 
-  .navbar-nav > .active > a:hover, 
+  .navbar-nav > .active > a,
+  .navbar-nav > .active > a:hover,
   .navbar-nav > .active > a:focus {
   }
 
-  .navbar-nav > .active > a::after, 
-  .navbar-nav > .active > a:hover::after, 
+  .navbar-nav > .active > a::after,
+  .navbar-nav > .active > a:hover::after,
   .navbar-nav > .active > a:focus::after {
     border-right: 8px solid transparent;
     border-top: 8px solid $color-brand-brown-lighter;
@@ -221,8 +226,8 @@ table {}
     bottom: -8px;
   }
 
-  .navbar-nav > li > a, 
-  .navbar-nav > li > a:hover, 
+  .navbar-nav > li > a,
+  .navbar-nav > li > a:hover,
   .navbar-nav > li > a:focus {
     background-color: $color-brand-brown-lighter;
     color: $color-brand-black-lightest;

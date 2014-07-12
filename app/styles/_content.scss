@@ -341,7 +341,7 @@ body {
   overflow: scroll;
 }
 .table-viewer .table th:first-child {
-  min-width: 60px;  
+  min-width: 60px;
 }
 .table-viewer .table td:first-child .edit {
   visibility: hidden;
@@ -406,7 +406,7 @@ body {
 .tooltip-inner {
   background-color: rgb(64,64,64);
   padding: 8px;
-  
+
 }
 
 
@@ -501,24 +501,47 @@ body {
 .featureSearch {
   margin-bottom: 10px;
 }
+.relationship-values {
+  padding: 16px 0;
+
+  .row {
+    border-bottom: 1px solid rgb(232, 232, 232);
+    margin-bottom: 16px;
+  }
+  .row:last-child {
+    border-bottom: 0;
+  }
+}
  .dropdown {
-    background-color: rgba(191, 191, 191, 1);
-    color: rgba(242, 242, 242, 1);
-    width: 154px;
+    background-color: rgb(255,255,255);
+    color: rgb(242, 242, 242);
+    width: 100%;
 
     ul {
+        // border-left: 1px solid rgb(242,242,242);
+        // border-right: 1px solid rgb(232,232,232);
+        // border-bottom: 2px inset rgb(212,212,212);
+        box-shadow: 0 2px 3px rgb(222,222,222);
         list-style-type: none;
-        width: 154px;
-        padding: 10px 0;
+        padding: 0;
+        width: 100%;
     }
 
     li {
-        margin: 5px 0;
-        padding: 0 5px;
+        color: rgb(85,85,85);
+        font-size: 16px;
+        font-weight: 300;
+        list-style-type: none;
+        margin: 0;
+        padding: 8px 0 8px 16px;
 
-        &:hover {
-            background-color: rgba(242, 242, 242, 1);
-            color: rgba(51, 51, 51, 1);            
+        a {
+          background-color: transparent;
+          color: rgb(58,58,58);
+
+          &:hover {
+              background-color: rgb(252,252,252);
+          }
         }
     }
 }

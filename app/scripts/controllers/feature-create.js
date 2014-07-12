@@ -157,7 +157,7 @@ angular.module('commonsCloudAdminApp')
         }).$promise.then(function(response) {
           $scope.fields = response;
 
-          $scope.getEnumeratedValues($scope.fields);
+          // $scope.getEnumeratedValues($scope.fields);
 
           $scope.getEditableMap();
         });
@@ -292,7 +292,7 @@ angular.module('commonsCloudAdminApp')
         $timeout(function () {
           map.invalidateSize();
         }, 500);
-        
+
       });
 
       $scope.MapLoaded = true;
@@ -310,25 +310,25 @@ angular.module('commonsCloudAdminApp')
     //
     // Build enumerated values for drop downs
     //
-    $scope.getEnumeratedValues = function (field_list) {
-
-      angular.forEach(field_list, function (field_, index) {
-        if (field_.data_type === 'relationship') {
-          Feature.query({
-              storage: field_.relationship
-            }).$promise.then(function (response) {
-              $scope.fields[index].values = response.response.features;
-            }, function(error) {
-              $rootScope.alerts.push({
-                'type': 'error',
-                'title': 'Uh-oh!',
-                'details': 'Something stranged happened, please reload the page.'
-              });
-            });
-        }
-      });
-
-    };
+    // $scope.getEnumeratedValues = function (field_list) {
+    //
+    //   angular.forEach(field_list, function (field_, index) {
+    //     if (field_.data_type === 'relationship') {
+    //       Feature.query({
+    //           storage: field_.relationship
+    //         }).$promise.then(function (response) {
+    //           $scope.fields[index].values = response.response.features;
+    //         }, function(error) {
+    //           $rootScope.alerts.push({
+    //             'type': 'error',
+    //             'title': 'Uh-oh!',
+    //             'details': 'Something stranged happened, please reload the page.'
+    //           });
+    //         });
+    //     }
+    //   });
+    //
+    // };
 
     //
     // Convert a FeatureCollection to a GeometryCollection so that it can be
@@ -382,30 +382,30 @@ angular.module('commonsCloudAdminApp')
         $scope.feature.geometry = JSON.stringify(geometry_object);
       }
 
-      angular.forEach($scope.fields, function(field, index) {
-        if (field.data_type === 'relationship') {
-          if (angular.isArray($scope.feature[field.relationship]) && $scope.feature[field.relationship].length >= 1) {
-            
-            var relationship_array_ = [];
-
-            angular.forEach($scope.feature[field.relationship], function (value, index) {
-              relationship_array_.push({
-                'id': value
-              });
-            });
-
-            $scope.feature[field.relationship] = relationship_array_;
-          } else if (angular.isNumber($scope.feature[field.relationship])) {
-
-            var value = $scope.feature[field.relationship];
-
-            $scope.feature[field.relationship] = [{
-              'id': value
-            }];
-
-          }
-        }
-      });
+      // angular.forEach($scope.fields, function(field, index) {
+      //   if (field.data_type === 'relationship') {
+      //     if (angular.isArray($scope.feature[field.relationship]) && $scope.feature[field.relationship].length >= 1) {
+      //
+      //       var relationship_array_ = [];
+      //
+      //       angular.forEach($scope.feature[field.relationship], function (value, index) {
+      //         relationship_array_.push({
+      //           'id': value
+      //         });
+      //       });
+      //
+      //       $scope.feature[field.relationship] = relationship_array_;
+      //     } else if (angular.isNumber($scope.feature[field.relationship])) {
+      //
+      //       var value = $scope.feature[field.relationship];
+      //
+      //       $scope.feature[field.relationship] = [{
+      //         'id': value
+      //       }];
+      //
+      //     }
+      //   }
+      // });
 
       $scope.feature.$save({
         storage: $scope.template.storage

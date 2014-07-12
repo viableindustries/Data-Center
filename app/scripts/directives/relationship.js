@@ -6,16 +6,29 @@ angular.module('commonsCloudAdminApp')
 		//create variables for needed DOM elements
 		var container = el.children()[0];
 		var input = angular.element(container.children[0]);
-		scope.searchText = input[0].value;
-    scope.model_values = []
 		var dropdown = angular.element(container.children[1]);
 		var timeout;
 
-		console.log('scope', scope);
+    scope.human_readable_values = (scope.model) ? scope.model: [];
+
+    scope.getPlaceholderText = function(field) {
+
+      var label = field.label;
+      var article = 'a';
+
+      // if ("aeiouAEIOU".indexOf(label) != -1) {
+      if (/[aeiouAEIOU]/.test(label)) {
+        article = 'an';
+      }
+
+      return 'Choose ' + article + ' ' + label;
+    };
+
+    scope.placeholder = scope.getPlaceholderText(scope.field);
 
 		//$http request to be fired on search
-		var getFilteredResults = function(){
-			var table = scope.field.relationship;
+		var getFilteredResults = function(field){
+			var table = field.relationship;
 			var url = '//api.commonscloud.org/v2/' + table + '.json';
 
 			$http({
@@ -36,14 +49,6 @@ angular.module('commonsCloudAdminApp')
 			}).success(function(data){
 				//assign feature objects to scope for use in template
 				scope.features = data.response.features;
-
-				//select DOM elements to create click events on them
-				// var elements = container.children[1].children[0].children;
-				var elements = el[0].children[0].children[1].children[0].children;
-				angular.forEach(elements, function(value, key){
-					console.log('element', elements[key]);
-				});
-
 			});
 		};
 
@@ -63,25 +68,33 @@ angular.module('commonsCloudAdminApp')
 				$timeout.cancel(timeout);
 
 				timeout = $timeout(function () {
-					getFilteredResults();
+					getFilteredResults(scope.field);
 				}, 500);
 			}
 		};
 
 		scope.addFeatureToRelationships = function(feature){
-			console.log('selected', feature);
-      scope.model_values.push(feature.id);
 
-      // Remove duplicates from array
-      scope.model_values = set(scope.model_values);
+      if (angular.isArray(scope.model)) {
+        scope.human_readable_values.push(feature);
+        scope.model.push(feature);
+      } else {
+        scope.model = [];
+        scope.human_readable_values.push(feature);
+        scope.model.push(feature);
+      }
 
-      // Add values to the actual field model (this is in the controller, not this directive)
-      scope.model = scope.model_values;
+      scope.model = set(scope.model);
 
       // Clear out input field
       scope.searchText = '';
       scope.features = [];
 		};
+
+    scope.removeFeatureFromRelationships = function(index) {
+      delete scope.human_readable_values.splice(index, 1);
+      delete scope.model.splice(index, 1);
+    };
 	}
 
 	return {

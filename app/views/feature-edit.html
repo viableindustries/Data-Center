@@ -6,7 +6,7 @@
 
     <div data-ng-show="!loading" class="inner wide">
       <div class="row">
-        <div class="col-xs-12">  
+        <div class="col-xs-12">
           <header class="application">
             <div class="row">
               <div class="col-sm-11">
@@ -53,7 +53,10 @@
                           <input data-ng-model="feature[field.name]" type="checkbox" id="{{ field.name }}" name="{{ field.name }}" /> {{ field.label }}
                         </label>
                       </div>
-                      <label data-ng-if="field.data_type !== 'boolean'" for="{{ field.name }}" class="control-label">{{ field.label }}</label>
+                      <label data-ng-if="field.data_type !== 'boolean'" for="{{ field.name }}" class="control-label"><span data-ng-show="feature[field.name].length > 0 || field.data_type === 'relationship'">{{ field.label }}</span><span data-ng-show="!feature[field.name].length">&nbsp;</span></label>
+
+                      <relationship model="feature[field.relationship]" field="field" feature="feature" data-ng-if="field.data_type === 'relationship'"></relationship>
+                      <code data-ng-if="field.data_type === 'relationship'"><pre>{{ feature }}<br />{{ feature[field.relationship] }}</pre></code>
 
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'text'" class="form-control" type="text" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'email'" class="form-control" type="email" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
@@ -64,11 +67,11 @@
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'whole_number' || field.data_type === 'float'" class="form-control" type="number" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
 
                       <textarea data-ng-model="feature[field.name]" class="form-control" data-ng-if="field.data_type === 'textarea'" id="{{ field.name }}" name="{{ field.name }}">{{ feature[field.name] }}</textarea>
-                      <div data-ng-if="field.data_type === 'relationship'">
+                      <!-- <div data-ng-if="field.data_type === 'relationship'">
                         <select multiple="" data-ng-model="feature[field.relationship]" class="form-control" id="{{ field.relationship }}" name="{{ field.relationship }}" data-ng-options="value_.id as value_.name for value_ in field.values">
                           <option value="">-- Choose {{ field.label }} --</option>
                         </select>
-                      </div>
+                      </div> -->
 
                       <div data-ng-if="field.data_type === 'file'">
 
@@ -101,13 +104,11 @@
                             </div>
                           </div>
                         </div>
-
-
                       </div>
-
+                      <p class="help-block">{{ field.help }}</p>
                     </div>
                   </fieldset>
-                  <hr />
+
                   <div class="form-group">
                     <label for="status">Feature Status</label>
                     <select class="form-control" data-ng-model="feature.status" id="status" name="status" required="required">

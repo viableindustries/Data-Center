@@ -498,11 +498,55 @@ body {
 /**
  * Feature Search Styles
  */
-.featureSearch {
-  margin-bottom: 10px;
+.relationship {
+  position: relative;
+  .dropdown {
+     background-color: rgb(255,255,255);
+     color: rgb(242, 242, 242);
+     left: 0;
+     position: absolute;
+     top: 34px;
+     width: 100%;
+     z-index: 9;
+
+     ul {
+         // border-left: 1px solid rgb(242,242,242);
+         // border-right: 1px solid rgb(232,232,232);
+         // border-bottom: 2px inset rgb(212,212,212);
+         box-shadow: 0 2px 3px rgb(222,222,222);
+         list-style-type: none;
+         padding: 0;
+         width: 100%;
+     }
+
+     li {
+         color: rgb(85,85,85);
+         font-size: 16px;
+         font-weight: 300;
+         list-style-type: none;
+         margin: 0;
+         padding: 8px 0 8px 16px;
+
+         p {
+           font-size: 14px;
+           line-height: 1;
+           margin: 16px 0;
+         }
+
+         a {
+           background-color: transparent;
+           color: rgb(58,58,58);
+
+           &:hover {
+               background-color: rgb(252,252,252);
+           }
+         }
+     }
+  }
 }
+
 .relationship-values {
-  padding: 16px 0;
+  padding: 16px 0 0;
 
   .row {
     border-bottom: 1px solid rgb(232, 232, 232);
@@ -510,38 +554,6 @@ body {
   }
   .row:last-child {
     border-bottom: 0;
+    margin-bottom: 0;
   }
-}
- .dropdown {
-    background-color: rgb(255,255,255);
-    color: rgb(242, 242, 242);
-    width: 100%;
-
-    ul {
-        // border-left: 1px solid rgb(242,242,242);
-        // border-right: 1px solid rgb(232,232,232);
-        // border-bottom: 2px inset rgb(212,212,212);
-        box-shadow: 0 2px 3px rgb(222,222,222);
-        list-style-type: none;
-        padding: 0;
-        width: 100%;
-    }
-
-    li {
-        color: rgb(85,85,85);
-        font-size: 16px;
-        font-weight: 300;
-        list-style-type: none;
-        margin: 0;
-        padding: 8px 0 8px 16px;
-
-        a {
-          background-color: transparent;
-          color: rgb(58,58,58);
-
-          &:hover {
-              background-color: rgb(252,252,252);
-          }
-        }
-    }
 }

@@ -8,8 +8,17 @@ angular.module('commonsCloudAdminApp')
 		var input = angular.element(container.children[0]);
 		var dropdown = angular.element(container.children[1]);
 		var timeout;
+    scope.relationship_focus = false;
 
-    scope.human_readable_values = (scope.model) ? scope.model: [];
+    //
+    // scope.human_readable_values = (scope.model) ? scope.model: [];
+    //
+    // scope.$watch('model', function (data) {
+    //   console.log('model updated', data);
+    //   scope.human_readable_values = data;
+    // });
+
+    console.log('enumerated value checking', scope.human_readable_values, scope.model);
 
     scope.getPlaceholderText = function(field) {
 
@@ -76,11 +85,11 @@ angular.module('commonsCloudAdminApp')
 		scope.addFeatureToRelationships = function(feature){
 
       if (angular.isArray(scope.model)) {
-        scope.human_readable_values.push(feature);
+        // scope.human_readable_values.push(feature);
         scope.model.push(feature);
       } else {
         scope.model = [];
-        scope.human_readable_values.push(feature);
+        // scope.human_readable_values.push(feature);
         scope.model.push(feature);
       }
 
@@ -89,12 +98,14 @@ angular.module('commonsCloudAdminApp')
       // Clear out input field
       scope.searchText = '';
       scope.features = [];
+      scope.relationship_focus = false;
 		};
 
     scope.removeFeatureFromRelationships = function(index) {
-      delete scope.human_readable_values.splice(index, 1);
+      // delete scope.human_readable_values.splice(index, 1);
       delete scope.model.splice(index, 1);
     };
+
 	}
 
 	return {

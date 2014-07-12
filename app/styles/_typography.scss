@@ -58,8 +58,13 @@ a {
 }
 
 a:hover {
-  color: darken($color-brand-blue-base, 5%);
+  color: darken($color-brand-blue-base, 20%);
   text-decoration: underline;
+}
+
+a.icon,
+a.icon:hover {
+  text-decoration: none;
 }
 
 nav li a,

@@ -1,5 +1,5 @@
 <div class="featureSearch">
-	<input type="text" placeholder="Search" data-ng-model="searchText" data-ng-change="search()" />
+	<input type="text" placeholder="Search" data-ng-model="searchText" data-ng-change="search()" class="form-control" />
 	<div class="hidden dropdown">
 		<ul>
 			<li data-ng-repeat="feature in features"><a data-ng-click="createTag()">{{feature.name}}</a></li>

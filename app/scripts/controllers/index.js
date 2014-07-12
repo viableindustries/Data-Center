@@ -1,11 +1,14 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('IndexCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'User', function($rootScope, $scope, $cookieStore, $location, $window, User) {
+  .controller('IndexCtrl', ['$rootScope', '$scope', 'ipCookie', '$location', '$window', 'User', function($rootScope, $scope, ipCookie, $location, $window, User) {
 
-    $scope.loginPage = function() {
+    var session_cookie = ipCookie('COMMONS_SESSION');
+
+    $rootScope.alerts = [];
+
+    $scope.setupLoginPage = function() {
       var host = $location.host();
-      var session_cookie = $cookieStore.get('ccapi_session');
 
       //
       // Redirect based on current enviornment
@@ -37,12 +40,14 @@ angular.module('commonsCloudAdminApp')
       });
     };
 
-    if ($cookieStore.get('ccapi_session')) {
+    if (session_cookie && session_cookie !== undefined && session_cookie !== 'undefined') {
+      console.log('session_cookie from index > if!', session_cookie);
       $scope.GetUser();
       $location.hash('');
       $location.path('/applications');
     } else {
-      $scope.loginPage();
+      console.log('session_cookie from index > else', session_cookie);
+      $scope.setupLoginPage();
     }
 
   }]);

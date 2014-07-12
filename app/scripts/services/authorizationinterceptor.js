@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .factory('AuthorizationInterceptor', ['$rootScope', '$q', '$cookies', '$location', function ($rootScope, $q, $cookies, $location) {
+  .factory('AuthorizationInterceptor', ['$rootScope', '$q', 'ipCookie', '$location', function ($rootScope, $q, ipCookie, $location) {
 
     //
     // Before we do anything else we should check to make sure
@@ -20,17 +20,18 @@ angular.module('commonsCloudAdminApp')
 
     return {
       request: function(config) {
-        var sessionCookie = $cookies.ccapi_session
 
-        if (config.url !== '/views/authorize.html' && (sessionCookie === 'undefined' || sessionCookie === undefined)) {
+        var session_cookie = ipCookie('COMMONS_SESSION');
+
+        if (config.url !== '/views/authorize.html' && (session_cookie === 'undefined' || session_cookie === undefined)) {
           $location.hash('');
           $location.path('/');
           return config || $q.when(config);
         }
 
         config.headers = config.headers || {};
-        if (sessionCookie) {
-          config.headers.Authorization = 'Bearer ' + sessionCookie;
+        if (session_cookie) {
+          config.headers.Authorization = 'Bearer ' + session_cookie;
         }
         config.headers['Cache-Control'] = 'no-cache, max-age=0, must-revalidate';
         // config.headers['Content-Type'] = 'application/json';

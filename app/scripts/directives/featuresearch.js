@@ -13,9 +13,9 @@ angular.module('commonsCloudAdminApp')
 		console.log('scope', scope);
 
 		//open and close dropdown
-		input.on('focus', function(){
-			dropdown.removeClass('hidden');
-		});
+		// input.on('focus', function(){
+		// 	dropdown.removeClass('hidden');
+		// });
 
 		// input.on('blur', function(){
 		// 	dropdown.addClass('hidden');
@@ -76,7 +76,7 @@ angular.module('commonsCloudAdminApp')
 	  scope: {
 			model: '='
 	  },
-	  templateUrl: '/views/featuresearch-template.html',
+	  templateUrl: '/views/includes/featuresearch-template.html',
 	  restrict: 'E',
 	  link: link
 	};

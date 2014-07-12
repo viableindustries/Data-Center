@@ -494,3 +494,31 @@ body {
 .security-label {
   margin: 16px 22px;
 }
+
+/**
+ * Feature Search Styles
+ */
+.featureSearch {
+  margin-bottom: 10px;
+}
+ .dropdown {
+    background-color: rgba(191, 191, 191, 1);
+    color: rgba(242, 242, 242, 1);
+    width: 154px;
+
+    ul {
+        list-style-type: none;
+        width: 154px;
+        padding: 10px 0;
+    }
+
+    li {
+        margin: 5px 0;
+        padding: 0 5px;
+
+        &:hover {
+            background-color: rgba(242, 242, 242, 1);
+            color: rgba(51, 51, 51, 1);            
+        }
+    }
+}

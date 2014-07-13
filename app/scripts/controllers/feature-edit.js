@@ -576,6 +576,73 @@ angular.module('commonsCloudAdminApp')
 
     };
 
+    $scope.initGeocoder = function() {
+      var requested_location = $scope.geocoder;
+
+      console.log(requested_location);
+
+      var geocode_service_url = '//api.tiles.mapbox.com/v4/geocode/mapbox.places-v1/' + requested_location + '.json';
+      $http({
+        method: 'get',
+        url: geocode_service_url,
+        params: {
+          'callback': 'JSON_CALLBACK',
+          'access_token': 'pk.eyJ1IjoiZGV2ZWxvcGVkc2ltcGxlIiwiYSI6Il9aYmF0eWMifQ.IKV2X58Q7rhaqVBEKPbJMw'
+        },
+        headers: {
+          'Authorization': 'external'
+        }
+      }).success(function(data) {
+
+        console.log('data', data);
+        $scope.geocode_features = data.features;
+
+        // if (data === 'JSON_CALLBACK({});') {
+        //   console.log('No geocode found');
+        // }
+
+        // var coordinates = data.results[0].centroid.coordinates;
+        // var lat = data.results[0][0].lat;
+        // var lon = data.results[0][0].lon;
+        // var centroid = {
+        //   'type': 'POINT',
+        //   'coordinates': [
+        //     lon,
+        //     lat
+        // ]};
+        // var coordinates = centroid.coordinates;
+        // console.log('coordinates', coordinates);
+        // if (coordinates) {
+        //   PersistData.AddCoordinates(coordinates);
+        //   createMap(PersistData.property.coordinates);
+        // } else {
+        //   console.log('cant find the property', data);
+        // }
+      }).error(function(data, status, headers, config) {
+        console.log('ERROR: ', data);
+      });
+
+    };
+
+    $scope.centerMapOnGeocode = function(result) {
+
+      //
+      // Once we click on an address we need to clear out the search field and
+      // the list of possible results so that we can see the map and allow the
+      // click event to center the map.
+      //
+      $scope.geocoder = '';
+      $scope.geocode_features = [];
+
+      leafletData.getMap().then(function(map) {
+
+        map.setView([result.center[1], result.center[0]], 18);
+
+        map.fitBounds(map.getBounds());
+
+      });
+    };
+
 
     //
     // Now that we've got the everything prepared, let's go ahead and start

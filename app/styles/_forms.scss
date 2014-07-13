@@ -11,6 +11,10 @@ form {
   padding: 0;
 }
 
+form.form-inline {
+  margin-bottom: 8px;
+}
+
 form.standalone-form {
     background-color: rgb(245,245,245);
     box-shadow: 0 .2em 0 darken(rgb(245,245,245), 10%);
@@ -72,46 +76,61 @@ label.alt {
   margin-top: 16px;
 }
 
-.button, .button:hover {
-  background: rgb(64, 172, 24);
-  background: -webkit-linear-gradient(rgb(64, 172, 24), darken(rgb(64, 172, 24), 8%));
-  background: linear-gradient(rgb(64, 172, 24), darken(rgb(64, 172, 24), 8%));
-  border: 1px solid darken(rgb(64, 172, 24), 12%);
-  border-top-color: darken(rgb(64, 172, 24), 10%);
-  border-bottom-color: darken(rgb(64, 172, 24), 16%);
-  border-radius: 4px;
+.button,
+.button:hover {
+  background-color: rgb(64, 172, 24);
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  box-shadow: 0px 2px 3px rgb(202, 202, 202);
   color: rgb(255, 255, 255);
-
   display: inline-block;
   font-size: 13px;
   font-weight: 100;
   font-style: normal;
-  padding: 6px 24px 7px;
+  letter-spacing: 0.025em;
+  padding: 10px 20px;
   text-decoration: none;
   text-align: center;
   text-shadow: none;
-}
-
-.button:hover {
-  background: rgb(64, 172, 24);
-  background: -webkit-linear-gradient(rgb(64, 172, 24), darken(rgb(64, 172, 24), 4%));
-  background: linear-gradient(rgb(64, 172, 24), darken(rgb(64, 172, 24), 4%));
+  text-transform: uppercase;
 }
 
 .button:active {
   position:relative;
-  top:1px;
+  top: 1px;
 }
 
-.button-cancel,
-.button-cancel:hover {
+.button.button-default,
+.button.button-default:hover {
+  background-color: rgb(252,252,252);
+  color: rgb(58,58,58);
+}
+
+.button.button-link,
+.button.button-link:hover {
+  background-color: rgb(252,252,252);
+  border-bottom: 2px solid rgb(252,252,252);
+  box-shadow: none;
+  color: rgb(64, 172, 24);
+  margin: 10px 20px;
+  padding: 0;
+}
+
+.button.button-link:hover {
+  border-bottom: 2px solid rgb(64, 172, 24);
+}
+
+.button.button-cancel,
+.button.button-cancel:hover {
     color: rgb(124,124,124);
     font-size: 1em;
     margin-top: 8px;
     text-decoration: underline;
 }
 
-.button-cancel:hover {
+.button.button-cancel:hover {
     text-decoration: none;
 }
 
@@ -318,4 +337,31 @@ input::-webkit-inner-spin-button {
 
 .upload-list label {
   font-size: 12px;
+}
+
+
+//
+// Geocoder
+//
+.form-geocoder {
+
+  .find-me .icon {
+    display: block;
+    font-size: 16px;
+    margin: 0;
+    padding-top: 8px;
+  }
+
+  .address {
+    border-bottom: 1px solid rgb(204, 204, 204);
+  }
+
+  .form-control {
+    border-bottom: 0;
+    width: 100%;
+  }
+
+  .button.button-link {
+    margin: 10px 0 0;
+  }
 }

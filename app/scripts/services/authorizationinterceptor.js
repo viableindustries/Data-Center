@@ -21,6 +21,11 @@ angular.module('commonsCloudAdminApp')
     return {
       request: function(config) {
 
+        if (config.headers.Authorization === 'external') {
+          delete config.headers.Authorization;
+          return config || $q.when(config);
+        }
+
         var session_cookie = ipCookie('COMMONS_SESSION');
 
         if (config.url !== '/views/authorize.html' && (session_cookie === 'undefined' || session_cookie === undefined)) {
@@ -33,8 +38,8 @@ angular.module('commonsCloudAdminApp')
         if (session_cookie) {
           config.headers.Authorization = 'Bearer ' + session_cookie;
         }
+
         config.headers['Cache-Control'] = 'no-cache, max-age=0, must-revalidate';
-        // config.headers['Content-Type'] = 'application/json';
         console.debug('AuthorizationInterceptor::Request', config || $q.when(config));
         return config || $q.when(config);
       },

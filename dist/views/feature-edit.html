@@ -6,7 +6,7 @@
 
     <div data-ng-show="!loading" class="inner wide">
       <div class="row">
-        <div class="col-xs-12">  
+        <div class="col-xs-12">
           <header class="application">
             <div class="row">
               <div class="col-sm-11">
@@ -53,22 +53,24 @@
                           <input data-ng-model="feature[field.name]" type="checkbox" id="{{ field.name }}" name="{{ field.name }}" /> {{ field.label }}
                         </label>
                       </div>
-                      <label data-ng-if="field.data_type !== 'boolean'" for="{{ field.name }}" class="control-label">{{ field.label }}</label>
+                      <label data-ng-if="field.data_type !== 'boolean'" for="{{ field.name }}" class="control-label"><span data-ng-show="feature[field.name].length > 0 || field.data_type === 'relationship'">{{ field.label }}</span><span data-ng-show="!feature[field.name].length">&nbsp;</span></label>
 
-                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'text'" class="form-control" type="text" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
-                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'email'" class="form-control" type="email" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
-                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'url'" class="form-control" type="url" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
-                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'phone'" class="form-control" type="tel" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
-                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'date'" class="form-control" class="form-control" type="date" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
-                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'time'" class="form-control" type="time" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
-                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'whole_number' || field.data_type === 'float'" class="form-control" type="number" id="{{ field.name }}" name="{{ field.name }}" value="{{ feature[field.name] }}" />
+                      <relationship model="feature[field.relationship]" field="field" feature="feature" data-ng-if="field.data_type === 'relationship'"></relationship>
 
-                      <textarea data-ng-model="feature[field.name]" class="form-control" data-ng-if="field.data_type === 'textarea'" id="{{ field.name }}" name="{{ field.name }}">{{ feature[field.name] }}</textarea>
-                      <div data-ng-if="field.data_type === 'relationship'">
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'text'" class="form-control" type="text" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'email'" class="form-control" type="email" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'url'" class="form-control" type="url" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'phone'" class="form-control" type="tel" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'date'" class="form-control" class="form-control" type="date" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'time'" class="form-control" type="time" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'whole_number' || field.data_type === 'float'" class="form-control" type="number" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
+
+                      <textarea data-ng-model="feature[field.name]" class="form-control" data-ng-if="field.data_type === 'textarea'" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}">{{ feature[field.name] }}</textarea>
+                      <!-- <div data-ng-if="field.data_type === 'relationship'">
                         <select multiple="" data-ng-model="feature[field.relationship]" class="form-control" id="{{ field.relationship }}" name="{{ field.relationship }}" data-ng-options="value_.id as value_.name for value_ in field.values">
                           <option value="">-- Choose {{ field.label }} --</option>
                         </select>
-                      </div>
+                      </div> -->
 
                       <div data-ng-if="field.data_type === 'file'">
 
@@ -101,13 +103,11 @@
                             </div>
                           </div>
                         </div>
-
-
                       </div>
-
+                      <p class="help-block">{{ field.help }}</p>
                     </div>
                   </fieldset>
-                  <hr />
+
                   <div class="form-group">
                     <label for="status">Feature Status</label>
                     <select class="form-control" data-ng-model="feature.status" id="status" name="status" required="required">
@@ -123,8 +123,23 @@
                   </div>
                 </form>
               </div>
-              <div class="col-sm-6" data-ng-show="ShowMap">
-                <a href="javascript:void(0)" data-ng-click="getCurrentLocation()"><span class="icon retinaicon-essentials-161"></span> Zoom to my location</a>
+              <div class="col-sm-6">
+                <form method="POST" class="form-inline form-geocoder" role="form">
+                  <div class="row">
+                    <div class="col-xs-1 find-me">
+                      <a class="icon retinaicon-essentials-161" href="javascript:void(0)" data-ng-click="getCurrentLocation()"></a>
+                    </div>
+                    <div class="col-xs-10 address">
+                      <input type="text" id="geocoder" name="geocoder" class="form-control" data-ng-model="geocoder" data-ng-change="initGeocoder()" placeholder="Search for address"/>
+                      <div data-ng-if="geocode_features.length && geocoder.length >= 3" class="dropdown">
+                        <ul>
+                          <!-- <li data-ng-if="relationship_focus && !features.length"><p><em>Begin typing to select the {{ field.label }} you want</em></p></li> -->
+                          <li data-ng-repeat="possible_result in geocode_features"><a href="#" data-ng-click="centerMapOnGeocode(possible_result)">{{ possible_result.place_name }}</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </form>
                 <leaflet defaults="defaults" controls="controls" width="100%" height="425"></leaflet>
                 <a href="javascript:void(0)" data-ng-click="ShowGeoJSONEditor=!ShowGeoJSONEditor">Show GeoJSON Editor</a>
                 <textarea data-ng-model="feature.geometry" class="form-control" data-ng-if="ShowGeoJSONEditor" id="geometry" name="geometry"></textarea>

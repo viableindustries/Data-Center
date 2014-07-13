@@ -124,8 +124,23 @@
                   </div>
                 </form>
               </div>
-              <div class="col-sm-6" data-ng-show="ShowMap">
-                <a href="javascript:void(0)" data-ng-click="getCurrentLocation()"><span class="icon retinaicon-essentials-161"></span> Zoom to my location</a>
+              <div class="col-sm-6">
+                <form method="POST" class="form-inline form-geocoder" role="form">
+                  <div class="row">
+                    <div class="col-xs-1 find-me">
+                      <a class="icon retinaicon-essentials-161" href="javascript:void(0)" data-ng-click="getCurrentLocation()"></a>
+                    </div>
+                    <div class="col-xs-10 address">
+                      <input type="text" id="geocoder" name="geocoder" class="form-control" data-ng-model="geocoder" data-ng-change="initGeocoder()" placeholder="Search for address"/>
+                      <div data-ng-if="geocode_features.length && geocoder.length >= 3" class="dropdown">
+                        <ul>
+                          <!-- <li data-ng-if="relationship_focus && !features.length"><p><em>Begin typing to select the {{ field.label }} you want</em></p></li> -->
+                          <li data-ng-repeat="possible_result in geocode_features"><a href="#" data-ng-click="centerMapOnGeocode(possible_result)">{{ possible_result.place_name }}</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </form>
                 <leaflet defaults="defaults" controls="controls" width="100%" height="425"></leaflet>
                 <a href="javascript:void(0)" data-ng-click="ShowGeoJSONEditor=!ShowGeoJSONEditor">Show GeoJSON Editor</a>
                 <textarea data-ng-model="feature.geometry" class="form-control" data-ng-if="ShowGeoJSONEditor" id="geometry" name="geometry"></textarea>

@@ -49,7 +49,7 @@
                   <thead>
                     <tr>
                       <th class="edit">&nbsp;</th>
-                      <th data-ng-repeat="field in fields" data-ng-if="field.is_listed && (field.data_type === 'text' || field.data_type === 'date')">
+                      <th data-ng-repeat="field in fields" data-ng-if="field.is_listed && (field.data_type === 'text' || field.data_type === 'date' || field.data_type === 'whole_number' || field.data_type === 'float')">
                         <a href="javascript:void()" data-ng-click="ChangeOrder(field.name)">
                           {{ field.label }} <span data-ng-show="orderByField == '{{ field.name }}'"><span data-ng-show="!reverseSort" class="glyphicon glyphicon-arrow-down"></span><span data-ng-show="reverseSort" class="glyphicon glyphicon-arrow-up"></span></span>
                         </a>
@@ -62,7 +62,7 @@
                   <tbody>
                     <tr data-ng-repeat="feature in features | orderBy:orderByField:reverseSort">
                       <td><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features/{{ feature.id }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                      <td data-ng-repeat="field in fields" data-ng-if="field.is_listed && (field.data_type === 'text' || field.data_type === 'date')">
+                      <td data-ng-repeat="field in fields" data-ng-if="field.is_listed && (field.data_type === 'text' || field.data_type === 'date' || field.data_type === 'whole_number' || field.data_type === 'float')">
                         <span data-ng-if="field.data_type === 'date'">{{ feature[field.name] | date : 'MMM d, y @ h:mm a' }}</span>
                         <span data-ng-if="field.data_type !== 'date'">{{ feature[field.name] }}</span>
                       </td>

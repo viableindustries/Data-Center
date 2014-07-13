@@ -498,10 +498,10 @@ body {
 /**
  * Feature Search Styles
  */
-.relationship {
+.relationship, .form-geocoder .address {
   position: relative;
   .dropdown {
-     background-color: rgb(255,255,255);
+     background-color: transparent;
      color: rgb(242, 242, 242);
      left: 0;
      position: absolute;
@@ -513,7 +513,8 @@ body {
          // border-left: 1px solid rgb(242,242,242);
          // border-right: 1px solid rgb(232,232,232);
          // border-bottom: 2px inset rgb(212,212,212);
-         box-shadow: 0 2px 3px rgb(222,222,222);
+         background-color: rgb(255,255,255);
+         box-shadow: 0 2px 3px rgba(0,0,0,0.2);
          list-style-type: none;
          padding: 0;
          width: 100%;

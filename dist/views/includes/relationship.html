@@ -1,0 +1,19 @@
+<div class="relationship">
+	<input data-ng-focus="relationship_focus=true" type="text" placeholder="{{ placeholder }}" data-ng-model="searchText" data-ng-change="search()" class="form-control" />
+	<div data-ng-if="features.length && searchText.length >= 3" class="dropdown">
+		<ul>
+			<!-- <li data-ng-if="relationship_focus && !features.length"><p><em>Begin typing to select the {{ field.label }} you want</em></p></li> -->
+			<li data-ng-repeat="feature in features"><a href="#" data-ng-click="addFeatureToRelationships(feature)">{{ feature.name }}</a></li>
+		</ul>
+	</div>
+	<div data-ng-if="model.length >= 1" class="relationship-values">
+		<div class="row" data-ng-repeat="option in model">
+			<div class="col-sm-11">
+				<p>{{ option.name }}</p>
+			</div>
+			<div class="col-xs-1">
+				<p><a class="text-right icon retinaicon-essentials-068" href="#" data-ng-click="removeFeatureFromRelationships($index)"></a></p>
+			</div>
+		</div>
+	</div>
+</div>

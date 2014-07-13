@@ -352,6 +352,7 @@ module.exports = function (grunt) {
     // }
   });
 
+  grunt.loadNpmTasks('grunt-sass');
 
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {

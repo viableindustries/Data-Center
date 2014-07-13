@@ -12,7 +12,6 @@
 // Bootstrap Overrides
 //
 .alerts {
-  padding-top: 32px;
 }
 
 .alert {
@@ -23,13 +22,14 @@
 }
 
 .alert-error{
-    background-color:#f2dede;
-    border-color:#eed3d7;
-    color:#b94a48;
+    background-color: #f2dede;
+    border-color: #eed3d7;
+    color: #b94a48;
 }
 
-.alert-error .alert-link{
-    color:#953b39;
+.alert-error .alert-link {
+    color: #953b39;
+    padding-top: 3px;
 }
 
 .glyphicon {

@@ -83,7 +83,7 @@ label.alt {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
-  box-shadow: 0px 2px 3px rgb(202, 202, 202);
+  box-shadow: 0px 2px 3px rgba(0,0,0,0.2);
   color: rgb(255, 255, 255);
   display: inline-block;
   font-size: 13px;
@@ -205,6 +205,7 @@ select {
 }
 
 textarea {
+  height: 34px;
   max-width: 100%;
   width: 100%;
 }

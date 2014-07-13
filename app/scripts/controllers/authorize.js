@@ -26,6 +26,13 @@ angular.module('commonsCloudAdminApp').controller('AuthorizeCtrl', ['$scope', '$
         $location.hash('');
         $location.path('/applications');
       } else {
+        //
+        // Clear out existing COMMONS_SESSION cookies that may be invalid or
+        // expired. This may happen when a user closes the window and comes back
+        //
+        ipCookie.remove('COMMONS_SESSION');
+        ipCookie.remove('COMMONS_SESSION', { path: '/' });
+        
         $scope.saveAuthorization();
       }
     };

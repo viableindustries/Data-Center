@@ -50,7 +50,6 @@
 
 #loading-bar .bar {
   background: $color-brand-blue-base;
-  top: 28px;
 }
 
 .loading-page {
@@ -77,14 +76,14 @@
   transition:all linear 0.1s;
   display:block!important;
 }
- 
+
 .page-content.ng-hide-add.ng-hide-add-active,
 .page-content.ng-hide-remove,
 .alerts.ng-hide-add.ng-hide-add-active,
 .alerts.ng-hide-remove {
   opacity:0;
 }
- 
+
 .page-content.ng-hide-add,
 .page-content.ng-hide-remove.ng-hide-remove-active,
 .alerts.ng-hide-add,

@@ -58,7 +58,12 @@ angular.module('commonsCloudAdminApp')
 
     $scope.defaults = {
       tileLayer: 'https://{s}.tiles.mapbox.com/v3/developedsimple.hl46o07c/{z}/{x}/{y}.png',
-      scrollWheelZoom: false
+      tileLayerOptions: {
+        detectRetina: true,
+        reuseTiles: true,
+      },
+      scrollWheelZoom: false,
+      zoomControl: false
     };
 
     $scope.controls = {
@@ -282,6 +287,10 @@ angular.module('commonsCloudAdminApp')
 
           $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
         });
+
+        new L.Control.Zoom({
+          position: 'bottomright'
+        }).addTo(map);
 
         //
         // We need to invalidate the size of the Mapbox container so that it

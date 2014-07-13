@@ -239,6 +239,10 @@ select.form-control.input-lg {
   appearance: none;
 }
 
+select.form-control {
+  background: url(/images/Retina-Icons-v_1.0_Arrow7-16x8.png) no-repeat 98% 13px;
+}
+
 .form-control:focus {
   border-bottom-width: 1px;
   box-shadow: none;

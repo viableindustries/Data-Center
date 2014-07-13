@@ -27,6 +27,15 @@
   width: 49.6777777777%
 }
 
+.leaflet-draw .leaflet-draw-section:first-child {
+  margin-left: 30px;
+}
+
+.leaflet-draw .leaflet-draw-section:last-child {
+  margin-right: -30px;
+  padding-left: 0;
+}
+
 .leaflet-draw .leaflet-draw-toolbar.leaflet-bar {
   float: left;
 }

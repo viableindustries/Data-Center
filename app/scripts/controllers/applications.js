@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationsCtrl', ['$rootScope', '$scope', 'Application', function ($rootScope, $scope, Application) {
+  .controller('ApplicationsCtrl', ['$rootScope', '$scope', '$timeout',  'Application', 'User', function ($rootScope, $scope, $timeout, Application, User) {
 
     //
     // Get a list of all Applications the user has access to
@@ -13,6 +13,14 @@ angular.module('commonsCloudAdminApp')
     // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar

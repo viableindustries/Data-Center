@@ -21,28 +21,11 @@ angular.module('commonsCloudAdminApp')
 
     };
 
-    //
-    // Get the User object so that we can present them with profile and other
-    // notification information
-    //
-    // @todo
-    // Move this somewhere that we don't need to call it in every controller
-    //
-    $scope.GetUser = function() {
-      User.get().$promise.then(function(response) {
-        $rootScope.user = response.response;
-      }, function (error) {
-        $rootScope.alerts.push({
-          'type': 'error',
-          'title': 'Oops!',
-          'details': 'Looks like your user information is missing in action. Try reloading the page or logging in again.'
-        });
-      });
-    };
-
     if (session_cookie && session_cookie !== undefined && session_cookie !== 'undefined') {
       console.log('session_cookie from index > if!', session_cookie);
-      $scope.GetUser();
+      if (!$rootScope.user) {
+        $rootScope.user = User.getUser();
+      }
       $location.hash('');
       $location.path('/applications');
     } else {

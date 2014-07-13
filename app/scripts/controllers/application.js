@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Feature', function ($rootScope, $scope, $routeParams, Application, Template, Feature) {
+  .controller('ApplicationCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'Application', 'Template', 'Feature', 'User', function ($rootScope, $scope, $routeParams, $timeout, Application, Template, Feature, User) {
 
   //
   // VARIABLES
@@ -28,6 +28,14 @@ angular.module('commonsCloudAdminApp')
     // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar

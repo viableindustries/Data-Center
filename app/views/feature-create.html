@@ -60,7 +60,6 @@
 
                       <relationship model="feature[field.relationship]" field="field" feature="feature" data-ng-if="field.data_type === 'relationship'"></relationship>
 
-                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'text'" class="form-control" type="text" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'email'" class="form-control" type="email" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'url'" class="form-control" type="url" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'phone'" class="form-control" type="tel" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />

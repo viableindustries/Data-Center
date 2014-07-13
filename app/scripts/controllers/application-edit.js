@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationEditCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', 'Application', 'User', function ($route, $rootScope, $scope, $routeParams, $location, Application, User) {
+  .controller('ApplicationEditCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'User', function ($route, $rootScope, $scope, $routeParams, $location, $timeout, Application, User) {
 
   //
   // VARIABLES
@@ -13,13 +13,20 @@ angular.module('commonsCloudAdminApp')
     $scope.application = {};
 
     //
-    // Controls for showing/hiding specific page elements that may not be
-    // fully loaded or when a specific user interaction has not yet happened
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
+
     $scope.loading = true;
-    $rootScope.navigation = false;
-    $scope.EditApplication = false;
 
 
   //
@@ -39,11 +46,6 @@ angular.module('commonsCloudAdminApp')
 
           $scope.application = response.response;
           $scope.loading = false;
-
-          //
-          // Get the User's information
-          //
-          $scope.GetUser();
 
         }, function(error) {
           $rootScope.alerts.push({

@@ -32,6 +32,9 @@
           </header>
 
           <article class="application single template-nested">
+            <!-- Alerts -->
+            <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
+
             <div class="row">
               <div class="col-sm-12">
                 <form method="PUT" class="form-narrow">

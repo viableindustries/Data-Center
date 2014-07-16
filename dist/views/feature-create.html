@@ -43,6 +43,9 @@
               </div>
             </div>
 
+            <!-- Alerts -->
+            <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
+
             <div class="row">
               <div class="col-sm-6">
                 <form method="POST">
@@ -57,7 +60,6 @@
 
                       <relationship model="feature[field.relationship]" field="field" feature="feature" data-ng-if="field.data_type === 'relationship'"></relationship>
 
-                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'text'" class="form-control" type="text" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'email'" class="form-control" type="email" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'url'" class="form-control" type="url" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'phone'" class="form-control" type="tel" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
@@ -65,7 +67,7 @@
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'time'" class="form-control" type="time" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'whole_number' || field.data_type === 'float'" class="form-control" type="number" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
 
-                      <textarea data-ng-model="feature[field.name]" class="form-control" data-ng-if="field.data_type === 'textarea'" id="{{ field.name }}" name="{{ field.name }}">{{ feature[field.name] }}</textarea>
+                      <textarea rows="1" data-ng-show="show" data-ng-init="show = true" data-ng-model="feature[field.name]" class="form-control animate"  msd-elastic data-ng-if="field.data_type === 'textarea' || field.data_type === 'text'" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}">{{ feature[field.name] }}</textarea>
                       <!-- <div data-ng-if="field.data_type === 'relationship' && field.values.length > 0">
                         <select multiple="" data-ng-model="feature[field.relationship]" class="form-control" id="{{ field.relationship }}" name="{{ field.relationship }}" data-ng-options="value_.id as value_.name for value_ in field.values">
                           <option value="">-- Choose {{ field.label }} --</option>

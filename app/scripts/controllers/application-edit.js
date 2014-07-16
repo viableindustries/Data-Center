@@ -16,11 +16,13 @@ angular.module('commonsCloudAdminApp')
     // Start a new Alerts array that is empty, this clears out any previous
     // messages that may have been presented on another page
     //
-    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+    // $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
 
-    $timeout(function () {
-      $rootScope.alerts = [];
-    }, 5000);
+    var clearAlerts = function () {
+      $rootScope.alerts.length = 0;
+    };
+
+    $timeout(clearAlerts, 5000);
 
     if (!$rootScope.user) {
       $rootScope.user = User.getUser();
@@ -66,6 +68,7 @@ angular.module('commonsCloudAdminApp')
         Application.update({
           id: $scope.application.id
         }, $scope.application).$promise.then(function(response) {
+          $rootScope.alerts = [];
           $rootScope.alerts.push({
             'type': 'success',
             'title': 'Awesome!',

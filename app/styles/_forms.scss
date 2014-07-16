@@ -78,7 +78,7 @@ label.alt {
 
 .button,
 .button:hover {
-  background-color: rgb(64, 172, 24);
+  background-color: rgb(112, 179, 0);
   border: 0;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
@@ -95,6 +95,10 @@ label.alt {
   text-align: center;
   text-shadow: none;
   text-transform: uppercase;
+}
+
+.button:hover {
+  background-color: lighten(rgb(112, 179, 0), 2%);
 }
 
 .button:active {

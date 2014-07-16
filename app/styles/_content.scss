@@ -9,6 +9,25 @@ body {
   margin: 0 auto 60px;
 }
 
+.notification {
+  background-color: rgba(252, 252, 252, 0.1);
+  margin: 64px auto 0;
+  max-width: 512px;
+  padding: 64px;
+  text-align: center;
+  
+  p {
+  	margin: 0;
+  }
+  
+  p.instruction {
+  	color: rgb(222,222,222);
+  	font-size: 14px;
+  	font-weight: 300;
+  	margin: 8px 16px 32px;
+  }
+}
+
 .site-header {
   color: rgb(25, 152, 198);
 }

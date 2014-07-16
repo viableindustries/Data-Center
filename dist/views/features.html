@@ -6,7 +6,7 @@
 
     <div data-ng-show="!loading" class="inner wide">
       <div class="row">
-        <div class="col-xs-12">  
+        <div class="col-xs-12">
           <header class="application">
             <div class="row">
               <div class="col-sm-11">
@@ -43,6 +43,8 @@
                 </ul>
               </div>
             </div>
+            <!-- Alerts -->
+            <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
             <div class="row">
               <div class="col-sm-12">
                 <table class="table table-hover">
@@ -63,12 +65,12 @@
                     <tr data-ng-repeat="feature in features | orderBy:orderByField:reverseSort">
                       <td><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features/{{ feature.id }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
                       <td data-ng-repeat="field in fields" data-ng-if="field.is_listed && (field.data_type === 'text' || field.data_type === 'date' || field.data_type === 'whole_number' || field.data_type === 'float')">
-                        <span data-ng-if="field.data_type === 'date'">{{ feature[field.name] | date : 'MMM d, y @ h:mm a' }}</span>
+                        <span data-ng-if="field.data_type === 'date'">{{ feature[field.name] | date : 'MMMM d, y @ h:mm a' }}</span>
                         <span data-ng-if="field.data_type !== 'date'">{{ feature[field.name] }}</span>
                       </td>
                       <td>{{ feature.status }}</td>
-                      <td>{{ feature.created }}</td>
-                      <td>{{ feature.updated }}</td>
+                      <td>{{ feature.created | date : 'MMMM d, y @ h:mm a' }}</td>
+                      <td>{{ feature.updated | date : 'MMMM d, y @ h:mm a' }}</td>
                     </tr>
                   </tbody>
                 </table>

@@ -610,7 +610,8 @@ angular
     'leaflet-directive',
     'angularFileUpload',
     'geolocation',
-    'angular-loading-bar'
+    'angular-loading-bar',
+    'monospaced.elastic'
   ])
   .config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
 
@@ -715,22 +716,6 @@ angular
 
 angular.module('commonsCloudAdminApp')
   .factory('AuthorizationInterceptor', ['$rootScope', '$q', 'ipCookie', '$location', function ($rootScope, $q, ipCookie, $location) {
-
-    //
-    // Before we do anything else we should check to make sure
-    // the users is authenticated with the CommonsCloud, otherwise
-    // the this Client Application will not work properly. We must
-    // have already authenticated the user (Resource Owner) with
-    // the API through OAuth 2.0
-    //
-    // We set the default value to `false` and then check if the
-    // session cookie for our domain exists.
-    //
-    $rootScope.user = {
-      'is_authenticated': false
-    };
-
-
     return {
       request: function(config) {
 
@@ -766,7 +751,6 @@ angular.module('commonsCloudAdminApp')
         return response || $q.when(response);
       }
     };
-
   }]).config(function ($httpProvider) {
     $httpProvider.interceptors.push('AuthorizationInterceptor');
   });
@@ -962,9 +946,18 @@ angular.module('commonsCloudAdminApp')
 angular.module('commonsCloudAdminApp')
   .provider('User', function() {
 
-    this.$get = ['$resource', function($resource) {
+    this.$get = ['$resource', '$rootScope', function($resource, $rootScope) {
 
       var User = $resource('//api.commonscloud.org/v2/user/me.json');
+
+      User.getUser = function () {
+        User.get().$promise.then(function(response) {
+          $rootScope.user = response.response;
+          console.log('User.getUser() fired successfully', $rootScope.user);
+        }, function (error) {
+          console.error('Couldn\'t retrieve user information from server.');
+        });
+      };
 
       return User;
     }];
@@ -1023,28 +1016,11 @@ angular.module('commonsCloudAdminApp')
 
     };
 
-    //
-    // Get the User object so that we can present them with profile and other
-    // notification information
-    //
-    // @todo
-    // Move this somewhere that we don't need to call it in every controller
-    //
-    $scope.GetUser = function() {
-      User.get().$promise.then(function(response) {
-        $rootScope.user = response.response;
-      }, function (error) {
-        $rootScope.alerts.push({
-          'type': 'error',
-          'title': 'Oops!',
-          'details': 'Looks like your user information is missing in action. Try reloading the page or logging in again.'
-        });
-      });
-    };
-
     if (session_cookie && session_cookie !== undefined && session_cookie !== 'undefined') {
       console.log('session_cookie from index > if!', session_cookie);
-      $scope.GetUser();
+      if (!$rootScope.user) {
+        $rootScope.user = User.getUser();
+      }
       $location.hash('');
       $location.path('/applications');
     } else {
@@ -1084,6 +1060,13 @@ angular.module('commonsCloudAdminApp').controller('AuthorizeCtrl', ['$scope', '$
         $location.hash('');
         $location.path('/applications');
       } else {
+        //
+        // Clear out existing COMMONS_SESSION cookies that may be invalid or
+        // expired. This may happen when a user closes the window and comes back
+        //
+        ipCookie.remove('COMMONS_SESSION');
+        ipCookie.remove('COMMONS_SESSION', { path: '/' });
+        
         $scope.saveAuthorization();
       }
     };
@@ -1110,7 +1093,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationsCtrl', ['$rootScope', '$scope', 'Application', function ($rootScope, $scope, Application) {
+  .controller('ApplicationsCtrl', ['$rootScope', '$scope', '$timeout',  'Application', 'User', function ($rootScope, $scope, $timeout, Application, User) {
 
     //
     // Get a list of all Applications the user has access to
@@ -1122,6 +1105,14 @@ angular.module('commonsCloudAdminApp')
     // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar
@@ -1140,7 +1131,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Feature', function ($rootScope, $scope, $routeParams, Application, Template, Feature) {
+  .controller('ApplicationCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'Application', 'Template', 'Feature', 'User', function ($rootScope, $scope, $routeParams, $timeout, Application, Template, Feature, User) {
 
   //
   // VARIABLES
@@ -1167,6 +1158,14 @@ angular.module('commonsCloudAdminApp')
     // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar
@@ -1303,7 +1302,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationCreateCtrl', ['$rootScope', '$scope', 'Application', '$location', function ($rootScope, $scope, Application, $location) {
+  .controller('ApplicationCreateCtrl', ['$rootScope', '$scope', 'Application', '$location', '$timeout', 'User', function ($rootScope, $scope, $location, $timeout, Application, User) {
 
     //
     // Instantiate an Application object so that we can perform all necessary
@@ -1317,6 +1316,14 @@ angular.module('commonsCloudAdminApp')
     // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar
@@ -1374,7 +1381,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationEditCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', 'Application', 'User', function ($route, $rootScope, $scope, $routeParams, $location, Application, User) {
+  .controller('ApplicationEditCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'User', function ($route, $rootScope, $scope, $routeParams, $location, $timeout, Application, User) {
 
   //
   // VARIABLES
@@ -1386,13 +1393,22 @@ angular.module('commonsCloudAdminApp')
     $scope.application = {};
 
     //
-    // Controls for showing/hiding specific page elements that may not be
-    // fully loaded or when a specific user interaction has not yet happened
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
     //
-    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+    // $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    var clearAlerts = function () {
+      $rootScope.alerts.length = 0;
+    };
+
+    $timeout(clearAlerts, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
+
     $scope.loading = true;
-    $rootScope.navigation = false;
-    $scope.EditApplication = false;
 
 
   //
@@ -1413,11 +1429,6 @@ angular.module('commonsCloudAdminApp')
           $scope.application = response.response;
           $scope.loading = false;
 
-          //
-          // Get the User's information
-          //
-          $scope.GetUser();
-
         }, function(error) {
           $rootScope.alerts.push({
             'type': 'error',
@@ -1437,6 +1448,7 @@ angular.module('commonsCloudAdminApp')
         Application.update({
           id: $scope.application.id
         }, $scope.application).$promise.then(function(response) {
+          $rootScope.alerts = [];
           $rootScope.alerts.push({
             'type': 'success',
             'title': 'Awesome!',
@@ -2191,7 +2203,12 @@ angular.module('commonsCloudAdminApp')
 
     $scope.defaults = {
       tileLayer: 'https://{s}.tiles.mapbox.com/v3/developedsimple.hl46o07c/{z}/{x}/{y}.png',
-      scrollWheelZoom: false
+      tileLayerOptions: {
+        detectRetina: true,
+        reuseTiles: true,
+      },
+      scrollWheelZoom: false,
+      zoomControl: false
     };
 
     $scope.controls = {
@@ -2415,6 +2432,10 @@ angular.module('commonsCloudAdminApp')
 
           $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
         });
+
+        new L.Control.Zoom({
+          position: 'bottomright'
+        }).addTo(map);
 
         //
         // We need to invalidate the size of the Mapbox container so that it
@@ -2742,7 +2763,12 @@ angular.module('commonsCloudAdminApp')
 
     $scope.defaults = {
       tileLayer: 'https://{s}.tiles.mapbox.com/v3/developedsimple.hl46o07c/{z}/{x}/{y}.png',
-      scrollWheelZoom: false
+      tileLayerOptions: {
+        detectRetina: true,
+        reuseTiles: true,
+      },
+      scrollWheelZoom: false,
+      zoomControl: false
     };
 
     $scope.controls = {
@@ -3010,6 +3036,10 @@ angular.module('commonsCloudAdminApp')
 
           $scope.feature.geometry = JSON.stringify(featureGroup.toGeoJSON());
         });
+
+        new L.Control.Zoom({
+          position: 'bottomright'
+        }).addTo(map);
 
         //
         // We need to invalidate the size of the Mapbox container so that it

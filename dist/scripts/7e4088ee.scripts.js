@@ -4352,14 +4352,11 @@ angular.module('commonsCloudAdminApp')
 
 		//search with timeout to prevent it from firing on every keystroke
 		scope.search = function(){
+			$timeout.cancel(timeout);
 
-			if (scope.searchText.length >= 3) {
-				$timeout.cancel(timeout);
-
-				timeout = $timeout(function () {
-					getFilteredResults(scope.field);
-				}, 500);
-			}
+			timeout = $timeout(function () {
+				getFilteredResults(scope.field);
+			}, 500);
 		};
 
 		scope.addFeatureToRelationships = function(feature){

@@ -70,7 +70,8 @@ angular.module('commonsCloudAdminApp')
       // Get a list of templates associated with the current application
       //
       Template.query({
-          applicationId: $routeParams.applicationId
+          applicationId: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.templates = response;
 
@@ -82,7 +83,8 @@ angular.module('commonsCloudAdminApp')
             // Get a list of all features
             //
             Feature.query({
-                storage: template.storage
+                storage: template.storage,
+                updated: new Date().getTime()
               }).$promise.then(function(response) {
                 $scope.templates[index].features = response;
               });
@@ -100,7 +102,8 @@ angular.module('commonsCloudAdminApp')
                       'val': 'crowd'
                     }
                   ]
-                }
+                },
+                updated: new Date().getTime()
               }).$promise.then(function(response) {
                 $scope.templates[index].moderation = response;
                 if ($scope.templates[index].moderation.properties.total_features > 0) {
@@ -122,7 +125,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //

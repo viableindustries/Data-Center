@@ -40,7 +40,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          templateId: template_id
+          templateId: template_id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
@@ -71,7 +72,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetFields = function() {
       Field.query({
-          templateId: $scope.template.id
+          templateId: $scope.template.id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.fields = response;
         });
@@ -90,7 +92,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //

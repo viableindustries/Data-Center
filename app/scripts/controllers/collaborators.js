@@ -46,7 +46,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //

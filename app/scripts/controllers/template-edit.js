@@ -37,7 +37,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //
@@ -78,7 +79,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          templateId: template_id
+          templateId: template_id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
@@ -105,7 +107,8 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.UpdateTemplate = function() {
       Template.update({
-        templateId: $scope.template.id
+        templateId: $scope.template.id,
+        updated: new Date().getTime()
       }, $scope.template).$promise.then(function(response) {
         $rootScope.alerts.push({
           'type': 'success',
@@ -139,7 +142,8 @@ angular.module('commonsCloudAdminApp')
       // Send the 'DELETE' method to the API so it's removed from the database
       //
       Template.delete({
-        templateId: template_.id
+        templateId: template_.id,
+        updated: new Date().getTime()
       }, template_).$promise.then(function(response) {
         $rootScope.alerts.push({
           'type': 'success',

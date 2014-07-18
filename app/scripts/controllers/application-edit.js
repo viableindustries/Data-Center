@@ -43,7 +43,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           $scope.application = response.response;
@@ -66,7 +67,8 @@ angular.module('commonsCloudAdminApp')
       if ($scope.application.id) {
         $scope.EditApplication = false;
         Application.update({
-          id: $scope.application.id
+          id: $scope.application.id,
+          updated: new Date().getTime()
         }, $scope.application).$promise.then(function(response) {
           $rootScope.alerts = [];
           $rootScope.alerts.push({
@@ -102,7 +104,8 @@ angular.module('commonsCloudAdminApp')
       // Send the 'DELETE' method to the API so it's removed from the database
       //
       Application.delete({
-        id: application_.id
+        id: application_.id,
+        updated: new Date().getTime()
       }, application_).$promise.then(function(response) {
         $rootScope.alerts.push({
           'type': 'success',

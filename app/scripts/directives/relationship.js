@@ -53,7 +53,8 @@ angular.module('commonsCloudAdminApp')
 								'val': '%' + scope.searchText + '%'
 							}
 						]
-					}
+					},
+          'results_per_page': 6
 				}
 			}).success(function(data){
 				//assign feature objects to scope for use in template
@@ -95,13 +96,22 @@ angular.module('commonsCloudAdminApp')
       // Clear out input field
       scope.searchText = '';
       scope.features = [];
-      scope.relationship_focus = false;
 		};
 
     scope.removeFeatureFromRelationships = function(index) {
       // delete scope.human_readable_values.splice(index, 1);
       delete scope.model.splice(index, 1);
     };
+
+    scope.$watch('relationship_focus', function () {
+      if (!scope.relationship_focus) {
+        $timeout(function () {
+          scope.searchText = '';
+          scope.features = [];
+          scope.relationship_focus = false;
+        }, 100);
+      }
+    });
 
 	}
 

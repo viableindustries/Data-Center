@@ -56,7 +56,7 @@
                           <input data-ng-model="feature[field.name]" type="checkbox" id="{{ field.name }}" name="{{ field.name }}" /> {{ field.label }}
                         </label>
                       </div>
-                      <label data-ng-if="field.data_type !== 'boolean'" for="{{ field.name }}" class="control-label"><span data-ng-show="feature[field.name].length > 0 || field.data_type === 'relationship'">{{ field.label }}</span><span data-ng-show="!feature[field.name].length">&nbsp;</span></label>
+                      <label data-ng-if="field.data_type !== 'boolean'" for="{{ field.name }}" class="control-label"><span data-ng-show="feature[field.name] || field.data_type === 'relationship'">{{ field.label }}</span><span data-ng-show="!feature[field.name].length">&nbsp;</span></label>
 
                       <relationship model="feature[field.relationship]" field="field" feature="feature" data-ng-if="field.data_type === 'relationship'"></relationship>
 

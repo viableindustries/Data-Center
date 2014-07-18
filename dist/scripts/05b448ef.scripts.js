@@ -1200,7 +1200,8 @@ angular.module('commonsCloudAdminApp')
       // Get a list of templates associated with the current application
       //
       Template.query({
-          applicationId: $routeParams.applicationId
+          applicationId: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.templates = response;
 
@@ -1212,7 +1213,8 @@ angular.module('commonsCloudAdminApp')
             // Get a list of all features
             //
             Feature.query({
-                storage: template.storage
+                storage: template.storage,
+                updated: new Date().getTime()
               }).$promise.then(function(response) {
                 $scope.templates[index].features = response;
               });
@@ -1230,7 +1232,8 @@ angular.module('commonsCloudAdminApp')
                       'val': 'crowd'
                     }
                   ]
-                }
+                },
+                updated: new Date().getTime()
               }).$promise.then(function(response) {
                 $scope.templates[index].moderation = response;
                 if ($scope.templates[index].moderation.properties.total_features > 0) {
@@ -1252,7 +1255,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //
@@ -1423,7 +1427,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           $scope.application = response.response;
@@ -1446,7 +1451,8 @@ angular.module('commonsCloudAdminApp')
       if ($scope.application.id) {
         $scope.EditApplication = false;
         Application.update({
-          id: $scope.application.id
+          id: $scope.application.id,
+          updated: new Date().getTime()
         }, $scope.application).$promise.then(function(response) {
           $rootScope.alerts = [];
           $rootScope.alerts.push({
@@ -1482,7 +1488,8 @@ angular.module('commonsCloudAdminApp')
       // Send the 'DELETE' method to the API so it's removed from the database
       //
       Application.delete({
-        id: application_.id
+        id: application_.id,
+        updated: new Date().getTime()
       }, application_).$promise.then(function(response) {
         $rootScope.alerts.push({
           'type': 'success',
@@ -1555,7 +1562,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //
@@ -1662,7 +1670,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //
@@ -1703,7 +1712,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          templateId: template_id
+          templateId: template_id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
@@ -1730,7 +1740,8 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.UpdateTemplate = function() {
       Template.update({
-        templateId: $scope.template.id
+        templateId: $scope.template.id,
+        updated: new Date().getTime()
       }, $scope.template).$promise.then(function(response) {
         $rootScope.alerts.push({
           'type': 'success',
@@ -1764,7 +1775,8 @@ angular.module('commonsCloudAdminApp')
       // Send the 'DELETE' method to the API so it's removed from the database
       //
       Template.delete({
-        templateId: template_.id
+        templateId: template_.id,
+        updated: new Date().getTime()
       }, template_).$promise.then(function(response) {
         $rootScope.alerts.push({
           'type': 'success',
@@ -1825,7 +1837,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //
@@ -1866,7 +1879,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          templateId: template_id
+          templateId: template_id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
@@ -1940,7 +1954,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //
@@ -2035,10 +2050,12 @@ angular.module('commonsCloudAdminApp')
   // CONTENT
   //
     $scope.GetFeatures = function(page) {
+      
       Feature.query({
           storage: $scope.template.storage,
           page: page,
-          q: $scope.query_params
+          q: $scope.query_params,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.featureproperties = response.properties;
           $scope.features = response.response.features;
@@ -2047,7 +2064,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetFields = function() {
       Field.query({
-          templateId: $scope.template.id
+          templateId: $scope.template.id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.fields = response;
         });
@@ -2055,7 +2073,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          templateId: $routeParams.templateId
+          templateId: $routeParams.templateId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
@@ -2089,7 +2108,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //
@@ -2303,7 +2323,8 @@ angular.module('commonsCloudAdminApp')
   //
     $scope.GetFields = function() {
       Field.query({
-          templateId: $scope.template.id
+          templateId: $scope.template.id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.fields = response;
 
@@ -2315,7 +2336,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          templateId: $routeParams.templateId
+          templateId: $routeParams.templateId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
@@ -2343,7 +2365,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //
@@ -3409,7 +3432,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          templateId: template_id
+          templateId: template_id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
@@ -3443,7 +3467,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //
@@ -3529,7 +3554,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          templateId: template_id
+          templateId: template_id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
@@ -3560,7 +3586,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetFields = function() {
       Field.query({
-          templateId: $scope.template.id
+          templateId: $scope.template.id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.fields = response;
         });
@@ -3579,7 +3606,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //
@@ -3668,7 +3696,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          templateId: template_id
+          templateId: template_id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
@@ -3706,7 +3735,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetFields = function() {
       Field.query({
-          templateId: $scope.template.id
+          templateId: $scope.template.id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.fields = response;
         });
@@ -3715,7 +3745,8 @@ angular.module('commonsCloudAdminApp')
     $scope.GetStatistic = function(template_id, statistic_id) {
       Statistic.get({
         templateId: template_id,
-        statisticId: statistic_id
+        statisticId: statistic_id,
+        updated: new Date().getTime()
       }).$promise.then(function (response) {
         $scope.statistic = response;
       });
@@ -3724,7 +3755,8 @@ angular.module('commonsCloudAdminApp')
     $scope.UpdateStatistic = function (statistic) {
       Statistic.update({
           templateId: $scope.template.id,
-          statisticId: statistic.id
+          statisticId: statistic.id,
+          updated: new Date().getTime()
         }, statistic).$promise.then(function(response) {
           $rootScope.alerts.push({
             'type': 'success',
@@ -3744,7 +3776,8 @@ angular.module('commonsCloudAdminApp')
 
       var statistic_ = {
         templateId: $scope.template.id,
-        statisticId: statistic.id
+        statisticId: statistic.id,
+        updated: new Date().getTime()
       };
 
       //
@@ -3764,7 +3797,8 @@ angular.module('commonsCloudAdminApp')
     // Get the single application that the user wants to view
     //
     Application.get({
-        id: $routeParams.applicationId
+        id: $routeParams.applicationId,
+        updated: new Date().getTime()
       }).$promise.then(function(response) {
 
         //
@@ -3846,7 +3880,8 @@ angular.module('commonsCloudAdminApp')
   //
     $scope.GetFields = function() {
       Field.query({
-          templateId: $scope.template.id
+          templateId: $scope.template.id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.fields = response;
         });
@@ -3854,7 +3889,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          templateId: $routeParams.templateId
+          templateId: $routeParams.templateId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
@@ -3882,7 +3918,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //
@@ -3974,7 +4011,8 @@ angular.module('commonsCloudAdminApp')
       // Get a list of templates associated with the current application
       //
       Template.query({
-          applicationId: application_id
+          applicationId: application_id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.templates = response;
         });
@@ -4009,7 +4047,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          templateId: template_id
+          templateId: template_id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
@@ -4042,7 +4081,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //
@@ -4134,7 +4174,8 @@ angular.module('commonsCloudAdminApp')
     $scope.GetField = function(template_id, field_id) {
       Field.get({
           templateId: template_id,
-          fieldId: field_id
+          fieldId: field_id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.field = response.response;
 
@@ -4153,7 +4194,8 @@ angular.module('commonsCloudAdminApp')
     $scope.UpdateField = function () {
       Field.update({
         templateId: $scope.template.id,
-        fieldId: $scope.field.id
+        fieldId: $scope.field.id,
+          updated: new Date().getTime()
       }, $scope.field).$promise.then(function(response) {
 
         $rootScope.alerts.push({
@@ -4183,7 +4225,8 @@ angular.module('commonsCloudAdminApp')
       //
       Field.delete({
         templateId: $scope.template.id,
-        fieldId: field.id
+        fieldId: field.id,
+        updated: new Date().getTime()
       }, field).$promise.then(function(response) {
         $rootScope.alerts.push({
           'type': 'success',
@@ -4204,7 +4247,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          templateId: $routeParams.templateId
+          templateId: $routeParams.templateId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
@@ -4234,7 +4278,8 @@ angular.module('commonsCloudAdminApp')
       // Get the single application that the user wants to view
       //
       Application.get({
-          id: $routeParams.applicationId
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
 
           //
@@ -4333,7 +4378,8 @@ angular.module('commonsCloudAdminApp')
 								'val': '%' + scope.searchText + '%'
 							}
 						]
-					}
+					},
+          'results_per_page': 6
 				}
 			}).success(function(data){
 				//assign feature objects to scope for use in template
@@ -4375,13 +4421,22 @@ angular.module('commonsCloudAdminApp')
       // Clear out input field
       scope.searchText = '';
       scope.features = [];
-      scope.relationship_focus = false;
 		};
 
     scope.removeFeatureFromRelationships = function(index) {
       // delete scope.human_readable_values.splice(index, 1);
       delete scope.model.splice(index, 1);
     };
+
+    scope.$watch('relationship_focus', function () {
+      if (!scope.relationship_focus) {
+        $timeout(function () {
+          scope.searchText = '';
+          scope.features = [];
+          scope.relationship_focus = false;
+        }, 100);
+      }
+    });
 
 	}
 

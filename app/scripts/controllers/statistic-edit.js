@@ -40,7 +40,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetTemplate = function(template_id) {
       Template.get({
-          templateId: template_id
+          templateId: template_id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.template = response.response;
 
@@ -78,7 +79,8 @@ angular.module('commonsCloudAdminApp')
 
     $scope.GetFields = function() {
       Field.query({
-          templateId: $scope.template.id
+          templateId: $scope.template.id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.fields = response;
         });
@@ -87,7 +89,8 @@ angular.module('commonsCloudAdminApp')
     $scope.GetStatistic = function(template_id, statistic_id) {
       Statistic.get({
         templateId: template_id,
-        statisticId: statistic_id
+        statisticId: statistic_id,
+        updated: new Date().getTime()
       }).$promise.then(function (response) {
         $scope.statistic = response;
       });
@@ -96,7 +99,8 @@ angular.module('commonsCloudAdminApp')
     $scope.UpdateStatistic = function (statistic) {
       Statistic.update({
           templateId: $scope.template.id,
-          statisticId: statistic.id
+          statisticId: statistic.id,
+          updated: new Date().getTime()
         }, statistic).$promise.then(function(response) {
           $rootScope.alerts.push({
             'type': 'success',
@@ -116,7 +120,8 @@ angular.module('commonsCloudAdminApp')
 
       var statistic_ = {
         templateId: $scope.template.id,
-        statisticId: statistic.id
+        statisticId: statistic.id,
+        updated: new Date().getTime()
       };
 
       //
@@ -136,7 +141,8 @@ angular.module('commonsCloudAdminApp')
     // Get the single application that the user wants to view
     //
     Application.get({
-        id: $routeParams.applicationId
+        id: $routeParams.applicationId,
+        updated: new Date().getTime()
       }).$promise.then(function(response) {
 
         //

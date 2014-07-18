@@ -95,13 +95,32 @@ angular.module('commonsCloudAdminApp')
       // Clear out input field
       scope.searchText = '';
       scope.features = [];
-      scope.relationship_focus = false;
+      // scope.relationship_focus = false;
+        $timeout(function () {
+          el.focus();
+        }, 200);
 		};
 
     scope.removeFeatureFromRelationships = function(index) {
       // delete scope.human_readable_values.splice(index, 1);
       delete scope.model.splice(index, 1);
     };
+
+    scope.$watch('relationship_focus', function () {
+      if (!scope.relationship_focus) {
+        $timeout(function () {
+          scope.searchText = '';
+          scope.features = [];
+          scope.relationship_focus = false;
+        }, 100);
+      }
+    });
+
+    scope.$watch('searchText', function () {
+      if (!scope.searchText) {
+        scope.features = [];
+      }
+    });
 
 	}
 

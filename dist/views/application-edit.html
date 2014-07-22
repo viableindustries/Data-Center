@@ -52,8 +52,32 @@
                   </div>
                   <hr />
                   <div class="form-group">
-                    <a href="javascript:void()" data-ng-click="DeleteApplication(application)" class="btn btn-link">Delete Application</a>
-                    <input data-ng-click="UpdateApplication(application)" id="update" name="update" type="submit" class="button pull-right" value="Update Application" />
+                    <a href="javascript:void()" data-ng-show="!remove_confirmation" data-ng-click="remove_confirmation=true" class="btn btn-link">Delete Application</a>
+                    <div data-ng-show="remove_confirmation || really_sure" class="row">
+                      <div class="col-xs-12">
+                        <div class="row alerts">
+                          <div class="col-sm-12">
+                            <p class="alert alert-danger" data-ng-show="!really_sure">
+                              If you choose to delete this application you'll be deleting all associated Templates, Features, and Attachments. All iOS, Android, HTML or other web applications using this data model will instantly stop working. This action cannot be undone, are you sure you want to delete this Application? <br /><br />
+                              <span class="text-center"><a class="btn btn-xs btn-link" data-ng-click="remove_confirmation=false;">Nevermind</a> <em>or</em> <a class="btn btn-xs btn-danger" data-ng-click="really_sure=true">Permanently remove</a></span>
+                            </p>
+                            <div class="alert alert-danger row text-center" data-ng-show="really_sure">
+                              <p>Type the word DELETE to permanently remove this Application</p>
+                              <div class="col-sm-6 col-sm-offset-3">
+                                <input type="text" placeholder="Type DELETE here" class="form-control input-lg" data-ng-model="delete_this_application" id="delete_this_application" name="delete_this_application" />
+                              </div>
+                            </div>
+                            <div class="row" data-ng-show="really_sure">
+                              <div class="col-sm-12">
+                                <a class="btn btn-xs btn-link" data-ng-click="remove_confirmation=false;">Nevermind</a>
+                                <a data-ng-if="delete_this_application==='DELETE'" class="btn btn-xs btn-danger pull-right" data-ng-click="DeleteApplication(application)">Permanently remove</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <input data-ng-show="!remove_confirmation" data-ng-click="UpdateApplication(application)" id="update" name="update" type="submit" class="button pull-right" value="Update Application" />
                   </div>
                 </form>
               </div>

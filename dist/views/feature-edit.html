@@ -84,13 +84,14 @@
                         </div>
 
                         <div class="row upload-list" data-ng-repeat="file in feature[field.relationship] track by $index">
-                          <div class="col-xs-4 thumbnail text-center">
+                          <div class="col-xs-12 thumbnail text-center">
                             <img data-ng-if="file.file.preview" data-ng-src="{{ file.file.preview }}" />
                             <img data-ng-if="file.filepath" data-ng-src="//{{ file.filepath }}" />
                             <p class="help-block"><small data-ng-if="file.file.name">{{ file.file.name }}</small><small  data-ng-if="file.filename">{{ file.filename }}</small></p>
-                            <a class="btn btn-xs btn-danger" data-ng-click="feature[field.relationship].splice($index, 1)">Remove</a>
+                            <a class="btn btn-xs btn-danger" data-ng-click="remove_confirmation=true;" data-ng-show="!remove_confirmation">Remove</a>
+                            <span data-ng-show="remove_confirmation"><a class="btn btn-xs btn-link" data-ng-click="remove_confirmation=false;">Nevermind</a> <em>or</em> <a class="btn btn-xs btn-danger" data-ng-click="DeleteAttachment(file, $index, field.relationship)">Permanently remove</a></span>
                           </div>
-                          <div class="col-xs-8">
+<!--                           <div class="col-xs-8">
                             <div class="form-group">
                               <label for="caption" class="control-label"><span data-ng-show="file.caption">Caption</span><span data-ng-show="!file.caption">&nbsp;</span></label>
                               <textarea rows="1" data-ng-show="show" data-ng-init="show = true" data-ng-model="file.caption" class="form-control animate"  msd-elastic id="caption" name="caption" placeholder="Caption">{{ file.caption }}</textarea>
@@ -104,7 +105,7 @@
                               <textarea rows="1" data-ng-show="show" data-ng-init="show = true" data-ng-model="file.credit_link" class="form-control animate"  msd-elastic id="credit_link" name="credit_link" placeholder="Credit Link">{{ file.credit_link }}</textarea>
                             </div>
                           </div>
-                        </div>
+ -->                        </div>
                       </div>
                       <p class="help-block">{{ field.help }}</p>
                     </div>
@@ -120,7 +121,8 @@
                       <option value="public">Public</option>
                     </select>
                     <br />
-                    <a class="btn btn-link" data-ng-click="DeleteFeature(feature)">Delete this feature</a>
+                    <a class="btn btn-link" data-ng-click="remove_feature_confirmation=true" data-ng-show="!remove_feature_confirmation">Remove this feature</a>
+                    <span data-ng-show="remove_feature_confirmation"><a class="btn btn-xs btn-link" data-ng-click="remove_feature_confirmation=false;">Nevermind</a> <em>or</em> <a class="btn btn-xs btn-danger" data-ng-click="DeleteFeature(feature)">Permanently remove</a></span>
                     <input type="submit" id="update" name="update" data-ng-click="UpdateFeature()" class="button pull-right" value="Update Feature" />
                   </div>
                 </form>

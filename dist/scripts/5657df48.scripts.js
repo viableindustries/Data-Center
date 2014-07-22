@@ -899,6 +899,26 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
+  .provider('Attachment', function () {
+
+    this.$get = ['$resource', function ($resource) {
+
+      var Attachment = $resource('//api.commonscloud.org/v2/:storage/:featureId/:attachmentStorage/:attachmentId.json', {
+
+      }, {
+        delete: {
+          method: 'DELETE'
+        }
+      });
+
+      return Attachment;
+    }];
+
+  });
+
+'use strict';
+
+angular.module('commonsCloudAdminApp')
   .provider('Statistic', function () {
 
     this.$get = ['$resource', function ($resource) {
@@ -1398,13 +1418,13 @@ angular.module('commonsCloudAdminApp')
     // Start a new Alerts array that is empty, this clears out any previous
     // messages that may have been presented on another page
     //
-    // $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
 
-    var clearAlerts = function () {
-      $rootScope.alerts.length = 0;
-    };
+    // var clearAlerts = function () {
+    //   $rootScope.alerts.length = 0;
+    // };
 
-    $timeout(clearAlerts, 5000);
+    // $timeout(clearAlerts, 5000);
 
     if (!$rootScope.user) {
       $rootScope.user = User.getUser();
@@ -2730,7 +2750,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FeatureEditCtrl', ['$rootScope', '$scope', '$route', '$routeParams', '$window', '$timeout', '$location', '$http', 'Application', 'Template', 'Feature', 'Field', 'geolocation', 'leafletData', function ($rootScope, $scope, $route, $routeParams, $window, $timeout, $location, $http, Application, Template, Feature, Field, geolocation, leafletData) {
+  .controller('FeatureEditCtrl', ['$rootScope', '$scope', '$route', '$routeParams', '$window', '$timeout', '$location', '$http', 'Application', 'Template', 'Feature', 'Field', 'Attachment', 'geolocation', 'leafletData', function ($rootScope, $scope, $route, $routeParams, $window, $timeout, $location, $http, Application, Template, Feature, Field, Attachment, geolocation, leafletData) {
 
   //
   // VARIABLES
@@ -3261,10 +3281,10 @@ angular.module('commonsCloudAdminApp')
             file.preview = event.target.result;
             var new_file = {
               'field': field_name,
-              'file': file,
-              'caption': $scope.feature[field_name][index].caption,
-              'credit': $scope.feature[field_name][index].credit,
-              'credit_link': $scope.feature[field_name][index].credit_link
+              'file': file
+              // 'caption': $scope.feature[field_name][index].caption,
+              // 'credit': $scope.feature[field_name][index].credit,
+              // 'credit_link': $scope.feature[field_name][index].credit_link
             };
             $scope.files.push(new_file);
             $scope.feature[field_name].push(new_file);
@@ -3275,10 +3295,10 @@ angular.module('commonsCloudAdminApp')
         } else {
           var new_file = {
             'field': field_name,
-            'file': file,
-            'caption': $scope.feature[field_name][index].caption,
-            'credit': $scope.feature[field_name][index].credit,
-            'credit_link': $scope.feature[field_name][index].credit_link
+            'file': file
+            // 'caption': $scope.feature[field_name][index].caption,
+            // 'credit': $scope.feature[field_name][index].credit,
+            // 'credit_link': $scope.feature[field_name][index].credit_link
           };
           $scope.files.push(new_file);
           $scope.feature[field_name].push(new_file);
@@ -3355,6 +3375,30 @@ angular.module('commonsCloudAdminApp')
         map.fitBounds(map.getBounds());
 
       });
+    };
+
+    $scope.DeleteAttachment = function(file, $index, attachment_storage) {
+
+      $scope.feature[attachment_storage].splice($index, 1);
+
+      // console.log($scope.template.storage, $scope.feature.id, attachment_storage, file.id)
+
+      //
+      // Send the 'DELETE' method to the API so it's removed from the database
+      //
+      Attachment.delete({
+        storage: $scope.template.storage,
+        featureId: $scope.feature.id,
+        attachmentStorage: attachment_storage,
+        attachmentId: file.id
+      }).$promise.then(function(response) {}, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind trying that again? We couldn\'t remove that Attachment.'
+        });
+      });
+
     };
 
 

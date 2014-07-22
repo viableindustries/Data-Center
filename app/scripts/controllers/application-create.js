@@ -1,14 +1,13 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationCreateCtrl', ['$rootScope', '$scope', 'Application', '$location', '$timeout', 'User', function ($rootScope, $scope, $location, $timeout, Application, User) {
+  .controller('ApplicationCreateCtrl', ['$rootScope', '$scope', '$location', '$timeout', 'Application', 'User', function ($rootScope, $scope, $location, $timeout, Application, User) {
 
     //
     // Instantiate an Application object so that we can perform all necessary
     // functionality against our Application resource
     //
     $scope.application = new Application();
-    $scope.applications = Application.query();
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -46,7 +45,6 @@ angular.module('commonsCloudAdminApp')
       // Applications array, so that it appears in the user interface
       //
       $scope.application.$save().then(function (response) {
-        $scope.applications.push(response.response);
 
         var alert = {
           'type': 'success',

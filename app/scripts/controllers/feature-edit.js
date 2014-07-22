@@ -452,31 +452,6 @@ angular.module('commonsCloudAdminApp')
         $scope.feature.geometry = $scope.convertFeatureCollectionToGeometryCollection($scope.feature.geometry);
       }
 
-      // angular.forEach($scope.fields, function(field, index) {
-      //   if (field.data_type === 'relationship') {
-      //     if (angular.isArray($scope.feature[field.relationship]) && $scope.feature[field.relationship].length >= 1) {
-      //
-      //       var relationship_array_ = [];
-      //
-      //       angular.forEach($scope.feature[field.relationship], function (value, index) {
-      //         relationship_array_.push({
-      //           'id': value
-      //         });
-      //       });
-      //
-      //       $scope.feature[field.relationship] = relationship_array_;
-      //     } else if (angular.isNumber($scope.feature[field.relationship])) {
-      //
-      //       var value = $scope.feature[field.relationship];
-      //
-      //       $scope.feature[field.relationship] = [{
-      //         'id': value
-      //       }];
-      //
-      //     }
-      //   }
-      // });
-
       Feature.update({
         storage: $scope.template.storage,
         featureId: $scope.feature.id
@@ -543,11 +518,6 @@ angular.module('commonsCloudAdminApp')
 
     };
 
-    $scope.onFileRemove = function(file, index) {
-      console.log('Need to delete', file)
-      // $scope.files.splice(index, 1);
-    };
-
     $scope.onFileSelect = function(files, field_name) {
 
       console.log('field_name', field_name);
@@ -562,7 +532,10 @@ angular.module('commonsCloudAdminApp')
             file.preview = event.target.result;
             var new_file = {
               'field': field_name,
-              'file': file
+              'file': file,
+              'caption': $scope.feature[field_name][index].caption,
+              'credit': $scope.feature[field_name][index].credit,
+              'credit_link': $scope.feature[field_name][index].credit_link
             };
             $scope.files.push(new_file);
             $scope.feature[field_name].push(new_file);
@@ -573,7 +546,10 @@ angular.module('commonsCloudAdminApp')
         } else {
           var new_file = {
             'field': field_name,
-            'file': file
+            'file': file,
+            'caption': $scope.feature[field_name][index].caption,
+            'credit': $scope.feature[field_name][index].credit,
+            'credit_link': $scope.feature[field_name][index].credit_link
           };
           $scope.files.push(new_file);
           $scope.feature[field_name].push(new_file);

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FeatureEditCtrl', ['$rootScope', '$scope', '$route', '$routeParams', '$window', '$timeout', '$location', '$http', 'Application', 'Template', 'Feature', 'Field', 'geolocation', 'leafletData', function ($rootScope, $scope, $route, $routeParams, $window, $timeout, $location, $http, Application, Template, Feature, Field, geolocation, leafletData) {
+  .controller('FeatureEditCtrl', ['$rootScope', '$scope', '$route', '$routeParams', '$window', '$timeout', '$location', '$http', 'Application', 'Template', 'Feature', 'Field', 'Attachment', 'geolocation', 'leafletData', function ($rootScope, $scope, $route, $routeParams, $window, $timeout, $location, $http, Application, Template, Feature, Field, Attachment, geolocation, leafletData) {
 
   //
   // VARIABLES
@@ -532,10 +532,10 @@ angular.module('commonsCloudAdminApp')
             file.preview = event.target.result;
             var new_file = {
               'field': field_name,
-              'file': file,
-              'caption': $scope.feature[field_name][index].caption,
-              'credit': $scope.feature[field_name][index].credit,
-              'credit_link': $scope.feature[field_name][index].credit_link
+              'file': file
+              // 'caption': $scope.feature[field_name][index].caption,
+              // 'credit': $scope.feature[field_name][index].credit,
+              // 'credit_link': $scope.feature[field_name][index].credit_link
             };
             $scope.files.push(new_file);
             $scope.feature[field_name].push(new_file);
@@ -546,10 +546,10 @@ angular.module('commonsCloudAdminApp')
         } else {
           var new_file = {
             'field': field_name,
-            'file': file,
-            'caption': $scope.feature[field_name][index].caption,
-            'credit': $scope.feature[field_name][index].credit,
-            'credit_link': $scope.feature[field_name][index].credit_link
+            'file': file
+            // 'caption': $scope.feature[field_name][index].caption,
+            // 'credit': $scope.feature[field_name][index].credit,
+            // 'credit_link': $scope.feature[field_name][index].credit_link
           };
           $scope.files.push(new_file);
           $scope.feature[field_name].push(new_file);
@@ -626,6 +626,30 @@ angular.module('commonsCloudAdminApp')
         map.fitBounds(map.getBounds());
 
       });
+    };
+
+    $scope.DeleteAttachment = function(file, $index, attachment_storage) {
+
+      $scope.feature[attachment_storage].splice($index, 1);
+
+      // console.log($scope.template.storage, $scope.feature.id, attachment_storage, file.id)
+
+      //
+      // Send the 'DELETE' method to the API so it's removed from the database
+      //
+      Attachment.delete({
+        storage: $scope.template.storage,
+        featureId: $scope.feature.id,
+        attachmentStorage: attachment_storage,
+        attachmentId: file.id
+      }).$promise.then(function(response) {}, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind trying that again? We couldn\'t remove that Attachment.'
+        });
+      });
+
     };
 
 

@@ -88,7 +88,8 @@
                             <img data-ng-if="file.file.preview" data-ng-src="{{ file.file.preview }}" />
                             <img data-ng-if="file.filepath" data-ng-src="//{{ file.filepath }}" />
                             <p class="help-block"><small data-ng-if="file.file.name">{{ file.file.name }}</small><small  data-ng-if="file.filename">{{ file.filename }}</small></p>
-                            <a class="btn btn-xs btn-danger" data-ng-click="feature[field.relationship].splice($index, 1)">Remove</a>
+                            <a class="btn btn-xs btn-danger" data-ng-click="remove_confirmation=true;" data-ng-show="!remove_confirmation">Remove</a>
+                            <span data-ng-show="remove_confirmation"><a class="btn btn-xs btn-link" data-ng-click="remove_confirmation=false;">Nevermind</a> <em>or</em> <a class="btn btn-xs btn-danger" data-ng-click="DeleteAttachment(file, $index, field.relationship)">Permanently remove</a></span>
                           </div>
 <!--                           <div class="col-xs-8">
                             <div class="form-group">
@@ -120,7 +121,8 @@
                       <option value="public">Public</option>
                     </select>
                     <br />
-                    <a class="btn btn-link" data-ng-click="DeleteFeature(feature)">Delete this feature</a>
+                    <a class="btn btn-link" data-ng-click="remove_feature_confirmation=true" data-ng-show="!remove_feature_confirmation">Remove this feature</a>
+                    <span data-ng-show="remove_feature_confirmation"><a class="btn btn-xs btn-link" data-ng-click="remove_feature_confirmation=false;">Nevermind</a> <em>or</em> <a class="btn btn-xs btn-danger" data-ng-click="DeleteFeature(feature)">Permanently remove</a></span>
                     <input type="submit" id="update" name="update" data-ng-click="UpdateFeature()" class="button pull-right" value="Update Feature" />
                   </div>
                 </form>

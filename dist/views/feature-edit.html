@@ -88,20 +88,20 @@
                             <img data-ng-if="file.file.preview" data-ng-src="{{ file.file.preview }}" />
                             <img data-ng-if="file.filepath" data-ng-src="//{{ file.filepath }}" />
                             <p class="help-block"><small data-ng-if="file.file.name">{{ file.file.name }}</small><small  data-ng-if="file.filename">{{ file.filename }}</small></p>
-                            <a class="btn btn-xs btn-danger" data-ng-click="onFileRemove(file, field.relationship)">Remove</a>
+                            <a class="btn btn-xs btn-danger" data-ng-click="feature[field.relationship].splice($index, 1)">Remove</a>
                           </div>
                           <div class="col-xs-8">
                             <div class="form-group">
-                              <label for="caption">Caption</label>
-                              <input class="form-control input-sm" type="text" data-ng-model="file.caption" id="caption" name="caption" value="{{ file.caption }}" />
+                              <label for="caption" class="control-label"><span data-ng-show="file.caption">Caption</span><span data-ng-show="!file.caption">&nbsp;</span></label>
+                              <textarea rows="1" data-ng-show="show" data-ng-init="show = true" data-ng-model="file.caption" class="form-control animate"  msd-elastic id="caption" name="caption" placeholder="Caption">{{ file.caption }}</textarea>
                             </div>
                             <div class="form-group">
-                              <label for="credit">Credit</label>
-                              <input class="form-control input-sm" type="text" data-ng-model="file.credit" id="credit" name="credit" value="{{ file.credit }}" />
+                              <label for="credit" class="control-label"><span data-ng-show="file.credit">Credit</span><span data-ng-show="!file.credit">&nbsp;</span></label>
+                              <textarea rows="1" data-ng-show="show" data-ng-init="show = true" data-ng-model="file.credit" class="form-control animate"  msd-elastic id="credit" name="credit" placeholder="Credit">{{ file.credit }}</textarea>
                             </div>
                             <div class="form-group">
-                              <label for="credit_link">Credit Link</label>
-                              <input class="form-control input-sm" type="text" data-ng-model="file.credit_link" id="credit_link" name="credit_link" value="{{ file.credit_link }}" />
+                              <label for="credit_link" class="control-label"><span data-ng-show="file.credit_link">Credit Link</span><span data-ng-show="!file.credit_link">&nbsp;</span></label>
+                              <textarea rows="1" data-ng-show="show" data-ng-init="show = true" data-ng-model="file.credit_link" class="form-control animate"  msd-elastic id="credit_link" name="credit_link" placeholder="Credit Link">{{ file.credit_link }}</textarea>
                             </div>
                           </div>
                         </div>

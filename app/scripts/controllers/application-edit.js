@@ -16,13 +16,13 @@ angular.module('commonsCloudAdminApp')
     // Start a new Alerts array that is empty, this clears out any previous
     // messages that may have been presented on another page
     //
-    // $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
 
-    var clearAlerts = function () {
-      $rootScope.alerts.length = 0;
-    };
+    // var clearAlerts = function () {
+    //   $rootScope.alerts.length = 0;
+    // };
 
-    $timeout(clearAlerts, 5000);
+    // $timeout(clearAlerts, 5000);
 
     if (!$rootScope.user) {
       $rootScope.user = User.getUser();

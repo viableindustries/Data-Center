@@ -103,6 +103,10 @@ angular
       .when('/applications/:applicationId/collections/:templateId/developers', {
         templateUrl: '/views/template-dev.html',
         controller: 'TemplateDevCtrl'
+      })
+      .when('/applications/:applicationId/collections/:templateId/import', {
+        templateUrl: '/views/template-import.html',
+        controller: 'TemplateImportCtrl'
       // })
       // .otherwise({
       //   templateUrl: '/views/errors/404.html'

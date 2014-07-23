@@ -157,7 +157,8 @@ angular.module('commonsCloudAdminApp')
 
       Feature.get({
           storage: $scope.template.storage,
-          featureId: feature_id
+          featureId: feature_id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.feature = response.response;
           // $scope.getEnumeratedValues($scope.fields);

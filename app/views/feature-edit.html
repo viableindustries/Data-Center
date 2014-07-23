@@ -49,7 +49,7 @@
 
             <div class="row">
               <div class="col-sm-6">
-                <form method="POST">
+                <form method="POST" data-ng-if="feature">
                   <fieldset>
                     <div class="form-group" data-ng-repeat="field in fields | orderBy:'id'">
                       <div data-ng-if="field.data_type === 'boolean'" class="checkbox">
@@ -76,13 +76,18 @@
                       </div> -->
 
                       <div data-ng-if="field.data_type === 'file'">
-
                         <div class="drop text-center" data-ng-file-drop="onFileSelect($files, field.relationship)" data-ng-file-drag-over-class="drag-over">
                           <span class="glyphicon glyphicon-cloud-upload upload"></span>
                           <p class="label-dragdrop">Drag and drop your files here</p>
                           <p class="label-or"><em>or</em></p>
                           <span class="btn btn-default">Choose files to upload <input type="file" data-ng-file-select="onFileSelect($files, field.relationship)" multiple="multiple" /></span>
                         </div>
+                        <h2>Field</h2>
+                        <code><pre>{{ feature[field.relationship] }}</pre></code>
+                        <h2>Loop</h2>
+                        <code data-ng-repeat="file in feature[field.relationship]"><pre>
+                          {{ file }}
+                        </pre></code>
 
                         <div class="row upload-list" data-ng-repeat="file in feature[field.relationship] track by $index">
                           <div class="col-xs-12 thumbnail text-center">
@@ -92,21 +97,7 @@
                             <a class="btn btn-xs btn-danger" data-ng-click="remove_confirmation=true;" data-ng-show="!remove_confirmation">Remove</a>
                             <span data-ng-show="remove_confirmation"><a class="btn btn-xs btn-link" data-ng-click="remove_confirmation=false;">Nevermind</a> <em>or</em> <a class="btn btn-xs btn-danger" data-ng-click="DeleteAttachment(file, $index, field.relationship)">Permanently remove</a></span>
                           </div>
-<!--                           <div class="col-xs-8">
-                            <div class="form-group">
-                              <label for="caption" class="control-label"><span data-ng-show="file.caption">Caption</span><span data-ng-show="!file.caption">&nbsp;</span></label>
-                              <textarea rows="1" data-ng-show="show" data-ng-init="show = true" data-ng-model="file.caption" class="form-control animate"  msd-elastic id="caption" name="caption" placeholder="Caption">{{ file.caption }}</textarea>
-                            </div>
-                            <div class="form-group">
-                              <label for="credit" class="control-label"><span data-ng-show="file.credit">Credit</span><span data-ng-show="!file.credit">&nbsp;</span></label>
-                              <textarea rows="1" data-ng-show="show" data-ng-init="show = true" data-ng-model="file.credit" class="form-control animate"  msd-elastic id="credit" name="credit" placeholder="Credit">{{ file.credit }}</textarea>
-                            </div>
-                            <div class="form-group">
-                              <label for="credit_link" class="control-label"><span data-ng-show="file.credit_link">Credit Link</span><span data-ng-show="!file.credit_link">&nbsp;</span></label>
-                              <textarea rows="1" data-ng-show="show" data-ng-init="show = true" data-ng-model="file.credit_link" class="form-control animate"  msd-elastic id="credit_link" name="credit_link" placeholder="Credit Link">{{ file.credit_link }}</textarea>
-                            </div>
-                          </div>
- -->                        </div>
+                        </div>
                       </div>
                       <p class="help-block">{{ field.help }}</p>
                     </div>

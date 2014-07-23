@@ -39,8 +39,8 @@
                   <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/fields">Fields</a></li>
                   <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/settings">Settings</a></li>
                   <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/developers">Developers</a></li>
-                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/import">Import</a></li>
-                </ul>
+<!--                   <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/import">Import</a></li>
+ -->                </ul>
               </div>
             </div>
 
@@ -57,7 +57,7 @@
                           <input data-ng-model="feature[field.name]" type="checkbox" id="{{ field.name }}" name="{{ field.name }}" /> {{ field.label }}
                         </label>
                       </div>
-                      <label data-ng-if="field.data_type !== 'boolean'" for="{{ field.name }}" class="control-label"><span data-ng-show="feature[field.name] || field.data_type === 'relationship'">{{ field.label }}</span><span data-ng-show="!feature[field.name].length">&nbsp;</span></label>
+                      <label data-ng-if="field.data_type !== 'boolean'" for="{{ field.name }}" class="control-label"><span data-ng-show="feature[field.name] || field.data_type === 'relationship' || field.data_type === 'date' || field.data_type === 'time'">{{ field.label }}</span><span data-ng-show="!feature[field.name].length">&nbsp;</span></label>
 
                       <relationship model="feature[field.relationship]" field="field" feature="feature" data-ng-if="field.data_type === 'relationship'"></relationship>
 
@@ -82,20 +82,20 @@
                           <p class="label-or"><em>or</em></p>
                           <span class="btn btn-default">Choose files to upload <input type="file" data-ng-file-select="onFileSelect($files, field.relationship)" multiple="multiple" /></span>
                         </div>
-                        <h2>Field</h2>
+<!--                         <h2>Field</h2>
                         <code><pre>{{ feature[field.relationship] }}</pre></code>
                         <h2>Loop</h2>
                         <code data-ng-repeat="file in feature[field.relationship]"><pre>
                           {{ file }}
                         </pre></code>
-
+ -->
                         <div class="row upload-list" data-ng-repeat="file in feature[field.relationship] track by $index">
                           <div class="col-xs-12 thumbnail text-center">
                             <img data-ng-if="file.file.preview" data-ng-src="{{ file.file.preview }}" />
                             <img data-ng-if="file.filepath" data-ng-src="//{{ file.filepath }}" />
                             <p class="help-block"><small data-ng-if="file.file.name">{{ file.file.name }}</small><small  data-ng-if="file.filename">{{ file.filename }}</small></p>
                             <a class="btn btn-xs btn-danger" data-ng-click="remove_confirmation=true;" data-ng-show="!remove_confirmation">Remove</a>
-                            <span data-ng-show="remove_confirmation"><a class="btn btn-xs btn-link" data-ng-click="remove_confirmation=false;">Nevermind</a> <em>or</em> <a class="btn btn-xs btn-danger" data-ng-click="DeleteAttachment(file, $index, field.relationship)">Permanently remove</a></span>
+                            <span data-ng-show="remove_confirmation"><a class="btn btn-xs btn-link" data-ng-click="remove_confirmation=false;">Nevermind</a> <em>or</em> <a class="btn btn-xs btn-danger" data-ng-click="remove_confirmation=false;DeleteAttachment(file, $index, field.relationship)">Permanently remove</a></span>
                           </div>
                         </div>
                       </div>

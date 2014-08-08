@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('StatisticCreateCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', 'Application', 'Template', 'Field', 'Statistic', 'User', function ($route, $rootScope, $scope, $routeParams, $location, Application, Template, Field, Statistic, User) {
+  .controller('StatisticCreateCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'Template', 'Field', 'Statistic', 'User', function ($route, $rootScope, $scope, $routeParams, $timeout, $location, Application, Template, Field, Statistic, User) {
 
 
   //
@@ -19,10 +19,23 @@ angular.module('commonsCloudAdminApp')
     $scope.statistic = new Statistic();
 
     //
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
+    //
+    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
+
+    //
     // Controls for showing/hiding specific page elements that may not be
     // fully loaded or when a specific user interaction has not yet happened
     //
-    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
     $scope.orderByField = null;
     $scope.reverseSort = false;
 

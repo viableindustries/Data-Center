@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FieldEditCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Field', '$location', function ($rootScope, $scope, $routeParams, Application, Template, Field, $location) {
+  .controller('FieldEditCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'Application', 'Template', 'Field', 'User', '$location', function ($rootScope, $scope, $routeParams, $timeout, Application, Template, Field, User, $location) {
 
   //
   // VARIABLES
@@ -16,10 +16,18 @@ angular.module('commonsCloudAdminApp')
 
 
     //
-    // Controls for showing/hiding specific page elements that may not be
-    // fully loaded or when a specific user interaction has not yet happened
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar

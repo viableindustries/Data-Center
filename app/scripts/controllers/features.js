@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FeaturesCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Feature', 'Field', function ($rootScope, $scope, $routeParams, Application, Template, Feature, Field) {
+  .controller('FeaturesCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'Application', 'Template', 'Feature', 'Field', 'User', function ($rootScope, $scope, $routeParams, $timeout, Application, Template, Feature, Field, User) {
 
   //
   // VARIABLES
@@ -16,12 +16,24 @@ angular.module('commonsCloudAdminApp')
     $scope.fields = [];
 
     //
-    // Controls for showing/hiding specific page elements that may not be
-    // fully loaded or when a specific user interaction has not yet happened
+    // Ensure the Templates are sorted oldest to newest
+    //
+    $scope.orderByField = 'id';
+    $scope.reverseSort = true;
+
+    //
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
-    $scope.orderByField = null;
-    $scope.reverseSort = false;
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar

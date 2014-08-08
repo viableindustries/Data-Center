@@ -549,7 +549,7 @@ body {
          font-weight: 300;
          list-style-type: none;
          margin: 0;
-         padding: 8px 0 8px 16px;
+         padding: 8px 16px;
 
          p {
            font-size: 14px;
@@ -558,11 +558,13 @@ body {
          }
 
          a {
-           background-color: transparent;
+           background-color: rgb(252,252,252);
            color: rgb(58,58,58);
+           display: block;
+           width: 100%;
 
            &:hover {
-               background-color: rgb(252,252,252);
+             background-color: rgb(252,252,252);
            }
          }
      }

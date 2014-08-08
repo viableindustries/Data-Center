@@ -1,0 +1,107 @@
+<div class="row">
+
+  <section class="col-xs-12 col-sm-12 page-content">
+
+    <div data-ng-include="'/views/includes/header.html'"></div>
+
+    <div class="inner wide">
+
+      <div class="row">
+        <div class="col-xs-12">
+
+          <header class="application">
+            <div class="row">
+              <div class="col-sm-11">
+                <h1 class="short">{{ application.name }}</h1>
+              </div>
+              <div class="col-xs-1 text-right">
+                <a href="/applications/{{ application.id }}/edit"><span class="glyphicon glyphicon-pencil"></span></a>
+              </div>
+            </div>
+          </header>
+          
+          <nav class="application-navigation navbar navbar-default">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="/applications/{{ application.id }}/collections">Feature Collections</a></li>
+              <li><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li>
+            </ul>
+          </nav>
+
+          <div class="loading-page"></div>
+
+          <article class="application single">
+            <div class="row">
+              <div class="col-sm-5">
+                <h1>{{ template.name }}</h1>
+              </div>
+              <div class="col-sm-7">
+                <ul class="nav nav-pills pull-right">
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features">All Features</a></li>
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/statistics">Statistics</a></li>
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/fields">Fields</a></li>
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/settings">Settings</a></li>
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/developers">Developer</a></li>
+                  <li class="active"><a href="/applications/{{ application.id }}/collections/{{ template.id }}/import">Import</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Alerts -->
+            <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
+
+            <h1>Import from CSV file</h1>
+
+            <div class="row">
+              <div class="col-sm-6">
+
+                <p>You can import lists of content using the {{ template.name }} Excel Template file. To ensure content imports easily, follow the steps below:</p>
+
+                <ol>
+                  <li>Download the Excel Template for this Feature Collection</li>
+                  <li>Only update content within the first Worksheet, do not update column names</li>
+                  <li>Save the Excel Template as a CSV</li>
+                  <li>Return to this Import page, drag and drop the file into this page</li>
+                  <li>Confirm the file is ready for import by clicking the Begin Import button</li>
+                </ol>
+
+                <br />
+
+                <p><a class="button button-info" href="">Download Excel Template</a></p>
+              </div>
+              <div class="col-sm-6">
+                <form>
+                  
+                  <div class="form-group">
+
+                    <div class="drop text-center" data-ng-file-drop="onFileSelect($files, field.relationship)" data-ng-file-drag-over-class="drag-over">
+                      <span class="glyphicon glyphicon-cloud-upload upload"></span>
+                      <p class="label-dragdrop">Drag and drop your files here</p>
+                      <p class="label-or"><em>or</em></p>
+                      <span class="btn btn-default">Choose files to import <input type="file" data-ng-file-select="onFileSelect($files, field.relationship)" multiple="multiple" /></span>
+                    </div>
+
+                    <div class="row upload-list" data-ng-repeat="file in files track by $index">
+                      <div class="col-xs-12 thumbnail text-center">
+                        <img data-ng-src="{{ file.file.preview }}" />
+                        <p class="help-block"><small>{{ file.file.name }}</small></p>
+                        <a class="btn btn-xs btn-danger" data-ng-click="onFileRemove(file.file, $index)">Remove</a>
+                      </div>
+                    </div>
+                    <p class="help-block">{{ field.help }}</p>
+
+                  </div>
+
+                  <input type="submit" id="submit" name="submit" class="button pull-right" value="Begin Import" />
+
+
+                </form>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div data-ng-include="'/views/includes/footer.html'"></div>

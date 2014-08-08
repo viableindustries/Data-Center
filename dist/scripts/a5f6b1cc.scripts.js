@@ -702,6 +702,10 @@ angular
       .when('/applications/:applicationId/collections/:templateId/developers', {
         templateUrl: '/views/template-dev.html',
         controller: 'TemplateDevCtrl'
+      })
+      .when('/applications/:applicationId/collections/:templateId/import', {
+        templateUrl: '/views/template-import.html',
+        controller: 'TemplateImportCtrl'
       // })
       // .otherwise({
       //   templateUrl: '/views/errors/404.html'
@@ -1420,11 +1424,9 @@ angular.module('commonsCloudAdminApp')
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
 
-    // var clearAlerts = function () {
-    //   $rootScope.alerts.length = 0;
-    // };
-
-    // $timeout(clearAlerts, 5000);
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
 
     if (!$rootScope.user) {
       $rootScope.user = User.getUser();
@@ -1544,7 +1546,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('TemplateCreateCtrl', ['$rootScope', '$routeParams', '$scope', 'Application', 'Template', '$location', function ($rootScope, $routeParams, $scope, Application, Template, $location) {
+  .controller('TemplateCreateCtrl', ['$rootScope', '$routeParams', '$scope', '$timeout', 'Application', 'Template', 'User', '$location', function ($rootScope, $routeParams, $scope, $timeout, Application, Template, User, $location) {
 
     //
     // Instantiate an Application object so that we can perform all necessary
@@ -1558,6 +1560,14 @@ angular.module('commonsCloudAdminApp')
     // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar
@@ -1652,7 +1662,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('TemplateEditCtrl', ['$rootScope', '$routeParams', '$scope', 'Application', 'Template', '$location', function ($rootScope, $routeParams, $scope, Application, Template, $location) {
+  .controller('TemplateEditCtrl', ['$rootScope', '$routeParams', '$scope', '$timeout', 'Application', 'Template', 'User', '$location', function ($rootScope, $routeParams, $scope, $timeout, Application, Template, User, $location) {
 
     //
     // Instantiate an Application object so that we can perform all necessary
@@ -1666,6 +1676,14 @@ angular.module('commonsCloudAdminApp')
     // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar
@@ -1819,7 +1837,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('TemplateDevCtrl', ['$rootScope', '$routeParams', '$scope', 'Application', 'Template', '$location', function ($rootScope, $routeParams, $scope, Application, Template, $location) {
+  .controller('TemplateDevCtrl', ['$rootScope', '$routeParams', '$scope', '$timeout', 'Application', 'Template', 'User', '$location', function ($rootScope, $routeParams, $scope, $timeout, Application, Template, User, $location) {
 
     //
     // Instantiate an Application object so that we can perform all necessary
@@ -1833,6 +1851,14 @@ angular.module('commonsCloudAdminApp')
     // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar
@@ -1927,7 +1953,123 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('CollaboratorsCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', function ($rootScope, $scope, $routeParams, Application) {
+  .controller('TemplateImportCtrl', ['$rootScope', '$routeParams', '$scope', '$timeout', 'Application', 'Template', 'User', '$location', function ($rootScope, $routeParams, $scope, $timeout, Application, Template, User, $location) {
+
+    //
+    // Instantiate an Application object so that we can perform all necessary
+    // functionality against our Application resource
+    //
+    $scope.application = {};
+    $scope.template = {};
+
+    //
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
+    //
+    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
+
+    //
+    // Define the Breadcrumbs that appear at the top of the page in the nav bar
+    //
+    $scope.breadcrumbs = [
+      {
+        'label': 'Applications',
+        'title': 'View my applications',
+        'url': '/applications',
+        'class': ''
+      }
+    ];
+
+    //
+    // Get the application the user has selected and begin loading the rest of
+    // the application page
+    //
+    $scope.GetApplication = function() {
+      //
+      // Get the single application that the user wants to view
+      //
+      Application.get({
+          id: $routeParams.applicationId,
+          updated: new Date().getTime()
+        }).$promise.then(function(response) {
+
+          //
+          // Assign the response to the Application object and end loading
+          //
+          $scope.application = response.response;
+
+          //
+          // Update the breadcrumbs based on the response from the application
+          //
+          $scope.breadcrumbs.push({
+            'label': $scope.application.name,
+            'title': 'View ' + $scope.application.name,
+            'url': '/applications/' + $scope.application.id,
+            'class': ''
+          });
+
+          $scope.breadcrumbs.push({
+            'label': 'Feature Collections',
+            'title': 'View all of ' + $scope.application.name + '\'s feature collections',
+            'url': '/applications/' + $scope.application.id,
+            'class': ''
+          });
+
+          if ($routeParams.templateId) {
+            $scope.GetTemplate($routeParams.templateId);
+          }
+
+        }, function(error) {
+          $rootScope.alerts.push({
+            'type': 'error',
+            'title': 'Uh-oh!',
+            'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
+          });
+        });
+    };
+
+
+    $scope.GetTemplate = function(template_id) {
+      Template.get({
+          templateId: template_id,
+          updated: new Date().getTime()
+        }).$promise.then(function(response) {
+          $scope.template = response.response;
+
+          $scope.breadcrumbs.push({
+            'label': $scope.template.name,
+            'title': 'View ' + $scope.template.name,
+            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
+            'class': ''
+          });
+
+          $scope.breadcrumbs.push({
+            'label': 'Developer',
+            'title': 'Developer',
+            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/developers',
+            'class': 'active'
+          });
+
+        });
+    };
+
+
+    $scope.GetApplication();
+
+  }]);
+
+'use strict';
+
+angular.module('commonsCloudAdminApp')
+  .controller('CollaboratorsCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'Application', 'User', function ($rootScope, $scope, $routeParams, $timeout, Application, User) {
 
   //
   // VARIABLES
@@ -1945,6 +2087,14 @@ angular.module('commonsCloudAdminApp')
     // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar
@@ -2018,7 +2168,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FeaturesCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Feature', 'Field', function ($rootScope, $scope, $routeParams, Application, Template, Feature, Field) {
+  .controller('FeaturesCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'Application', 'Template', 'Feature', 'Field', 'User', function ($rootScope, $scope, $routeParams, $timeout, Application, Template, Feature, Field, User) {
 
   //
   // VARIABLES
@@ -2033,12 +2183,24 @@ angular.module('commonsCloudAdminApp')
     $scope.fields = [];
 
     //
-    // Controls for showing/hiding specific page elements that may not be
-    // fully loaded or when a specific user interaction has not yet happened
+    // Ensure the Templates are sorted oldest to newest
+    //
+    $scope.orderByField = 'id';
+    $scope.reverseSort = true;
+
+    //
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
-    $scope.orderByField = null;
-    $scope.reverseSort = false;
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar
@@ -2184,7 +2346,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FeatureCreateCtrl', ['$rootScope', '$scope', '$routeParams', '$window', '$timeout', '$location', '$http', 'Application', 'Template', 'Feature', 'Field', 'geolocation', 'leafletData', function ($rootScope, $scope, $routeParams, $window, $timeout, $location, $http, Application, Template, Feature, Field, geolocation, leafletData) {
+  .controller('FeatureCreateCtrl', ['$rootScope', '$scope', '$routeParams', '$window', '$timeout', '$location', '$http', 'Application', 'Template', 'Feature', 'Field', 'User', 'geolocation', 'leafletData', function ($rootScope, $scope, $routeParams, $window, $timeout, $location, $http, Application, Template, Feature, Field, User, geolocation, leafletData) {
 
   //
   // VARIABLES
@@ -2203,10 +2365,19 @@ angular.module('commonsCloudAdminApp')
     $scope.default_geometry = {};
 
     //
-    // Controls for showing/hiding specific page elements that may not be
-    // fully loaded or when a specific user interaction has not yet happened
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
+
     $scope.ShowMap = true;
 
 
@@ -2750,7 +2921,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FeatureEditCtrl', ['$rootScope', '$scope', '$route', '$routeParams', '$window', '$timeout', '$location', '$http', 'Application', 'Template', 'Feature', 'Field', 'Attachment', 'geolocation', 'leafletData', function ($rootScope, $scope, $route, $routeParams, $window, $timeout, $location, $http, Application, Template, Feature, Field, Attachment, geolocation, leafletData) {
+  .controller('FeatureEditCtrl', ['$rootScope', '$scope', '$route', '$routeParams', '$window', '$timeout', '$location', '$http', 'Application', 'Template', 'Feature', 'Field', 'User', 'Attachment', 'geolocation', 'leafletData', function ($rootScope, $scope, $route, $routeParams, $window, $timeout, $location, $http, Application, Template, Feature, Field, User, Attachment, geolocation, leafletData) {
 
   //
   // VARIABLES
@@ -2766,10 +2937,19 @@ angular.module('commonsCloudAdminApp')
     $scope.files = [];
 
     //
-    // Controls for showing/hiding specific page elements that may not be
-    // fully loaded or when a specific user interaction has not yet happened
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
+
     $scope.ShowMap = true;
 
 
@@ -2906,7 +3086,8 @@ angular.module('commonsCloudAdminApp')
 
       Feature.get({
           storage: $scope.template.storage,
-          featureId: feature_id
+          featureId: feature_id,
+          updated: new Date().getTime()
         }).$promise.then(function(response) {
           $scope.feature = response.response;
           // $scope.getEnumeratedValues($scope.fields);
@@ -3412,7 +3593,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('StatisticsCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', 'Application', 'Template', 'Statistic', 'User', function ($route, $rootScope, $scope, $routeParams, $location, Application, Template, Statistic, User) {
+  .controller('StatisticsCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'Template', 'Statistic', 'User', function ($route, $rootScope, $scope, $routeParams, $location, $timeout, Application, Template, Statistic, User) {
 
 
   //
@@ -3429,10 +3610,23 @@ angular.module('commonsCloudAdminApp')
     $scope.statistics = [];
 
     //
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
+    //
+    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
+
+    //
     // Controls for showing/hiding specific page elements that may not be
     // fully loaded or when a specific user interaction has not yet happened
     //
-    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
     $scope.orderByField = null;
     $scope.reverseSort = false;
 
@@ -3533,8 +3727,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('StatisticCreateCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', 'Application', 'Template', 'Field', 'Statistic', 'User', function ($route, $rootScope, $scope, $routeParams, $location, Application, Template, Field, Statistic, User) {
-
+  .controller('StatisticCreateCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', '$location', 'Application', 'Template', 'Field', 'Statistic', 'User', function ($rootScope, $scope, $routeParams, $timeout, $location, Application, Template, Field, Statistic, User) {
 
   //
   // VARIABLES
@@ -3551,10 +3744,23 @@ angular.module('commonsCloudAdminApp')
     $scope.statistic = new Statistic();
 
     //
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
+    //
+    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
+
+    //
     // Controls for showing/hiding specific page elements that may not be
     // fully loaded or when a specific user interaction has not yet happened
     //
-    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
     $scope.orderByField = null;
     $scope.reverseSort = false;
 
@@ -3675,7 +3881,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('StatisticEditCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', 'Application', 'Template', 'Field', 'Statistic', 'User', function ($route, $rootScope, $scope, $routeParams, $location, Application, Template, Field, Statistic, User) {
+  .controller('StatisticEditCtrl', ['$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'Template', 'Field', 'Statistic', 'User', function ($rootScope, $scope, $routeParams, $location, $timeout, Application, Template, Field, Statistic, User) {
 
 
   //
@@ -3693,10 +3899,23 @@ angular.module('commonsCloudAdminApp')
     $scope.statistic = {};
 
     //
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
+    //
+    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
+
+    //
     // Controls for showing/hiding specific page elements that may not be
     // fully loaded or when a specific user interaction has not yet happened
     //
-    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
     $scope.orderByField = null;
     $scope.reverseSort = false;
 
@@ -3860,7 +4079,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FieldsCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Field', '$location', '$anchorScroll', function ($rootScope, $scope, $routeParams, Application, Template, Field, $location, $anchorScroll) {
+  .controller('FieldsCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'Application', 'Template', 'Field', 'User', '$location', '$anchorScroll', function ($rootScope, $scope, $routeParams, $timeout, Application, Template, Field, User, $location, $anchorScroll) {
 
   //
   // VARIABLES
@@ -3875,10 +4094,18 @@ angular.module('commonsCloudAdminApp')
 
 
     //
-    // Controls for showing/hiding specific page elements that may not be
-    // fully loaded or when a specific user interaction has not yet happened
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar
@@ -3983,7 +4210,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FieldCreateCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Field', '$location', function ($rootScope, $scope, $routeParams, Application, Template, Field, $location) {
+  .controller('FieldCreateCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'Application', 'Template', 'Field', 'User', '$location', function ($rootScope, $scope, $routeParams, $timeout, Application, Template, Field, User, $location) {
 
   //
   // VARIABLES
@@ -3999,10 +4226,18 @@ angular.module('commonsCloudAdminApp')
 
 
     //
-    // Controls for showing/hiding specific page elements that may not be
-    // fully loaded or when a specific user interaction has not yet happened
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar
@@ -4153,7 +4388,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FieldEditCtrl', ['$rootScope', '$scope', '$routeParams', 'Application', 'Template', 'Field', '$location', function ($rootScope, $scope, $routeParams, Application, Template, Field, $location) {
+  .controller('FieldEditCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'Application', 'Template', 'Field', 'User', '$location', function ($rootScope, $scope, $routeParams, $timeout, Application, Template, Field, User, $location) {
 
   //
   // VARIABLES
@@ -4168,10 +4403,18 @@ angular.module('commonsCloudAdminApp')
 
 
     //
-    // Controls for showing/hiding specific page elements that may not be
-    // fully loaded or when a specific user interaction has not yet happened
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 5000);
+
+    if (!$rootScope.user) {
+      $rootScope.user = User.getUser();
+    }
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar

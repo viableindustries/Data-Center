@@ -4663,7 +4663,7 @@ angular.module('commonsCloudAdminApp')
 
 			timeout = $timeout(function () {
 				getFilteredResults(scope.field);
-			}, 500);
+			}, 2000);
 		};
 
 		scope.addFeatureToRelationships = function(feature){

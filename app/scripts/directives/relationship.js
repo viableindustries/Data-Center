@@ -103,15 +103,12 @@ angular.module('commonsCloudAdminApp')
       delete scope.model.splice(index, 1);
     };
 
-    scope.$watch('relationship_focus', function () {
-      if (!scope.relationship_focus) {
-        $timeout(function () {
-          scope.searchText = '';
-          scope.features = [];
-          scope.relationship_focus = false;
-        }, 100);
-      }
-    });
+    scope.resetField = function() {
+      scope.searchText = '';
+      scope.features = [];
+      scope.relationship_focus = false;
+      console.log('Field reset');
+    };
 
 	}
 

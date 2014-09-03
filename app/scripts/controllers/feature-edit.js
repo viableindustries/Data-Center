@@ -658,7 +658,10 @@ angular.module('commonsCloudAdminApp')
         featureId: $scope.feature.id,
         attachmentStorage: attachment_storage,
         attachmentId: file.id
-      }).$promise.then(function(response) {}, function(error) {
+      }).$promise.then(function(response) {
+        console.log('DeleteAttachment', response);
+        $route.reload();
+      }, function(error) {
         $rootScope.alerts.push({
           'type': 'error',
           'title': 'Uh-oh!',

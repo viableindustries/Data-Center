@@ -451,7 +451,6 @@ angular.module('commonsCloudAdminApp')
             'details': 'Your new Features created.'
           });
 
-          $location.hash('top');
           $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features/' + $scope.feature.id);
         }, function(error) {
           console.log('Update failed!!!!', error);

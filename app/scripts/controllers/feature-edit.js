@@ -487,7 +487,9 @@ angular.module('commonsCloudAdminApp')
             'title': 'Awesome!',
             'details': 'Your Feature updates were saved successfully!'
           });
-          $route.reload()
+          $location.hash('top');
+          $anchorScroll();
+          $location.hash('');
         }, function(error) {
           console.log('Update failed!!!!', error);
         });

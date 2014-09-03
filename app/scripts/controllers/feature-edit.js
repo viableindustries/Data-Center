@@ -173,6 +173,7 @@ angular.module('commonsCloudAdminApp')
           // $scope.getEnumeratedValues($scope.fields);
           $scope.getEditableMap(response.response.geometry);
         }, function(error) {
+          $rootScope.alerts = [];
           $rootScope.alerts.push({
             'type': 'error',
             'title': 'Uh-oh!',
@@ -486,8 +487,7 @@ angular.module('commonsCloudAdminApp')
             'title': 'Awesome!',
             'details': 'Your Feature updates were saved successfully!'
           });
-          $location.hash('top');
-          $anchorScroll();
+          $route.reload()
         }, function(error) {
           console.log('Update failed!!!!', error);
         });

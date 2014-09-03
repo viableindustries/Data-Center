@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FeatureEditCtrl', ['$rootScope', '$scope', '$route', '$routeParams', '$window', '$timeout', '$location', '$http', 'Application', 'Template', 'Feature', 'Field', 'User', 'Attachment', 'geolocation', 'leafletData', function ($rootScope, $scope, $route, $routeParams, $window, $timeout, $location, $http, Application, Template, Feature, Field, User, Attachment, geolocation, leafletData) {
+  .controller('FeatureEditCtrl', ['$rootScope', '$scope', '$route', '$routeParams', '$window', '$timeout', '$location', '$http', '$anchorScroll', 'Application', 'Template', 'Feature', 'Field', 'User', 'Attachment', 'geolocation', 'leafletData', function ($rootScope, $scope, $route, $routeParams, $window, $timeout, $location, $http, $anchorScroll, Application, Template, Feature, Field, User, Attachment, geolocation, leafletData) {
 
   //
   // VARIABLES
@@ -479,14 +479,17 @@ angular.module('commonsCloudAdminApp')
         }, fileData).$promise.then(function(response) {
           console.log('Update fired', response);
           $scope.feature = response.response;
+
+          $rootScope.alerts = [];
+          $rootScope.alerts.push({
+            'type': 'success',
+            'title': 'Awesome!',
+            'details': 'Your Feature updates were saved successfully!'
+          });
+          $location.hash('top');
+          $anchorScroll();
         }, function(error) {
           console.log('Update failed!!!!', error);
-        });
-
-        $rootScope.alerts.push({
-          'type': 'success',
-          'title': 'Awesome!',
-          'details': 'Your Feature updates were saved successfully!'
         });
 
         // $route.reload();

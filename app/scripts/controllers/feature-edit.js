@@ -406,6 +406,10 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.convertFeatureCollectionToGeometryCollection = function (featureCollection) {
 
+      if (featureCollection.type === 'GeometryCollection') {
+        return featureCollection;
+      }
+
       var ExistingCollection = angular.fromJson(featureCollection);
 
       var NewFeatureCollection = {
@@ -425,6 +429,10 @@ angular.module('commonsCloudAdminApp')
     // saved to a Geometry field within the CommonsCloud Admin UI
     //
     $scope.convertGeometryCollectionToFeatureCollection = function (geometryCollection) {
+
+      if (geometryCollection.type === 'FeatureCollection') {
+        return geometryCollection;
+      }
 
       var ExistingCollection = angular.fromJson(geometryCollection);
 

@@ -443,17 +443,19 @@ angular.module('commonsCloudAdminApp')
           featureId: response.resource_id
         }, fileData).$promise.then(function(response) {
           console.log('Update fired', response);
+          $scope.feature = response.response
+
+          $rootScope.alerts.push({
+            'type': 'success',
+            'title': 'Yes!',
+            'details': 'Your new Features created.'
+          });
+
+          $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features/' + $scope.feature.id);
         }, function(error) {
           console.log('Update failed!!!!', error);
         });
 
-        $rootScope.alerts.push({
-          'type': 'success',
-          'title': 'Yes!',
-          'details': 'Your new Features created.'
-        });
-
-        $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features');
       }, function(error) {
         $rootScope.alerts.push({
           'type': 'error',

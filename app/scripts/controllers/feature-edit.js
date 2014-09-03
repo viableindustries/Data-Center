@@ -20,11 +20,11 @@ angular.module('commonsCloudAdminApp')
     // Start a new Alerts array that is empty, this clears out any previous
     // messages that may have been presented on another page
     //
-    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+    // $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
 
     $timeout(function () {
       $rootScope.alerts = [];
-    }, 5000);
+    }, 30000);
 
     if (!$rootScope.user) {
       $rootScope.user = User.getUser();
@@ -478,6 +478,7 @@ angular.module('commonsCloudAdminApp')
           featureId: $scope.feature.id
         }, fileData).$promise.then(function(response) {
           console.log('Update fired', response);
+          $scope.feature = response.response;
         }, function(error) {
           console.log('Update failed!!!!', error);
         });
@@ -488,7 +489,7 @@ angular.module('commonsCloudAdminApp')
           'details': 'Your Feature updates were saved successfully!'
         });
 
-        $route.reload();
+        // $route.reload();
       }, function(error) {
         $rootScope.alerts.push({
           'type': 'error',

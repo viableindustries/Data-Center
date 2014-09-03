@@ -460,7 +460,10 @@ angular.module('commonsCloudAdminApp')
     $scope.UpdateFeature = function () {
 
       if ($scope.feature.geometry) {
+        console.log('Full Feature before conversion', $scope.feature);
+        console.log('Existing geometry collection', $scope.feature.geometry);
         $scope.feature.geometry = $scope.convertFeatureCollectionToGeometryCollection($scope.feature.geometry);
+        console.log('Updated geometry collection', $scope.feature.geometry);
       }
 
       Feature.update({

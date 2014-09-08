@@ -5,8 +5,6 @@ angular.module('commonsCloudAdminApp')
 
     var session_cookie = ipCookie('COMMONS_SESSION');
 
-    $rootScope.alerts = [];
-
     $scope.setupLoginPage = function() {
       var host = $location.host();
 

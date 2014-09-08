@@ -28,6 +28,7 @@ angular.module('commonsCloudAdminApp')
         return config || $q.when(config);
       },
       response: function(response) {
+        console.log('AI Response Status', response.status);
         if (response.status === 401 || response.status === 403) {
           $location.hash('');
           $location.path('/');

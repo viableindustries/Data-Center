@@ -16,7 +16,7 @@ angular.module('commonsCloudAdminApp')
 
     $timeout(function () {
       $rootScope.alerts = [];
-    }, 5000);
+    }, 15000);
 
     if (!$rootScope.user) {
       $rootScope.user = User.getUser();

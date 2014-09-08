@@ -29,9 +29,7 @@ angular.module('commonsCloudAdminApp')
       $rootScope.alerts = [];
     }, 5000);
 
-    if (!$rootScope.user) {
-      $rootScope.user = User.getUser();
-    }
+    $rootScope.user = User.getUser();
 
     $scope.ShowMap = true;
 

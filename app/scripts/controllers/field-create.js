@@ -26,9 +26,7 @@ angular.module('commonsCloudAdminApp')
       $rootScope.alerts = [];
     }, 5000);
 
-    if (!$rootScope.user) {
-      $rootScope.user = User.getUser();
-    }
+    $rootScope.user = User.getUser();
 
     //
     // Define the Breadcrumbs that appear at the top of the page in the nav bar

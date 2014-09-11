@@ -52,49 +52,48 @@
             <h1>Import from CSV file</h1>
 
             <div class="row">
-              <div class="col-sm-6">
+              <div class="col-sm-8">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Status</th>
+                      <th>Activity Type</th>
+                      <th>Activity Created</th>
+<!--                       <th>Last Modified</th>
+ -->                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr data-ng-repeat="activity in activities | orderBy:'created':reverseSort">
+                      <td>{{ activity.status }}</td>
+                      <td>{{ activity.name }}</td>
+                      <td>{{ activity.created | date : 'MMMM d, y @ h:mm a' }}</td>
+<!--                       <td>{{ activity.updated | date : 'MMMM d, y @ h:mm a' }}</td>
+ -->                    </tr>
+                    <tr>
+                      <td colspan="4">
+                        <div class="drop text-center" style="margin: 32px 0;" data-ng-file-drop="onFileSelect($files, field.relationship)" data-ng-file-drag-over-class="drag-over">
+                          <span class="btn btn-default">Choose file to import <input type="file" data-ng-file-select="onFileSelect($files, field.relationship)" multiple="multiple" /></span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+              <div class="col-sm-4">
 
                 <p>You can import lists of content using the {{ template.name }} Excel Template file. To ensure content imports easily, follow the steps below:</p>
 
                 <ol>
                   <li>Download the Excel Template for this Feature Collection</li>
                   <li>Only update content within the first Worksheet, do not update column names</li>
-                  <li>Save the Excel Template as a CSV</li>
-                  <li>Return to this Import page, drag and drop the file into this page</li>
-                  <li>Confirm the file is ready for import by clicking the Begin Import button</li>
+                  <li>Save the Excel Template as a Windows CSV</li>
+                  <li>Click the "Choose file to import" button and select your CSV file</li>
                 </ol>
 
                 <br />
 
                 <p><a class="button button-info" href="//api.commonscloud.org/v2/{{ template.storage }}/excel-template">Download Excel Template</a></p>
-              </div>
-              <div class="col-sm-6">
-                <form>
-                  
-                  <div class="form-group">
-
-                    <div class="drop text-center" data-ng-file-drop="onFileSelect($files, field.relationship)" data-ng-file-drag-over-class="drag-over">
-                      <span class="glyphicon glyphicon-cloud-upload upload"></span>
-                      <p class="label-dragdrop">Drag and drop your files here</p>
-                      <p class="label-or"><em>or</em></p>
-                      <span class="btn btn-default">Choose files to import <input type="file" data-ng-file-select="onFileSelect($files, field.relationship)" multiple="multiple" /></span>
-                    </div>
-
-                    <div class="row upload-list" data-ng-repeat="file in files track by $index">
-                      <div class="col-xs-12 thumbnail text-center">
-                        <img data-ng-src="{{ file.file.preview }}" />
-                        <p class="help-block"><small>{{ file.file.name }}</small></p>
-                        <a class="btn btn-xs btn-danger" data-ng-click="onFileRemove(file.file, $index)">Remove</a>
-                      </div>
-                    </div>
-                    <p class="help-block">{{ field.help }}</p>
-
-                  </div>
-
-                  <input type="submit" id="submit" name="submit" class="button pull-right" value="Begin Import" />
-
-
-                </form>
               </div>
             </div>
           </article>

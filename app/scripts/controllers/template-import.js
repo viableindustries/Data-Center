@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('TemplateImportCtrl', ['$rootScope', '$routeParams', '$scope', '$timeout', 'Application', 'Template', 'User', '$location', function ($rootScope, $routeParams, $scope, $timeout, Application, Template, User, $location) {
+  .controller('TemplateImportCtrl', ['$rootScope', '$routeParams', '$scope', '$timeout', '$location', 'Application', 'Template', 'User', 'Import', function ($rootScope, $routeParams, $scope, $timeout, $location, Application, Template, User, Import) {
 
     //
     // Instantiate an Application object so that we can perform all necessary
@@ -9,6 +9,7 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.application = {};
     $scope.template = {};
+    $scope.activities = [];
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -104,9 +105,75 @@ angular.module('commonsCloudAdminApp')
             'class': 'active'
           });
 
+          $scope.getActivities(template_id);
+
         });
     };
 
+    $scope.getActivities = function(template_id) {
+
+      Template.activity({
+          templateId: template_id,
+          updated: new Date().getTime()
+        }).$promise.then(function(response) {
+          console.log('Template.activity response', response);
+          $scope.activities = response.response.activities;
+        });
+    };
+
+
+    $scope.onFileSelect = function(files) {
+
+      angular.forEach(files, function(file, index) {
+
+        //
+        // Add import to Activities list
+        //
+        var new_index = $scope.activities.push({
+          'name': 'Import content from CSV',
+          'description': '',
+          'file': file,
+          'created': '',
+          'updated': '',
+          'status': 'Uploading'
+        });
+        $scope.$apply();
+        console.log('activities', $scope.activities);
+
+        //
+        // Create a file data object for uploading
+        //
+        var fileData = new FormData();
+        fileData.append('import', file);
+
+        //
+        // Post CSV to server to begin import process
+        //
+        $scope.uploadFeatureImport(fileData, new_index-1);
+
+      });
+
+    };
+
+    $scope.uploadFeatureImport = function(fileData, file_index) {
+
+      Import.postFiles({
+        storage: $scope.template.storage
+      }, fileData).$promise.then(function(response) {
+
+        $scope.activities[file_index].status = 'Queued'
+
+        $rootScope.alerts.push({
+          'type': 'success',
+          'title': 'Yes!',
+          'details': 'Your CSV has been successfully queued for import'
+        });
+
+      }, function(error) {
+        console.log('Import failed!!!!', error);
+      });
+
+    };
 
     $scope.GetApplication();
 

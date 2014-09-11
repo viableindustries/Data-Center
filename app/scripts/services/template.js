@@ -8,6 +8,10 @@ angular.module('commonsCloudAdminApp')
       var Template = $resource('//api.commonscloud.org/v2/templates/:templateId.json', {
 
       }, {
+        activity: {
+          method: 'GET',
+          url: '//api.commonscloud.org/v2/templates/:templateId/activity.json'
+        },
         get: {
           method: 'GET',
           url: '//api.commonscloud.org/v2/templates/:templateId.json'

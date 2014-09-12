@@ -71,7 +71,7 @@
 
                           <textarea disabled="disabled" class="form-control" data-ng-if="field.data_type === 'textarea'" id="{{ field.name }}" name="{{ field.name }}"></textarea>
 
-                          <select disabled="disabled" class="form-control" data-ng-if="field.data_type === 'relationship'" id="{{ field.name }}" name="{{ field.name }}"></select>
+                          <select disabled="disabled" class="form-control" data-ng-if="field.data_type === 'relationship' || field.data_type === 'list'" id="{{ field.name }}" name="{{ field.name }}"></select>
 
                           <p class="help-block">{{ field.help }}</p>
                         </div>

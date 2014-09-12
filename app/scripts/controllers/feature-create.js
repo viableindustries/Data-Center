@@ -168,12 +168,29 @@ angular.module('commonsCloudAdminApp')
           templateId: $scope.template.id,
           updated: new Date().getTime()
         }).$promise.then(function(response) {
-          $scope.fields = response;
+          
+          $scope.fields = $scope.PrepareFields(response);
 
           // $scope.getEnumeratedValues($scope.fields);
 
           $scope.getEditableMap();
         });
+    };
+
+    $scope.PrepareFields = function(fields) {
+
+      var processed_fields = [];
+
+      angular.forEach(fields, function(field, index) {
+
+        if (field.data_type === 'list') {
+          field.options = field.options.split(',');
+        }
+
+        processed_fields.push(field);
+      });
+
+      return processed_fields;
     };
 
     $scope.GetTemplate = function(template_id) {

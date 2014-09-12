@@ -187,7 +187,7 @@ angular.module('commonsCloudAdminApp')
       Field.query({
           templateId: $scope.template.id
         }).$promise.then(function(response) {
-          $scope.fields = response;
+          $scope.fields = $scope.PrepareFields(response);
 
           if ($routeParams.featureId) {
             $scope.GetFeature($routeParams.featureId);
@@ -195,6 +195,22 @@ angular.module('commonsCloudAdminApp')
         });
     };
 
+    $scope.PrepareFields = function(fields) {
+
+      var processed_fields = [];
+
+      angular.forEach(fields, function(field, index) {
+
+        if (field.data_type === 'list') {
+          field.options = field.options.split(',');
+        }
+
+        processed_fields.push(field);
+      });
+
+      return processed_fields;
+    };
+    
     $scope.GetTemplate = function(template_id) {
       Template.get({
           templateId: $routeParams.templateId

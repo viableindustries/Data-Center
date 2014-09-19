@@ -2,6 +2,16 @@
   <div class="col-xs-12">
 		<div class="notification">
 			<p><img src="/images/7a86f110.CommonsCloud-Light.png" alt="" title="" /></p>
+
+      <!-- Alerts -->
+      <div class="row" data-ng-if="alerts" style="margin: 16px 0;">
+        <div class="col-xs-12">
+          <div data-ng-show="alerts.length !== 0" class="alerts">
+            <p data-ng-repeat="alert in alerts" class="alert alert-{{ alert.type }} text-center"><strong>{{ alert.title }} </strong><br /> {{ alert.details }}</p>
+          </div>
+        </div>
+      </div>
+
 			<p class="instruction">Please sign in with your CommonsCloud account to begin using the data explorer.</p>
 			<p><a class="button" href="{{ login_url }}">Sign in</a></p>
 		</div>

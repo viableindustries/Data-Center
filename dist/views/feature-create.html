@@ -50,6 +50,7 @@
             <div class="row">
               <div class="col-sm-6">
                 <form method="POST">
+                  
                   <fieldset>
                     <div class="form-group" data-ng-repeat="field in fields | orderBy:'id'">
                       <div data-ng-if="field.data_type === 'boolean'" class="checkbox">
@@ -57,9 +58,12 @@
                           <input data-ng-model="feature[field.name]" type="checkbox" id="{{ field.name }}" name="{{ field.name }}" /> {{ field.label }}
                         </label>
                       </div>
-                      <label data-ng-if="field.data_type !== 'boolean'" for="{{ field.name }}" class="control-label"><span data-ng-show="feature[field.name] || field.data_type === 'relationship' || field.data_type === 'date' || field.data_type === 'time'">{{ field.label }}</span><span data-ng-show="!feature[field.name].length">&nbsp;</span></label>
+                      <label data-ng-if="field.data_type !== 'boolean'" for="{{ field.name }}" class="control-label"><span data-ng-show="feature[field.name] || field.data_type === 'relationship' || field.data_type === 'date' || field.data_type === 'time' || field.data_type === 'list'">{{ field.label }}</span><span data-ng-show="!feature[field.name].length">&nbsp;</span></label>
 
                       <relationship model="feature[field.relationship]" field="field" feature="feature" data-ng-if="field.data_type === 'relationship'"></relationship>
+
+                      <select data-ng-if="field.data_type === 'list'" class="form-control" data-ng-model="feature[field.name]" id="{{ field.name }}" name="{{ field.name }}" data-ng-options="value for value in field.options">
+                      </select>
 
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'email'" class="form-control" type="email" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'url'" class="form-control" type="url" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />

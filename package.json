@@ -1,7 +1,9 @@
 {
   "name": "commonscloudadmin",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "chalk": "^0.5.1"
+  },
   "devDependencies": {
     "connect-modrewrite": "latest",
     "grunt": "latest",

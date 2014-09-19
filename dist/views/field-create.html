@@ -72,6 +72,7 @@
                         <optgroup label="Text">
                           <option value="text">Single Line Text</option>
                           <option value="textarea">Multi-Line Text</option>
+                          <option value="list">List</option>
                           <option value="email">Email</option>
                           <option value="phone">Telephone</option>
                           <option value="url">URL</option>
@@ -89,6 +90,11 @@
                           <option value="boolean">Boolean</option>
                         </optgroup>
                       </select>
+                    </div>
+                    <div class="form-group" data-ng-show="field.data_type === 'list'">
+                      <label for="list" class="control-label">List Options</label>
+                      <textarea rows="1" data-ng-model="field.options" class="form-control" id="options" name="options" placeholder="List of options" msd-elastic></textarea>
+                      <p class="help-block">A list of options to be displayed in the drop down. Place one item per line, maximum of 255 characters per line.</p>
                     </div>
                     <div class="form-group" data-ng-show="field.data_type === 'relationship'">
                       <label for="relationship" class="control-label">Relationship</label>

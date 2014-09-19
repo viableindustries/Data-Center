@@ -18,7 +18,10 @@
     "leaflet.markerclusterer": "0.4",
     "leaflet.draw": "0.2.2",
     "bootstrap": "~3.2.0",
-    "angular-cookie": "~4.0.2"
+    "angular-cookie": "~4.0.2",
+    "angular-elastic": "~2.4.0",
+    "angular-ui": "~0.4.0",
+    "angular-loading-bar": "~0.6.0"
   },
   "devDependencies": {
     "angular-mocks": "1.2.16",

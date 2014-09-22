@@ -5,6 +5,7 @@
 // application-content stylesheet or another, relevant stylesheet
 //
 h1, h2, h3, h4, h5, h6 {
+  font-family: $font-sans;
   letter-spacing: -0.025em;
   line-height: 1.2;
   margin-top: 0;
@@ -19,10 +20,6 @@ h1 {
   line-height: 1;
   margin-bottom: 16px;
 }
-
-  h1.short {
-    margin-bottom: 0;
-  }
 
   h1 a,
   h1 a:hover {

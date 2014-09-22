@@ -32,7 +32,15 @@ angular
       })
       .when('/applications', {
         templateUrl: '/views/applications.html',
-        controller: 'ApplicationsCtrl'
+        controller: 'ApplicationsCtrl',
+        resolve: {
+          applications: function(Application) {
+            return Application.query();
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/new', {
         templateUrl: '/views/application-create.html',
@@ -40,7 +48,18 @@ angular
       })
       .when('/applications/:applicationId', {
         templateUrl: '/views/application.html',
-        controller: 'ApplicationCtrl'
+        controller: 'ApplicationCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          templates: function(Template, $route) {
+            return Template.GetTemplateList($route.current.params.applicationId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/:applicationId/edit', {
         templateUrl: '/views/application-edit.html',

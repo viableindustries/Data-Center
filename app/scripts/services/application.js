@@ -23,6 +23,26 @@ angular.module('commonsCloudAdminApp')
         }
       });
 
+      Application.GetApplication = function(applicationId) {
+
+        //
+        // Get the single application that the user wants to view
+        //
+        var promise = Application.get({
+            id: applicationId
+          }).$promise.then(function(response) {
+            return response.response;
+          }, function(error) {
+            $rootScope.alerts.push({
+              'type': 'error',
+              'title': 'Uh-oh!',
+              'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
+            });
+          });
+
+        return promise;
+      };
+
       return Application;
     }];
   });

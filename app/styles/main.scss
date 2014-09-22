@@ -9,6 +9,16 @@
 @import "_map";
 
 
+[ng\:cloak],
+[ng-cloak], 
+[data-ng-cloak], 
+[x-ng-cloak], 
+.ng-cloak, 
+.x-ng-cloak {
+  display: none !important;
+}
+
+
 //
 // Bootstrap Overrides
 //
@@ -51,7 +61,7 @@
 }
 
 #loading-bar .bar {
-  background: $color-brand-blue-base;
+  background: $color-brand-white-base;
 }
 
 .loading-page {

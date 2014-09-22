@@ -64,13 +64,13 @@ body {
 }
 
 .page-content > .inner {
-  padding: 16px 0 0;
   margin: 0 auto;
   max-width: 75%;
+  padding: 0;
 }
 
 .page-content > .inner.wide {
-  max-width: 95%;
+  max-width: 100%;
 }
 
 .page-content > .inner > .row > div {
@@ -92,13 +92,65 @@ body {
 
   .application p {
     max-width: 660px;
+
+    &.application-url {
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: none;
+      }
+
+      span.icon {
+        position: relative;
+        top: 2px;
+      }
+      span.text:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
-  header.application {
+  header.application-header {
     background-color: $color-brand-blue-base;
     border: 0;
     color: $color-brand-white-base;
-    padding: 32px 16px;
+    padding: 16px;
+
+    h1 {
+      font-size: 20px;
+      margin-bottom: 0;
+    }
+
+    h1,
+    h1 a {
+      color: $color-brand-white-base;
+      text-decoration: none;
+    }
+
+    h1 a:hover {
+      color: $color-brand-white-base;
+      text-decoration: none;
+    }
+
+    .application-back {
+      font-size: 13px;
+      margin-right: 10px;
+    }
+
+    .hover-only {
+      display: none;
+      background-color: rgba($color-brand-white-base, 0.25);
+      font-size: 12px;
+      padding: 4px 6px;
+      position: relative;
+      top: -2px;
+      margin-bottom: -2px;
+    }
+
+    a:hover .hover-only {
+      display: inline-block;
+    }
+
   }
 
   header.application h1 {

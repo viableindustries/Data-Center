@@ -36,6 +36,22 @@ angular.module('commonsCloudAdminApp')
         }
       });
 
+      Template.GetTemplateList = function(applicationId) {
+        
+        //
+        // Get a list of templates associated with the current application
+        //
+        var promise = Template.query({
+            applicationId: applicationId,
+            updated: new Date().getTime()
+          }).$promise.then(function(response) {
+            return response;
+          });
+
+        return promise;
+      };
+
+
       return Template;
     }];
 

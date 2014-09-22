@@ -9,7 +9,7 @@
       <div class="row">
         <div class="col-xs-12">
 
-          <header class="application">
+          <header class="application-header">
             <h1 class="short">My Applications</h1>
           </header>
           
@@ -27,7 +27,7 @@
             <div class="col-sm-6 col-sm-offset-3 application-content">
               <h1><a href="/applications/{{ application.id }}">{{ application.name }}</a></h1>
               <p data-ng-show="application.description">{{ application.description }}</p>
-              <p data-ng-show="application.url"><a href="{{ application.url }}" target="_blank">{{ application.url }}</a> <span class="glyphicon glyphicon-link"></span></p>
+              <p data-ng-show="application.url" class="application-url"><a href="{{ application.url }}" target="_blank"><span class="icon retinaicon-essentials-039"></span> <span class="text">{{ application.url }}</span></a></p>
             </div>
           </article>
 

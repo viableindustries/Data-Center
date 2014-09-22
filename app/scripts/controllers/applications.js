@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationsCtrl', ['$rootScope', '$scope', '$timeout',  'Application', 'User', function ($rootScope, $scope, $timeout, Application, User) {
+  .controller('ApplicationsCtrl', ['$rootScope', '$scope', '$timeout', 'applications', 'user', function ($rootScope, $scope, $timeout, applications, user) {
 
     //
     // Get a list of all Applications the user has access to
     //
-    $scope.applications = Application.query();
+    $scope.applications = applications;
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -17,19 +17,5 @@ angular.module('commonsCloudAdminApp')
     $timeout(function () {
       $rootScope.alerts = [];
     }, 15000);
-
-    $rootScope.user = User.getUser();
-
-    //
-    // Define the Breadcrumbs that appear at the top of the page in the nav bar
-    //
-    $scope.breadcrumbs = [
-      {
-        'label': 'Applications',
-        'title': 'View my applications',
-        'url': '/applications',
-        'class': 'active'
-      }
-    ];
 
   }]);

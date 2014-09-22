@@ -146,7 +146,24 @@ angular
       })
       .when('/applications/:applicationId/collections/:templateId/features/:featureId', {
         templateUrl: '/views/feature-edit.html',
-        controller: 'FeatureEditCtrl'
+        controller: 'FeatureEditCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          fields: function(Field, $route) {
+            return Field.GetFields($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          },
+          feature: function(Feature, $route) {
+            return Feature.GetSingleFeatures($route.current.params.templateId, $route.current.params.featureId);
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId', {
         redirectTo: '/applications/:applicationId/collections/:templateId/features'

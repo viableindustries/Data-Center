@@ -46,9 +46,16 @@ angular.module('commonsCloudAdminApp')
         return promise;     
       }
 
-      Feature.GetTemplate = function(templateId, page) {
+      Feature.GetSingleFeatures = function(templateId, featureId) {
+        
+        var promise = Feature.GetTemplateSingleFeature(templateId, featureId).then(function(options) {
+          return Feature.GetFeature(options);
+        });
+        
+        return promise;     
+      }
 
-        console.log(page);
+      Feature.GetTemplate = function(templateId, page) {
   
         var promise = Template.get({
             templateId: templateId,
@@ -63,9 +70,21 @@ angular.module('commonsCloudAdminApp')
         return promise;
       };
 
-      Feature.GetFeatures = function(options) {
+      Feature.GetTemplateSingleFeature = function(templateId, featureId) {
+  
+        var promise = Template.get({
+            templateId: templateId,
+            updated: new Date().getTime()
+          }).$promise.then(function(response) {
+            return {
+              storage: response.response.storage,
+              featureId: featureId
+            };
+          });
 
-        console.log('options', options);
+        return promise;
+      };
+      Feature.GetFeatures = function(options) {
 
         var promise = Feature.query({
             storage: options.storage,
@@ -80,12 +99,31 @@ angular.module('commonsCloudAdminApp')
             },
             updated: new Date().getTime()
           }).$promise.then(function(response) {
-            console.log('response', response);
             return response;
           });
 
         return promise;
       };
+
+      Feature.GetFeature = function(options) {
+        console.log('options', options)
+        var promise = Feature.get({
+            storage: options.storage,
+            featureId: options.featureId,
+            updated: new Date().getTime()
+          }).$promise.then(function(response) {
+            return response.response;
+          }, function(error) {
+            $rootScope.alerts = [];
+            $rootScope.alerts.push({
+              'type': 'error',
+              'title': 'Uh-oh!',
+              'details': 'Mind trying that again? We couldn\'t find the Feature you were looking for.'
+            });
+          });
+
+        return promise;
+      }
 
       return Feature;
     }];

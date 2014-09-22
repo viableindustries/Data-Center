@@ -3,7 +3,7 @@
 angular.module('commonsCloudAdminApp')
   .provider('Feature', function () {
 
-    this.$get = ['$resource', function ($resource) {
+    this.$get = ['$resource', 'Template', function ($resource, Template) {
 
       var Feature = $resource('//api.commonscloud.org/v2/:storage.json', {
 
@@ -36,6 +36,56 @@ angular.module('commonsCloudAdminApp')
           url: '//api.commonscloud.org/v2/:storage/:featureId.json'
         }
       });
+
+      Feature.GetPaginatedFeatures = function(templateId, page) {
+        
+        var promise = Feature.GetTemplate(templateId, page).then(function(options) {
+          return Feature.GetFeatures(options);
+        });
+        
+        return promise;     
+      }
+
+      Feature.GetTemplate = function(templateId, page) {
+
+        console.log(page);
+  
+        var promise = Template.get({
+            templateId: templateId,
+            updated: new Date().getTime()
+          }).$promise.then(function(response) {
+            return {
+              storage: response.response.storage,
+              page: page
+            };
+          });
+
+        return promise;
+      };
+
+      Feature.GetFeatures = function(options) {
+
+        console.log('options', options);
+
+        var promise = Feature.query({
+            storage: options.storage,
+            page: (options.page === undefined || options.page === null) ? 1: options.page,
+            q: {
+              'order_by': [
+                {
+                  'field': 'id',
+                  'direction': 'desc'
+                }
+              ]
+            },
+            updated: new Date().getTime()
+          }).$promise.then(function(response) {
+            console.log('response', response);
+            return response;
+          });
+
+        return promise;
+      };
 
       return Feature;
     }];

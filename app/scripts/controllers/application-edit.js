@@ -13,7 +13,8 @@ angular.module('commonsCloudAdminApp')
     $scope.application = application;
 
     $scope.page = {
-      title: 'Edit Application'
+      title: 'Edit Application',
+      back: '/applications/' + $scope.application.id
     }
 
     //

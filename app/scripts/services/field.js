@@ -33,6 +33,18 @@ angular.module('commonsCloudAdminApp')
 
       });
 
+      Field.GetFields = function(templateId) {
+
+        var promise = Field.query({
+            templateId: templateId,
+            updated: new Date().getTime()
+          }).$promise.then(function(response) {
+            return response;
+          });
+
+        return promise
+      };
+
       return Field;
     }];
 

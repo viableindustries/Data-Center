@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('CollaboratorsCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'Application', 'User', function ($rootScope, $scope, $routeParams, $timeout, Application, User) {
+  .controller('CollaboratorsCtrl', ['$rootScope', '$scope', '$timeout', 'application', 'user', function ($rootScope, $scope, $timeout, application, user) {
 
   //
   // VARIABLES
@@ -10,9 +10,12 @@ angular.module('commonsCloudAdminApp')
     //
     // Placeholders for our existing content
     //
-    $scope.application = {};
+    $scope.application = application;
 
-    $scope.loading = true;
+    $scope.page = {
+      title: 'Collaborators',
+      back: '/applications/' + $scope.application.id
+    }
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -24,73 +27,5 @@ angular.module('commonsCloudAdminApp')
       $rootScope.alerts = [];
     }, 5000);
 
-    $rootScope.user = User.getUser();
 
-    //
-    // Define the Breadcrumbs that appear at the top of the page in the nav bar
-    //
-    $scope.breadcrumbs = [
-      {
-        'label': 'Applications',
-        'title': 'View my applications',
-        'url': '/applications',
-        'class': ''
-      }
-    ];
-
-
-  //
-  // CONTENT
-  //
-
-    //
-    // Get the application the user has selected and begin loading the rest of
-    // the application page
-    //
-    $scope.GetApplication = function() {
-      //
-      // Get the single application that the user wants to view
-      //
-      Application.get({
-          id: $routeParams.applicationId,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-
-          //
-          // Assign the response to the Application object and end loading
-          //
-          $scope.application = response.response;
-          $scope.loading = false;
-
-          //
-          // Update the breadcrumbs based on the response from the application
-          //
-          $scope.breadcrumbs.push({
-            'label': $scope.application.name,
-            'title': 'View ' + $scope.application.name,
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Collaborators',
-            'title': 'View all of ' + $scope.application.name + '\'s collaborators',
-            'url': '/applications/' + $scope.application.id + '/collaborators',
-            'class': 'active'
-          });
-
-        }, function(error) {
-          $rootScope.alerts.push({
-            'type': 'error',
-            'title': 'Uh-oh!',
-            'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
-          });
-        });
-    };
-
-    //
-    // Now that we've got the everything prepared, let's go ahead and start
-    // the controller by instantiating the GetApplication method
-    //
-    $scope.GetApplication();
   }]);

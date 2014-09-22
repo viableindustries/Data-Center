@@ -2,18 +2,10 @@
 
   <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
 
-    <div data-ng-include="'/views/includes/header.html'"></div>
-
-    <div data-ng-show="!loading" class="inner wide">
+    <div class="inner wide">
       <div class="row">
         <div class="col-xs-12">  
-          <header class="application">
-            <div class="row">
-              <div class="col-sm-12">
-                <h1 class="short">{{ application.name }}</h1>
-              </div>
-            </div>
-          </header>
+          <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
 
           <div class="template single">
 

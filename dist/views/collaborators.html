@@ -2,23 +2,11 @@
 
   <section class="col-xs-12 col-sm-12 page-content">
 
-    <div data-ng-include="'/views/includes/header.html'"></div>
-
     <div class="inner wide">
 
       <div class="row">
         <div class="col-xs-12">
-
-          <header class="application">
-            <div class="row">
-              <div class="col-sm-11">
-                <h1 class="short">{{ application.name }}</h1>
-              </div>
-              <div class="col-xs-1 text-right">
-                <a href="/applications/{{ application.id }}/edit"><span class="glyphicon glyphicon-pencil"></span></a>
-              </div>
-            </div>
-          </header>
+          <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
           
           <nav class="application-navigation navbar navbar-default">
             <ul class="nav navbar-nav">

@@ -10,7 +10,8 @@ angular.module('commonsCloudAdminApp')
     $scope.application = new Application();
 
     $scope.page = {
-      title: "New Application"
+      title: 'New Application',
+      back: '/applications/'
     };
 
     //

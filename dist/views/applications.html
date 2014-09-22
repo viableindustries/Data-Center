@@ -2,23 +2,12 @@
 
   <section class="col-xs-12 col-sm-12 page-content">
 
-    <div data-ng-include="'/views/includes/header.html'"></div>
-
     <div class="inner wide">
 
       <div class="row">
         <div class="col-xs-12">
-
-          <header class="application">
-            <h1 class="short">My Applications</h1>
-          </header>
+          <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
           
-          <nav class="application-navigation navbar navbar-default">
-            <a href="/applications/new" class="button pull-right">Add an Application</a>
-          </nav>
-          
-          <div class="loading-page"></div>
-
           <!-- Alerts -->
           <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
 
@@ -27,7 +16,7 @@
             <div class="col-sm-6 col-sm-offset-3 application-content">
               <h1><a href="/applications/{{ application.id }}">{{ application.name }}</a></h1>
               <p data-ng-show="application.description">{{ application.description }}</p>
-              <p data-ng-show="application.url"><a href="{{ application.url }}" target="_blank">{{ application.url }}</a> <span class="glyphicon glyphicon-link"></span></p>
+              <p data-ng-show="application.url" class="application-url"><a href="{{ application.url }}" target="_blank"><span class="icon retinaicon-essentials-039"></span> <span class="text">{{ application.url }}</span></a></p>
             </div>
           </article>
 

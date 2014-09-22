@@ -83,15 +83,48 @@ angular
       })
       .when('/applications/:applicationId/collaborators', {
         templateUrl: '/views/collaborators.html',
-        controller: 'CollaboratorsCtrl'
+        controller: 'CollaboratorsCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/:applicationId/collections/new', {
         templateUrl: '/views/template-create.html',
-        controller: 'TemplateCreateCtrl'
+        controller: 'TemplateCreateCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId/features', {
         templateUrl: '/views/features.html',
-        controller: 'FeaturesCtrl'
+        controller: 'FeaturesCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          fields: function(Field, $route) {
+            return Field.GetFields($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          },
+          features: function(Feature, $route) {
+            return Feature.GetPaginatedFeatures($route.current.params.templateId, $route.current.params.page);
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId/features/new', {
         templateUrl: '/views/feature-create.html',

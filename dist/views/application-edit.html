@@ -1,35 +1,11 @@
 <div class="row">
 
-  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
-    <header>
-      <div class="row">
-        <div class="col-sm-10">
-          <ol class="breadcrumb">
-            <li class="front-page"><a title="Return to your dashboard" target="_self" class="sidebar-toggle"><span class="glyphicon glyphicon-cloud"></span></a></li>
-            <li><a href="/applications" title="">Applications</a></li>
-            <li><a href="/applications/{{ application.id }}" title="">{{ application.name }}</a></li>
-            <li class="active"><a href="/applications/{{ application.id }}/templates" title="">Templates</a></li>
-          </ol>
-        </div>
-        <div class="col-sm-2 text-right">
-          <ul class="nav account">
-            <li><a href="" class="notifications"><span class="glyphicon glyphicon-bell"></span></a></li>
-            <li><a href="//api.commonscloud.org/user/profile" class="user"><img data-ng-if="user.email" gravatar-src="'{{ user.email }}'" gravatar-size="24" /></a></li>
-          </ul>
-        </div>
-      </div>
-    </header>
+  <section class="col-xs-12 col-sm-12 page-content">
 
-    <div data-ng-show="!loading" class="inner wide">
+    <div class="inner wide">
       <div class="row">
         <div class="col-xs-12">
-          <header class="application">
-            <div class="row">
-              <div class="col-sm-11">
-                <h1 class="short">{{ application.name }}</h1>
-              </div>
-            </div>
-          </header>
+          <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
 
           <article class="application single template-nested">
             <!-- Alerts -->
@@ -37,22 +13,25 @@
 
             <div class="row">
               <div class="col-sm-12">
-                <form method="PUT" class="form-narrow">
+                <form method="PUT" class="form-narrow" name="form" id="form">
                   <div class="form-group">
                     <label class="control-label" for="name">Application Name</label>
-                    <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}" />
+                    <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}" required="required" />
+                    <p class="help-block error-message" data-ng-show="!form.name.$pristine && form.name.$invalid && form.name.$error">Application names cannot exceed 255 characters total</p>
                   </div>
                   <div class="form-group">
                     <label class="control-label" for="description">Description</label>
-                    <textarea msd-elastic rows="1" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description">{{ application.description }}</textarea>
+                    <textarea msd-elastic rows="1" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description" data-ng-maxlength="255">{{ application.description }}</textarea>
+                    <p class="help-block error-message" data-ng-show="form.description.$invalid">Application descriptions cannot exceed 255 characters total</p>
                   </div>
                   <div class="form-group">
                     <label class="control-label" for="url">URL</label>
-                    <input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" placeholder="Website" value="{{ application.url }}" />
+                    <input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" placeholder="http://" value="{{ application.url }}" />
+                    <p class="help-block error-message" data-ng-show="form.url.$invalid">Please enter a valid URL, making sure you include http:// at the beginning</p>
                   </div>
                   <hr />
                   <div class="form-group">
-                    <a href="javascript:void()" data-ng-show="!remove_confirmation" data-ng-click="remove_confirmation=true" class="btn btn-link">Delete Application</a>
+                    <a href="javascript:void()" data-ng-show="!remove_confirmation" data-ng-click="remove_confirmation=true" class="btn btn-link pull-left">Delete Application</a>
                     <div data-ng-show="remove_confirmation || really_sure" class="row">
                       <div class="col-xs-12">
                         <div class="row alerts">
@@ -89,8 +68,5 @@
     </div>
   </section>
 </div>
-<div class="row text-center">
-  <div class="col-sm-12">
-    <img class="security-label" src="/images/CommonsCloudSecuredByKeyhole-LightTranslucent.png" alt="" title="">
-  </div>
-</div>
+
+<div data-ng-include="'/views/includes/footer.html'"></div>

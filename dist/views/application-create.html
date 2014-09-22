@@ -1,19 +1,11 @@
 <div class="row">
 
-  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
+  <section class="col-xs-12 col-sm-12 page-content">
 
-    <div data-ng-include="'/views/includes/header.html'"></div>
-
-    <div data-ng-show="!loading" class="inner wide">
+    <div class="inner wide">
       <div class="row">
         <div class="col-xs-12">
-          <header class="application">
-            <div class="row">
-              <div class="col-sm-11">
-                <h1 class="short">New Application</h1>
-              </div>
-            </div>
-          </header>
+          <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
 
           <article class="application single">
             <!-- Alerts -->
@@ -21,18 +13,21 @@
 
             <div class="row">
               <div class="col-sm-12">
-                <form method="POST" class="form-narrow">
+                <form method="POST" class="form-narrow" name="form" id="form">
                   <div class="form-group">
-                    <label class="control-label" for="name">Application Name</label>
-                    <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" />
+                    <label class="control-label" for="name">Application Name*</label>
+                    <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" required data-ng-maxlength="255"/>
+                    <p class="help-block error-message" data-ng-show="!form.name.$pristine && form.name.$invalid && form.name.$error">Application names cannot exceed 255 characters total</p>
                   </div>
                   <div class="form-group">
                     <label class="control-label" for="description">Description</label>
-                    <textarea msd-elastic rows="1" id="description" name="description" class="form-control" data-ng-model="application.description"></textarea>
+                    <textarea msd-elastic rows="1" id="description" name="description" class="form-control" data-ng-model="application.description" placeholder="Description" data-ng-maxlength="255"></textarea>
+                    <p class="help-block error-message" data-ng-show="form.description.$invalid">Application descriptions cannot exceed 255 characters total</p>
                   </div>
                   <div class="form-group">
                     <label class="control-label" for="url">URL</label>
                     <input type="url" id="url" name="url" class="form-control" data-ng-model="application.url" />
+                    <p class="help-block error-message" data-ng-show="form.url.$invalid">Please enter a valid URL, making sure you include http:// at the beginning</p>
                   </div>
                   <hr />
                   <div class="form-group text-right">

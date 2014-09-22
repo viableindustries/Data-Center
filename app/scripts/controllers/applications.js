@@ -8,6 +8,11 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.applications = applications;
 
+    $scope.page = {
+      title: "My Applications"
+    };
+
+
     //
     // Start a new Alerts array that is empty, this clears out any previous
     // messages that may have been presented on another page

@@ -1,13 +1,17 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationCreateCtrl', ['$rootScope', '$scope', '$location', '$timeout', 'Application', 'User', function ($rootScope, $scope, $location, $timeout, Application, User) {
+  .controller('ApplicationCreateCtrl', ['$rootScope', '$scope', '$location', '$timeout', 'Application', 'user', function ($rootScope, $scope, $location, $timeout, Application, user) {
 
     //
     // Instantiate an Application object so that we can perform all necessary
     // functionality against our Application resource
     //
     $scope.application = new Application();
+
+    $scope.page = {
+      title: "New Application"
+    };
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -19,19 +23,6 @@ angular.module('commonsCloudAdminApp')
       $rootScope.alerts = [];
     }, 5000);
 
-    $rootScope.user = User.getUser();
-
-    //
-    // Define the Breadcrumbs that appear at the top of the page in the nav bar
-    //
-    $scope.breadcrumbs = [
-      {
-        'label': 'Applications',
-        'title': 'View my applications',
-        'url': '/applications',
-        'class': 'active'
-      }
-    ];
 
     //
     // Save a new Application to the API Database

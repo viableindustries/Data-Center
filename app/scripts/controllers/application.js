@@ -12,7 +12,7 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.application = application;
     $scope.templates = templates;
-    $scope.features = [];
+    $scope.features = {};
 
     $scope.loading = true;
 
@@ -38,18 +38,6 @@ angular.module('commonsCloudAdminApp')
   //
   // CONTENT
   //
-
-    //
-    // Retrieve the total number of features for each template
-    //
-    $scope.features.count('features');
-
-
-    //
-    // Determine if any features are in need of being moderated
-    //
-    $scope.features.count('moderation');
-
 
     //
     // Return a total count of features per template, or a total number of features needing moderated
@@ -97,5 +85,15 @@ angular.module('commonsCloudAdminApp')
 
       });
     };
+
+    //
+    // Retrieve the total number of features for each template
+    //
+    $scope.features.count('features');
+
+    //
+    // Determine if any features are in need of being moderated
+    //
+    $scope.features.count('moderation');
 
   }]);

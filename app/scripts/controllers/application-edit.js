@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('ApplicationEditCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'User', function ($route, $rootScope, $scope, $routeParams, $location, $timeout, Application, User) {
+  .controller('ApplicationEditCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'application', 'user', function ($route, $rootScope, $scope, $routeParams, $location, $timeout, Application, application, user) {
 
   //
   // VARIABLES
@@ -10,7 +10,11 @@ angular.module('commonsCloudAdminApp')
     //
     // Placeholders for our existing content
     //
-    $scope.application = {};
+    $scope.application = application;
+
+    $scope.page = {
+      title: 'Edit Application'
+    }
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -22,38 +26,10 @@ angular.module('commonsCloudAdminApp')
       $rootScope.alerts = [];
     }, 5000);
 
-    $rootScope.user = User.getUser();
-
-    $scope.loading = true;
-
 
   //
   // CONTENT
   //
-    //
-    // Get the application the user has selected and begin loading the rest of
-    // the application page
-    //
-    $scope.GetApplication = function() {
-      //
-      // Get the single application that the user wants to view
-      //
-      Application.get({
-          id: $routeParams.applicationId,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-
-          $scope.application = response.response;
-          $scope.loading = false;
-
-        }, function(error) {
-          $rootScope.alerts.push({
-            'type': 'error',
-            'title': 'Uh-oh!',
-            'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
-          });
-        });
-    };
 
     //
     // Save a new Application to the API Database
@@ -120,10 +96,4 @@ angular.module('commonsCloudAdminApp')
 
     };
 
-
-    //
-    // Now that we've got the everything prepared, let's go ahead and start
-    // the controller by instantiating the GetApplication method
-    //
-    $scope.GetApplication();
   }]);

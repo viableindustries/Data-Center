@@ -1,1 +1,10 @@
-
+            <div class="col-sm-10">
+              <h1 data-ng-if="page.title"><a data-ng-if="page.title !== 'My Applications'" class="application-back" href="/applications/"><span class="icon retinaicon-retina-icons-v-1-4"></span></a> {{ page.title }} <a data-ng-if="page.title === 'My Applications'" href="/applications/new"><span class="hover-only static"><span class="icon retinaicon-essentials-047"></span> Add an application</span></a></h1>
+              <h1 data-ng-if="application && !page.title"><a class="application-back" href="/applications/"><span class="icon retinaicon-retina-icons-v-1-4"></span></a> <a href="/applications/{{ application.id }}/edit">{{ application.name }} <span class="hover-only">Click to edit</span></a></h1>
+            </div>
+            <div class="col-sm-2 text-right">
+              <ul class="nav account">
+                <li><a href="/logout" class="logout">Logout</a></li>
+                <li><a href="//api.commonscloud.org/user/profile" class="user"><img data-ng-if="$root.user.email" gravatar-src="'{{ $root.user.email }}'" gravatar-size="24" /></a></li>
+              </ul>
+            </div>

@@ -2,15 +2,11 @@
 
   <section class="col-xs-12 col-sm-12 page-content">
 
-    <div data-ng-include="'/views/includes/header.html'"></div>
-
     <div class="inner wide">
 
       <div class="row">
         <div class="col-xs-12">  
-          <header class="application-header">
-            <h1><a class="application-back" href="/applications/"><span class="icon retinaicon-retina-icons-v-1-4"></span></a> <a href="/applications/{{ application.id }}/edit">{{ application.name }} <span class="hover-only">Click to edit</span></a></h1>
-          </header>
+          <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
 
           <nav class="application-navigation navbar navbar-default">
             <ul class="nav navbar-nav">

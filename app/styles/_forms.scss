@@ -380,3 +380,23 @@ input::-webkit-inner-spin-button {
     margin: 10px 0 0;
   }
 }
+
+
+//
+// Form Validation
+//
+.form-control.ng-invalid-maxlength {
+  border-color: #F44336;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.form-control.ng-invalid-maxlength:focus {
+  border-color: #F44336;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.help-block.error-message {
+  color: #F44336;
+}

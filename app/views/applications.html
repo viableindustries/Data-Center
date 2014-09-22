@@ -2,23 +2,12 @@
 
   <section class="col-xs-12 col-sm-12 page-content">
 
-    <div data-ng-include="'/views/includes/header.html'"></div>
-
     <div class="inner wide">
 
       <div class="row">
         <div class="col-xs-12">
-
-          <header class="application-header">
-            <h1 class="short">My Applications</h1>
-          </header>
+          <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
           
-          <nav class="application-navigation navbar navbar-default">
-            <a href="/applications/new" class="button pull-right">Add an Application</a>
-          </nav>
-          
-          <div class="loading-page"></div>
-
           <!-- Alerts -->
           <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
 

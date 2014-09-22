@@ -44,7 +44,12 @@ angular
       })
       .when('/applications/new', {
         templateUrl: '/views/application-create.html',
-        controller: 'ApplicationCreateCtrl'
+        controller: 'ApplicationCreateCtrl',
+        resolve: {
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/:applicationId', {
         templateUrl: '/views/application.html',
@@ -63,7 +68,15 @@ angular
       })
       .when('/applications/:applicationId/edit', {
         templateUrl: '/views/application-edit.html',
-        controller: 'ApplicationEditCtrl'
+        controller: 'ApplicationEditCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/:applicationId/collections', {
         redirectTo: '/applications/:applicationId'

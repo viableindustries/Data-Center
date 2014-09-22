@@ -727,7 +727,21 @@ angular
       })
       .when('/applications/:applicationId/collections/:templateId/features/new', {
         templateUrl: '/views/feature-create.html',
-        controller: 'FeatureCreateCtrl'
+        controller: 'FeatureCreateCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          fields: function(Field, $route) {
+            return Field.GetFields($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId/features/:featureId', {
         templateUrl: '/views/feature-edit.html',
@@ -1072,6 +1086,35 @@ angular.module('commonsCloudAdminApp')
         }
 
       });
+
+      Field.PrepareFields = function() {
+
+        var processed_fields = [];
+
+        angular.forEach(fields, function(field, index) {
+
+          if (field.data_type === 'list') {
+            field.options = field.options.split(',');
+          }
+
+          processed_fields.push(field);
+        });
+
+        return processed_fields;
+      }
+
+      Field.GetPreparedFields = function(templateId) {
+
+        var promise = Field.query({
+            templateId: templateId,
+            updated: new Date().getTime()
+          }).$promise.then(function(response) {
+            return $scope.PrepareFields(response);
+          });
+
+        return promise
+      };
+
 
       Field.GetFields = function(templateId) {
 
@@ -2292,7 +2335,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FeatureCreateCtrl', ['$rootScope', '$scope', '$routeParams', '$window', '$timeout', '$location', '$http', 'Application', 'Template', 'Feature', 'Field', 'User', 'geolocation', 'leafletData', function ($rootScope, $scope, $routeParams, $window, $timeout, $location, $http, Application, Template, Feature, Field, User, geolocation, leafletData) {
+  .controller('FeatureCreateCtrl', ['$rootScope', '$scope', '$routeParams', '$window', '$timeout', '$location', '$http', 'application', 'template', 'Feature', 'fields', 'user', 'geolocation', 'leafletData', function ($rootScope, $scope, $routeParams, $window, $timeout, $location, $http, application, template, Feature, fields, user, geolocation, leafletData) {
 
   //
   // VARIABLES
@@ -2301,14 +2344,18 @@ angular.module('commonsCloudAdminApp')
     //
     // Placeholders for our on-screen content
     //
-    $scope.application = {};
-    $scope.template = {};
-    $scope.features = [];
-    $scope.fields = [];
+    $scope.application = application;
+    $scope.template = template;
+    $scope.fields = fields;
     $scope.feature = new Feature();
     $scope.files = [];
     $scope.feature.status = 'public';
     $scope.default_geometry = {};
+
+    $scope.page = {
+      title: 'Add feature',
+      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features/'
+    }
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -2320,34 +2367,7 @@ angular.module('commonsCloudAdminApp')
       $rootScope.alerts = [];
     }, 5000);
 
-    $rootScope.user = User.getUser();
-
     $scope.ShowMap = true;
-
-
-    //
-    // Define the Breadcrumbs that appear at the top of the page in the nav bar
-    //
-    $scope.breadcrumbs = [
-      {
-        'label': 'Applications',
-        'title': 'View my applications',
-        'url': '/applications',
-        'class': ''
-      }
-    ];
-
-    //
-    // Default query parameters
-    //
-    $scope.query_params = {
-      'order_by': [
-        {
-          'field': 'id',
-          'direction': 'desc'
-        }
-      ]
-    };
 
     //
     // Default Map parameters and necessary variables
@@ -2454,103 +2474,6 @@ angular.module('commonsCloudAdminApp')
   //
   // CONTENT
   //
-    $scope.GetFields = function() {
-      Field.query({
-          templateId: $scope.template.id,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          
-          $scope.fields = $scope.PrepareFields(response);
-
-          // $scope.getEnumeratedValues($scope.fields);
-
-          $scope.getEditableMap();
-        });
-    };
-
-    $scope.PrepareFields = function(fields) {
-
-      var processed_fields = [];
-
-      angular.forEach(fields, function(field, index) {
-
-        if (field.data_type === 'list') {
-          field.options = field.options.split(',');
-        }
-
-        processed_fields.push(field);
-      });
-
-      return processed_fields;
-    };
-
-    $scope.GetTemplate = function(template_id) {
-      Template.get({
-          templateId: $routeParams.templateId,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          $scope.template = response.response;
-
-          $scope.GetFields();
-
-          $scope.breadcrumbs.push({
-            'label': $scope.template.name,
-            'title': 'View ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Features',
-            'title': 'Viewing all features in ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features',
-            'class': 'active'
-          });
-
-        });
-    };
-
-    $scope.GetApplication = function() {
-      //
-      // Get the single application that the user wants to view
-      //
-      Application.get({
-          id: $routeParams.applicationId,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-
-          //
-          // Assign the response to the Application object and end loading
-          //
-          $scope.application = response.response;
-          $scope.loading = false;
-
-          //
-          // Update the breadcrumbs based on the response from the application
-          //
-          $scope.breadcrumbs.push({
-            'label': $scope.application.name,
-            'title': 'View ' + $scope.application.name,
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Feature Collections',
-            'title': 'View all of ' + $scope.application.name + '\'s feature collections',
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          $scope.GetTemplate();
-        }, function(error) {
-          $rootScope.alerts.push({
-            'type': 'error',
-            'title': 'Uh-oh!',
-            'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
-          });
-        });
-    };
 
     $scope.getCurrentLocation = function () {
       geolocation.getLocation().then(function(data){
@@ -2634,28 +2557,6 @@ angular.module('commonsCloudAdminApp')
       L.geoJson(geojson).eachLayer(add);
     };
 
-    //
-    // Build enumerated values for drop downs
-    //
-    // $scope.getEnumeratedValues = function (field_list) {
-    //
-    //   angular.forEach(field_list, function (field_, index) {
-    //     if (field_.data_type === 'relationship') {
-    //       Feature.query({
-    //           storage: field_.relationship
-    //         }).$promise.then(function (response) {
-    //           $scope.fields[index].values = response.response.features;
-    //         }, function(error) {
-    //           $rootScope.alerts.push({
-    //             'type': 'error',
-    //             'title': 'Uh-oh!',
-    //             'details': 'Something stranged happened, please reload the page.'
-    //           });
-    //         });
-    //     }
-    //   });
-    //
-    // };
 
     //
     // Convert a FeatureCollection to a GeometryCollection so that it can be
@@ -2708,31 +2609,6 @@ angular.module('commonsCloudAdminApp')
         var geometry_object = $scope.convertFeatureCollectionToGeometryCollection($scope.feature.geometry);
         $scope.feature.geometry = JSON.stringify(geometry_object);
       }
-
-      // angular.forEach($scope.fields, function(field, index) {
-      //   if (field.data_type === 'relationship') {
-      //     if (angular.isArray($scope.feature[field.relationship]) && $scope.feature[field.relationship].length >= 1) {
-      //
-      //       var relationship_array_ = [];
-      //
-      //       angular.forEach($scope.feature[field.relationship], function (value, index) {
-      //         relationship_array_.push({
-      //           'id': value
-      //         });
-      //       });
-      //
-      //       $scope.feature[field.relationship] = relationship_array_;
-      //     } else if (angular.isNumber($scope.feature[field.relationship])) {
-      //
-      //       var value = $scope.feature[field.relationship];
-      //
-      //       $scope.feature[field.relationship] = [{
-      //         'id': value
-      //       }];
-      //
-      //     }
-      //   }
-      // });
 
       $scope.feature.$save({
         storage: $scope.template.storage
@@ -2825,30 +2701,8 @@ angular.module('commonsCloudAdminApp')
         }
       }).success(function(data) {
 
-        console.log('data', data);
         $scope.geocode_features = data.features;
 
-        // if (data === 'JSON_CALLBACK({});') {
-        //   console.log('No geocode found');
-        // }
-
-        // var coordinates = data.results[0].centroid.coordinates;
-        // var lat = data.results[0][0].lat;
-        // var lon = data.results[0][0].lon;
-        // var centroid = {
-        //   'type': 'POINT',
-        //   'coordinates': [
-        //     lon,
-        //     lat
-        // ]};
-        // var coordinates = centroid.coordinates;
-        // console.log('coordinates', coordinates);
-        // if (coordinates) {
-        //   PersistData.AddCoordinates(coordinates);
-        //   createMap(PersistData.property.coordinates);
-        // } else {
-        //   console.log('cant find the property', data);
-        // }
       }).error(function(data, status, headers, config) {
         console.log('ERROR: ', data);
       });
@@ -2874,11 +2728,8 @@ angular.module('commonsCloudAdminApp')
       });
     };
 
-    //
-    // Now that we've got the everything prepared, let's go ahead and start
-    // the controller by instantiating the GetApplication method
-    //
-    $scope.GetApplication();
+    $scope.getEditableMap();
+
   }]);
 
 'use strict';

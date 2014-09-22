@@ -1,6 +1,17 @@
             <div class="col-sm-10">
-              <h1 data-ng-if="page.title"><a data-ng-if="page.title !== 'My Applications'" class="application-back" href="{{ page.back }}"><span class="icon retinaicon-retina-icons-v-1-4"></span></a> {{ page.title }} <a data-ng-if="page.title === 'My Applications'" href="/applications/new"><span class="hover-only static"><span class="icon retinaicon-essentials-047"></span> Add an application</span></a></h1>
-              <h1 data-ng-if="application && !page.title"><a class="application-back" href="/applications/"><span class="icon retinaicon-retina-icons-v-1-4"></span></a> <a href="/applications/{{ application.id }}/edit">{{ application.name }} <span class="hover-only">Click to edit</span></a></h1>
+              <h1 data-ng-if="!page.edit">
+                <a data-ng-if="page.title !== 'My Applications'" class="application-back" href="{{ page.back }}">
+                  <span class="icon retinaicon-retina-icons-v-1-4"></span>
+                </a>
+                <span data-ng-if="page.title">{{ page.title }}</span>
+                <span data-ng-if="!page.title">My Applications</span>
+                <a data-ng-if="page.link" href="{{ page.link.url }}">
+                  <span class="hover-only {{ page.link.static }}">
+                    <span data-ng-if="page.link.type === 'new'" class="icon retinaicon-essentials-047"></span>
+                    {{ page.link.text }}
+                  </span>
+                </a>
+              </h1>
             </div>
             <div class="col-sm-2 text-right">
               <ul class="nav account">

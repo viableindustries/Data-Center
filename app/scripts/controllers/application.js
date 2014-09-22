@@ -14,7 +14,16 @@ angular.module('commonsCloudAdminApp')
     $scope.templates = templates;
     $scope.features = {};
 
-    $scope.loading = true;
+    $scope.page = {
+      title: $scope.application.name,
+      link: {
+        type: 'edit',
+        url: '/applications/' + $scope.application.id + '/edit/',
+        text: 'Edit this application',
+        static: "static"
+      },
+      back: '/applications/'
+    };
 
     //
     // Template sorting options

@@ -163,6 +163,10 @@ body {
       display: inline-block;
     }
 
+    a:hover .hover-only.static {
+      background-color: rgba($color-brand-white-base, 0.1);    
+    }
+
   }
 
   header.application h1 {

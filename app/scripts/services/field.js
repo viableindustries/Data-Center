@@ -33,6 +33,35 @@ angular.module('commonsCloudAdminApp')
 
       });
 
+      Field.PrepareFields = function() {
+
+        var processed_fields = [];
+
+        angular.forEach(fields, function(field, index) {
+
+          if (field.data_type === 'list') {
+            field.options = field.options.split(',');
+          }
+
+          processed_fields.push(field);
+        });
+
+        return processed_fields;
+      }
+
+      Field.GetPreparedFields = function(templateId) {
+
+        var promise = Field.query({
+            templateId: templateId,
+            updated: new Date().getTime()
+          }).$promise.then(function(response) {
+            return $scope.PrepareFields(response);
+          });
+
+        return promise
+      };
+
+
       Field.GetFields = function(templateId) {
 
         var promise = Field.query({

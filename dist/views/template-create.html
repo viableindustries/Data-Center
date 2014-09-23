@@ -1,20 +1,7 @@
-<div class="row">
-
-  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
-
-    <div class="inner wide">
-      <div class="row">
-        <div class="col-xs-12">  
-          <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
-
-          <div class="template single">
-
-            <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
-
             <div class="row">          
-              <article class="col-sm-12">
+              <article class="col-sm-6 col-sm-offset-3">
                 <div class="row">
-                  <form method="POST" class="form-narrow">
+                  <form method="POST">
                     <fieldset>
                       <legend>New Template</legend>
                       <div class="form-group">
@@ -79,12 +66,3 @@
                 </div>  
               </article>
             </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
-
-<div data-ng-include="'/views/includes/footer.html'"></div>

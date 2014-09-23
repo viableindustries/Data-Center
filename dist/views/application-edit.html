@@ -1,19 +1,6 @@
-<div class="row">
-
-  <section class="col-xs-12 col-sm-12 page-content">
-
-    <div class="inner wide">
-      <div class="row">
-        <div class="col-xs-12">
-          <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
-
-          <article class="application single template-nested">
-            <!-- Alerts -->
-            <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
-
             <div class="row">
-              <div class="col-sm-12">
-                <form method="PUT" class="form-narrow" name="form" id="form">
+              <div class="col-sm-6 col-sm-offset-3">
+                <form method="PUT" name="form" id="form">
                   <div class="form-group">
                     <label class="control-label" for="name">Application Name</label>
                     <input type="text" id="name" name="name" class="form-control input-lg" data-ng-model="application.name" value="{{ application.name }}" required="required" />
@@ -61,12 +48,4 @@
                 </form>
               </div>
             </div>
-          </article>
-
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
-
-<div data-ng-include="'/views/includes/footer.html'"></div>
+          

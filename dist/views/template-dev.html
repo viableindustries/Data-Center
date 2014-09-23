@@ -1,28 +1,4 @@
-<div class="row">
-
-  <section class="col-xs-12 col-sm-12 page-content">
-
-    <div class="inner wide">
-      <div class="row">
-        <div class="col-xs-12">
-          <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
-
           <article class="application single">
-            <div class="row">
-              <div class="col-sm-12">
-                <ul class="nav nav-pills pull-right">
-                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features">All Features</a></li>
-                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/statistics">Statistics</a></li>
-                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/attributes">Attributes</a></li>
-                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/settings">Settings</a></li>
-                  <li class="active"><a href="/applications/{{ application.id }}/collections/{{ template.id }}/developers">Developers</a></li>
-                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/import">Import</a></li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- Alerts -->
-            <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
 
             <div class="row">
               <div class="col-sm-12">
@@ -89,10 +65,4 @@
               </div>
             </div>
           </article>
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
-
-<div data-ng-include="'/views/includes/footer.html'"></div>
+          

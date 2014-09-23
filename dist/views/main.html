@@ -1,0 +1,29 @@
+<div data-ng-include="'/views/includes/header.html'"></div>
+
+<div class="row">
+
+  <section class="col-xs-12 col-sm-12 page-content">
+
+    <div class="inner wide">
+
+      <div class="row">
+        <div class="col-xs-12">
+          <header class="application-header row" data-ng-include="'/views/includes/breadcrumbs.html'"></header>
+          
+          <!-- Alerts -->
+          <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
+
+          <!-- Page Content -->
+          <main data-ng-include="page.template"></main>
+
+        </div>
+      </div>
+
+    </div>
+    <!-- /.inner.wide -->
+
+  </section>
+
+</div>
+
+<div data-ng-include="'/views/includes/footer.html'"></div>

@@ -228,32 +228,82 @@ angular
           }
         }
       })
-      .when('/applications/:applicationId/collections/:templateId/fields', {
+      .when('/applications/:applicationId/collections/:templateId/attributes', {
         templateUrl: '/views/fields.html',
-        controller: 'FieldsCtrl'
+        controller: 'FieldsCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          fields: function(Field, $route) {
+            return Field.GetFields($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
-      .when('/applications/:applicationId/collections/:templateId/fields/new', {
+      .when('/applications/:applicationId/collections/:templateId/attributes/new', {
         templateUrl: '/views/field-create.html',
         controller: 'FieldCreateCtrl'
       })
-      .when('/applications/:applicationId/collections/:templateId/fields/:fieldId/edit', {
+      .when('/applications/:applicationId/collections/:templateId/attributes/:fieldId/edit', {
         templateUrl: '/views/field-edit.html',
         controller: 'FieldEditCtrl'
       })
       .when('/applications/:applicationId/collections/:templateId/settings', {
         templateUrl: '/views/template-edit.html',
-        controller: 'TemplateEditCtrl'
+        controller: 'TemplateEditCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId/developers', {
         templateUrl: '/views/template-dev.html',
-        controller: 'TemplateDevCtrl'
+        controller: 'TemplateDevCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId/import', {
         templateUrl: '/views/template-import.html',
-        controller: 'TemplateImportCtrl'
-      // })
-      // .otherwise({
-      //   templateUrl: '/views/errors/404.html'
+        controller: 'TemplateImportCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          activities: function(Template, $route) {
+            return Template.GetActivities($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
+      })
+      .otherwise({
+        templateUrl: '/views/errors/404.html'
       });
 
     // If you remove this, you break the whole application

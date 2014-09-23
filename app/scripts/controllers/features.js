@@ -25,7 +25,7 @@ angular.module('commonsCloudAdminApp')
         text: 'Add a ' + $scope.template.name,
         static: 'static'
       }]
-    }
+    };
 
     //
     // Ensure the Templates are sorted oldest to newest

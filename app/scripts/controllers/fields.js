@@ -23,7 +23,7 @@ angular.module('commonsCloudAdminApp')
         text: 'Add an attribute',
         static: 'static'
       }]
-    }
+    };
 
 
     //

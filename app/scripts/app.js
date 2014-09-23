@@ -248,11 +248,42 @@ angular
       })
       .when('/applications/:applicationId/collections/:templateId/attributes/new', {
         templateUrl: '/views/field-create.html',
-        controller: 'FieldCreateCtrl'
+        controller: 'FieldCreateCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          templates: function(Template, $route) {
+            return Template.GetTemplateList($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId/attributes/:fieldId/edit', {
         templateUrl: '/views/field-edit.html',
-        controller: 'FieldEditCtrl'
+        controller: 'FieldEditCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          templates: function(Template, $route) {
+            return Template.GetTemplateList($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          field: function(Field, $route) {
+            return Field.GetField($route.current.params.templateId, $route.current.params.fieldId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId/settings', {
         templateUrl: '/views/template-edit.html',

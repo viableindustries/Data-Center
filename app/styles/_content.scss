@@ -6,7 +6,7 @@ body {
   color: $color-brand-white-base;
   font-family: $font-sans;
   font-size: 100%;
-  margin: 0 auto 60px;
+  margin: 2px auto 60px;
 }
 
 .notification {
@@ -165,6 +165,17 @@ body {
 
     a:hover .hover-only.static {
       background-color: rgba($color-brand-white-base, 0.1);    
+    }
+
+    .new {
+      .hover-only {
+        background-color: rgb(112, 179, 0);
+      }
+      &:hover {
+        .hover-only {
+          background-color: rgba(112, 179, 0, 0.1);
+        }
+      }
     }
 
   }

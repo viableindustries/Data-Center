@@ -17,8 +17,14 @@ angular.module('commonsCloudAdminApp')
     $scope.fields = fields;
 
     $scope.page = {
-      title: $scope.template.name + ' features',
-      back: '/applications/' + $scope.application.id
+      title: $scope.template.name,
+      back: '/applications/' + $scope.application.id,
+      links: [{
+        type: 'new',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features/new',
+        text: 'Add a ' + $scope.template.name,
+        static: 'static'
+      }]
     }
 
     //

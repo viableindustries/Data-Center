@@ -5,10 +5,10 @@
                 </a>
                 <span data-ng-if="page.title">{{ page.title }}</span>
                 <span data-ng-if="!page.title">My Applications</span>
-                <a data-ng-if="page.link" href="{{ page.link.url }}">
-                  <span class="hover-only {{ page.link.static }}">
-                    <span data-ng-if="page.link.type === 'new'" class="icon retinaicon-essentials-047"></span>
-                    {{ page.link.text }}
+                <a data-ng-repeat="link in page.links" href="{{ link.url }}" class="{{ link.type }}">
+                  <span class="hover-only {{ link.static }}">
+                    <span data-ng-if="link.type === 'new'" class="icon retinaicon-essentials-047"></span>
+                    {{ link.text }}
                   </span>
                 </a>
               </h1>

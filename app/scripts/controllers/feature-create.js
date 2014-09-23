@@ -19,7 +19,7 @@ angular.module('commonsCloudAdminApp')
     $scope.default_geometry = {};
 
     $scope.page = {
-      title: 'Add feature',
+      title: 'Add a ' + $scope.template.name,
       back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features/'
     }
 

@@ -170,15 +170,63 @@ angular
       })
       .when('/applications/:applicationId/collections/:templateId/statistics', {
         templateUrl: '/views/statistics.html',
-        controller: 'StatisticsCtrl'
+        controller: 'StatisticsCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          },
+          statistics: function(Statistic, $route) {
+            return Statistic.GetStatistics($route.current.params.templateId);
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId/statistics/new', {
         templateUrl: '/views/statistic-create.html',
-        controller: 'StatisticCreateCtrl'
+        controller: 'StatisticCreateCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          fields: function(Field, $route) {
+            return Field.GetFields($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId/statistics/:statisticId', {
+        redirectTo: '/applications/:applicationId/collections/:templateId/statistics/:statisticId/edit'
+      })
+      .when('/applications/:applicationId/collections/:templateId/statistics/:statisticId/edit', {
         templateUrl: '/views/statistic-edit.html',
-        controller: 'StatisticEditCtrl'
+        controller: 'StatisticEditCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          fields: function(Field, $route) {
+            return Field.GetFields($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          },
+          statistic: function(Statistic, $route) {
+            return Statistic.GetStatistic($route.current.params.templateId, $route.current.params.statisticId);
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId/fields', {
         templateUrl: '/views/fields.html',

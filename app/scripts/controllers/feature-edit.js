@@ -16,6 +16,11 @@ angular.module('commonsCloudAdminApp')
     $scope.feature = feature;
     $scope.files = [];
 
+    $scope.page = {
+      title: 'Editing feature',
+      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features/'
+    }
+
     //
     // Start a new Alerts array that is empty, this clears out any previous
     // messages that may have been presented on another page

@@ -8,16 +8,6 @@
         <div class="col-xs-12">  
           <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
 
-          <nav class="application-navigation navbar navbar-default">
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="/applications/{{ application.id }}/collections">Feature Collections</a></li>
-              <li><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li>
-            </ul>
-            <a href="/applications/{{ application.id }}/collections/new" class="button pull-right">Add a Feature Collection</a>
-          </nav>
-
-          <div class="loading-page"></div>
-
           <div class="template single">
             <!-- Alerts -->
             <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>

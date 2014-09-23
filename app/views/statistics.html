@@ -1,37 +1,15 @@
 <div class="row">
 
-  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
+  <section class="col-xs-12 col-sm-12 page-content">
 
-    <div data-ng-include="'/views/includes/header.html'"></div>
-
-    <div data-ng-show="!loading" class="inner wide">
+    <div class="inner wide">
       <div class="row">
         <div class="col-xs-12">  
-          <header class="application">
-            <div class="row">
-              <div class="col-sm-11">
-                <h1 class="short">{{ application.name }}</h1>
-              </div>
-              <div class="col-xs-1 text-right">
-                <a href="/applications/{{ application.id }}/edit"><span class="glyphicon glyphicon-pencil"></span></a>
-              </div>
-            </div>
-          </header>
-
-          <nav class="application-navigation navbar navbar-default">
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="/applications/{{ application.id }}/collections">Feature Collections</a></li>
-              <li><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li>
-            </ul>
-            <a href="/applications/{{ application.id }}/collections/{{ template.id }}/statistics/new" class="button pull-right">Add a new statistic</a>
-          </nav>
+          <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
 
           <article class="application single">
             <div class="row">
-              <div class="col-sm-5">
-                <h1>{{ template.name }}</h1>
-              </div>
-              <div class="col-sm-7">
+              <div class="col-sm-12">
                 <ul class="nav nav-pills pull-right">
                   <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features">All Features</a></li>
                   <li class="active"><a href="/applications/{{ application.id }}/collections/{{ template.id }}/statistics">Statistics</a></li>

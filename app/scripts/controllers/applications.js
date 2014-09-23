@@ -10,12 +10,12 @@ angular.module('commonsCloudAdminApp')
 
     $scope.page = {
       title: 'My Applications',
-      link: {
+      links: [{
         type: 'new',
         url: '/applications/new',
         text: 'Add an application',
-        static: "static"
-      }
+        static: 'static'
+      }]
     };
 
 

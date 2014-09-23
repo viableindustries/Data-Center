@@ -38,6 +38,29 @@ angular.module('commonsCloudAdminApp')
         }
       });
 
+      Statistic.GetStatistics = function(templateId) {
+        
+        var promise = Statistic.query({
+            templateId: templateId
+          }).$promise.then(function(response) {
+            return response;
+          });
+
+        return promise;
+      };
+
+      Statistic.GetStatistic = function(templateId, statisticId) {
+        
+        var promise = Statistic.get({
+            templateId: templateId,
+            statisticId: statisticId
+          }).$promise.then(function(response) {
+            return response;
+          });
+
+        return promise;
+      };
+
       return Statistic;
     }];
 

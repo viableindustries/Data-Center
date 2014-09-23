@@ -1,21 +1,7 @@
-<div class="row">
-
-  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
-
-    <div class="inner wide">
-      <div class="row">
-        <div class="col-xs-12">
-          <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
-
-          <article class="application single template-nested">
-
-            <!-- Alerts -->
-            <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
-
+          <article class="application single">
             <div class="row">
               <div class="col-sm-6">
                 <form method="POST">
-                  
                   <fieldset>
                     <div class="form-group" data-ng-repeat="field in fields | orderBy:'id'">
                       <div data-ng-if="field.data_type === 'boolean'" class="checkbox">
@@ -118,10 +104,3 @@
               </div>
             </div>
           </article>
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
-
-<div data-ng-include="'/views/includes/footer.html'"></div>

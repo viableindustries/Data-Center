@@ -15,6 +15,7 @@ angular.module('commonsCloudAdminApp')
     $scope.features = {};
 
     $scope.page = {
+      template: '/views/application.html',
       title: $scope.application.name,
       links: [
         {

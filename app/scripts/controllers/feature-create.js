@@ -19,6 +19,7 @@ angular.module('commonsCloudAdminApp')
     $scope.default_geometry = {};
 
     $scope.page = {
+      template: '/views/feature-create.html',
       title: 'Add a ' + $scope.template.name,
       back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features/'
     }

@@ -106,7 +106,6 @@ angular.module('commonsCloudAdminApp')
       };
 
       Feature.GetFeature = function(options) {
-        console.log('options', options)
         var promise = Feature.get({
             storage: options.storage,
             featureId: options.featureId,

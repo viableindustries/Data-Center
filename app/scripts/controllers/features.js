@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FeaturesCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'application', 'template', 'features', 'fields', 'user', function ($rootScope, $scope, $routeParams, $timeout, application, template, features, fields, user) {
+  .controller('FeaturesCtrl', ['$q', '$route', '$rootScope', '$scope', '$routeParams', '$timeout', 'application', 'template', 'features', 'Feature', 'fields', 'user', function ($q, $route, $rootScope, $scope, $routeParams, $timeout, application, template, features, Feature, fields, user) {
 
   //
   // VARIABLES
@@ -13,10 +13,12 @@ angular.module('commonsCloudAdminApp')
     $scope.application = application;
     $scope.template = template;
     $scope.features = features.response.features;
-    $scope.featureproperties = features.response.properties;
+    $scope.featureproperties = features.properties;
     $scope.fields = fields;
+    $scope.batch = [];
 
     $scope.page = {
+      template: '/views/features.html',
       title: $scope.template.name,
       back: '/applications/' + $scope.application.id,
       links: [{
@@ -26,6 +28,34 @@ angular.module('commonsCloudAdminApp')
         static: 'static'
       }]
     };
+
+    $scope.navigation = [
+      {
+        title: 'All Features',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features',
+        class: 'active'
+      }, {
+        title: 'Statistics',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics',
+        class: ''
+      }, {
+        title: 'Attributes',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/attributes',
+        class: ''
+      }, {
+        title: 'Settings',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/settings',
+        class: ''
+      }, {
+        title: 'Developers',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/developers',
+        class: ''
+      }, {
+        title: 'Import',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/import',
+        class: ''
+      },
+    ];
 
     //
     // Ensure the Templates are sorted oldest to newest
@@ -41,7 +71,7 @@ angular.module('commonsCloudAdminApp')
 
     $timeout(function () {
       $rootScope.alerts = [];
-    }, 5000);
+    }, 25000);
 
 
   //
@@ -55,6 +85,36 @@ angular.module('commonsCloudAdminApp')
     $scope.ChangeOrder = function (value) {
       $scope.orderByField = value;
       $scope.reverseSort =! $scope.reverseSort;
+    };
+
+
+  //
+  // BATCH
+  //
+    $scope.batch.delete = function() {
+
+      var deferred = $q.defer();
+      var promise = deferred.promise;
+
+      promise.then(function () {
+        $scope.features.forEach(function (feature, index) {
+          if (feature.batch) {
+            Feature.delete({
+              storage: $scope.template.storage,
+              featureId: feature.id
+            });
+          }
+        });
+      }).then(function () {
+        $rootScope.alerts.push({
+          'type': 'success',
+          'title': 'Goodbye!',
+          'details': 'The features you selected have been removed successfully'
+        });
+        $route.reload();
+      });
+      deferred.resolve();
+
     };
 
   }]);

@@ -17,6 +17,7 @@ angular.module('commonsCloudAdminApp')
     $scope.files = [];
 
     $scope.page = {
+      template: '/views/feature-edit.html',
       title: 'Editing feature',
       back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features/'
     }

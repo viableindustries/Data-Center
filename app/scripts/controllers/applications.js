@@ -9,6 +9,7 @@ angular.module('commonsCloudAdminApp')
     $scope.applications = applications;
 
     $scope.page = {
+      template: '/views/applications.html',
       title: 'My Applications',
       links: [{
         type: 'new',

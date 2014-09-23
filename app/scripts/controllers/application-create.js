@@ -10,6 +10,7 @@ angular.module('commonsCloudAdminApp')
     $scope.application = new Application();
 
     $scope.page = {
+      template: '/views/application-create.html',
       title: 'New Application',
       back: '/applications/'
     };

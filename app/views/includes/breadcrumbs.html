@@ -1,0 +1,18 @@
+            <div class="col-sm-12">
+              <h1 data-ng-if="!page.edit">
+                <a data-ng-if="page.title !== 'My Applications'" class="application-back" href="{{ page.back }}">
+                  <span class="icon retinaicon-retina-icons-v-1-4"></span>
+                </a>
+                <span data-ng-if="page.title">{{ page.title }}</span>
+                <span data-ng-if="!page.title">My Applications</span>
+                <a data-ng-repeat="link in page.links" href="{{ link.url }}" class="{{ link.type }}">
+                  <span class="hover-only {{ link.static }}">
+                    <span data-ng-if="link.type === 'new'" class="icon retinaicon-essentials-047"></span>
+                    {{ link.text }}
+                  </span>
+                </a>
+              </h1>
+              <ul data-ng-if="navigation" class="nav nav-pills pull-right">
+                <li data-ng-repeat="link in navigation" class="{{ link.class }}"><a href="{{ link.url }}">{{ link.title }}</a></li>
+              </ul>
+            </div>

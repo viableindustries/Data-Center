@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('IndexCtrl', ['$rootScope', '$scope', 'ipCookie', '$location', '$window', 'User', function($rootScope, $scope, ipCookie, $location, $window, User) {
+  .controller('IndexCtrl', ['$rootScope', '$scope', 'ipCookie', '$location', '$window', 'user', function($rootScope, $scope, ipCookie, $location, $window, user) {
 
     var session_cookie = ipCookie('COMMONS_SESSION');
 
@@ -22,16 +22,11 @@ angular.module('commonsCloudAdminApp')
     };
 
     if (session_cookie && session_cookie !== undefined && session_cookie !== 'undefined') {
-      console.log('session_cookie from index > if!', session_cookie);
-      if (!$rootScope.user) {
-        $rootScope.user = User.getUser();
-      }
       $location.hash('');
       $location.path('/applications');
     } else {
       ipCookie.remove('COMMONS_SESSION');
       ipCookie.remove('COMMONS_SESSION', { path: '/' });
-      console.log('session_cookie from index > else', session_cookie);
       $scope.setupLoginPage();
     }
 

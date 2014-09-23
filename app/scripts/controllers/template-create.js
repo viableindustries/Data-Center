@@ -11,6 +11,7 @@ angular.module('commonsCloudAdminApp')
     $scope.newTemplate = new Template();
 
     $scope.page = {
+      template: '/views/template-create.html',
       title: 'Add a Feature Collection',
       back: '/applications/' + $scope.application.id
     }

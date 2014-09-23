@@ -27,6 +27,7 @@ angular.module('commonsCloudAdminApp')
     }, 5000);
 
     $scope.page = {
+      template: '/views/field-edit.html',
       title: 'Edit attribute',
       back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/attributes'
     };

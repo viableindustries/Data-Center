@@ -27,6 +27,7 @@ angular.module('commonsCloudAdminApp')
     }, 5000);
 
     $scope.page = {
+      template: '/views/field-create.html',
       title: 'Add a new attribute to ' + $scope.template.name,
       back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/attributes'
     };

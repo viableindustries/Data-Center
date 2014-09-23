@@ -13,6 +13,7 @@ angular.module('commonsCloudAdminApp')
     $scope.application = application;
 
     $scope.page = {
+      template: '/views/collaborators.html',
       title: 'Collaborators',
       back: '/applications/' + $scope.application.id
     }

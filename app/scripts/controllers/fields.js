@@ -15,6 +15,7 @@ angular.module('commonsCloudAdminApp')
     $scope.fields = fields;
 
     $scope.page = {
+      template: '/views/fields.html',
       title: $scope.template.name + ' Attributes',
       back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
       links: [{
@@ -25,6 +26,33 @@ angular.module('commonsCloudAdminApp')
       }]
     };
 
+    $scope.navigation = [
+      {
+        title: 'All Features',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features',
+        class: ''
+      }, {
+        title: 'Statistics',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics',
+        class: ''
+      }, {
+        title: 'Attributes',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/attributes',
+        class: 'active'
+      }, {
+        title: 'Settings',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/settings',
+        class: ''
+      }, {
+        title: 'Developers',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/developers',
+        class: ''
+      }, {
+        title: 'Import',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/import',
+        class: ''
+      },
+    ];
 
     //
     // Start a new Alerts array that is empty, this clears out any previous

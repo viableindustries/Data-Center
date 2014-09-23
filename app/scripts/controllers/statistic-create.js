@@ -16,8 +16,9 @@ angular.module('commonsCloudAdminApp')
     $scope.statistic = new Statistic();
 
     $scope.page = {
-      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics/',
-      title: 'Add a ' + $scope.template.name + ' Statistics'
+      template: '/views/statistic-create.html',
+      title: 'Add a ' + $scope.template.name + ' Statistics',
+      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics/'
     }
 
     //

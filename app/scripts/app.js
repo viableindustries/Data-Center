@@ -16,11 +16,18 @@ angular
   ])
   .config(['$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
 
+    var templateUrl = '/views/main.html';
+
     // Setup routes for our application
     $routeProvider
       .when('/', {
         templateUrl: '/views/index.html',
-        controller: 'IndexCtrl'
+        controller: 'IndexCtrl',
+        resolve: {
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/authorize', {
         templateUrl: '/views/authorize.html',
@@ -31,7 +38,7 @@ angular
         controller: 'LogoutCtrl'
       })
       .when('/applications', {
-        templateUrl: '/views/applications.html',
+        templateUrl: templateUrl,
         controller: 'ApplicationsCtrl',
         resolve: {
           applications: function(Application) {
@@ -43,7 +50,7 @@ angular
         }
       })
       .when('/applications/new', {
-        templateUrl: '/views/application-create.html',
+        templateUrl: templateUrl,
         controller: 'ApplicationCreateCtrl',
         resolve: {
           user: function(User) {
@@ -52,7 +59,7 @@ angular
         }
       })
       .when('/applications/:applicationId', {
-        templateUrl: '/views/application.html',
+        templateUrl: templateUrl,
         controller: 'ApplicationCtrl',
         resolve: {
           application: function(Application, $route) {
@@ -67,7 +74,7 @@ angular
         }
       })
       .when('/applications/:applicationId/edit', {
-        templateUrl: '/views/application-edit.html',
+        templateUrl: templateUrl,
         controller: 'ApplicationEditCtrl',
         resolve: {
           application: function(Application, $route) {
@@ -82,7 +89,7 @@ angular
         redirectTo: '/applications/:applicationId'
       })
       .when('/applications/:applicationId/collaborators', {
-        templateUrl: '/views/collaborators.html',
+        templateUrl: templateUrl,
         controller: 'CollaboratorsCtrl',
         resolve: {
           application: function(Application, $route) {
@@ -94,7 +101,7 @@ angular
         }
       })
       .when('/applications/:applicationId/collections/new', {
-        templateUrl: '/views/template-create.html',
+        templateUrl: templateUrl,
         controller: 'TemplateCreateCtrl',
         resolve: {
           application: function(Application, $route) {
@@ -106,7 +113,7 @@ angular
         }
       })
       .when('/applications/:applicationId/collections/:templateId/features', {
-        templateUrl: '/views/features.html',
+        templateUrl: templateUrl,
         controller: 'FeaturesCtrl',
         resolve: {
           application: function(Application, $route) {
@@ -127,7 +134,7 @@ angular
         }
       })
       .when('/applications/:applicationId/collections/:templateId/features/new', {
-        templateUrl: '/views/feature-create.html',
+        templateUrl: templateUrl,
         controller: 'FeatureCreateCtrl',
         resolve: {
           application: function(Application, $route) {
@@ -145,7 +152,7 @@ angular
         }
       })
       .when('/applications/:applicationId/collections/:templateId/features/:featureId', {
-        templateUrl: '/views/feature-edit.html',
+        templateUrl: templateUrl,
         controller: 'FeatureEditCtrl',
         resolve: {
           application: function(Application, $route) {
@@ -169,7 +176,7 @@ angular
         redirectTo: '/applications/:applicationId/collections/:templateId/features'
       })
       .when('/applications/:applicationId/collections/:templateId/statistics', {
-        templateUrl: '/views/statistics.html',
+        templateUrl: templateUrl,
         controller: 'StatisticsCtrl',
         resolve: {
           application: function(Application, $route) {
@@ -187,7 +194,7 @@ angular
         }
       })
       .when('/applications/:applicationId/collections/:templateId/statistics/new', {
-        templateUrl: '/views/statistic-create.html',
+        templateUrl: templateUrl,
         controller: 'StatisticCreateCtrl',
         resolve: {
           application: function(Application, $route) {
@@ -208,7 +215,7 @@ angular
         redirectTo: '/applications/:applicationId/collections/:templateId/statistics/:statisticId/edit'
       })
       .when('/applications/:applicationId/collections/:templateId/statistics/:statisticId/edit', {
-        templateUrl: '/views/statistic-edit.html',
+        templateUrl: templateUrl,
         controller: 'StatisticEditCtrl',
         resolve: {
           application: function(Application, $route) {
@@ -229,7 +236,7 @@ angular
         }
       })
       .when('/applications/:applicationId/collections/:templateId/attributes', {
-        templateUrl: '/views/fields.html',
+        templateUrl: templateUrl,
         controller: 'FieldsCtrl',
         resolve: {
           application: function(Application, $route) {
@@ -247,7 +254,7 @@ angular
         }
       })
       .when('/applications/:applicationId/collections/:templateId/attributes/new', {
-        templateUrl: '/views/field-create.html',
+        templateUrl: templateUrl,
         controller: 'FieldCreateCtrl',
         resolve: {
           application: function(Application, $route) {
@@ -265,7 +272,7 @@ angular
         }
       })
       .when('/applications/:applicationId/collections/:templateId/attributes/:fieldId/edit', {
-        templateUrl: '/views/field-edit.html',
+        templateUrl: templateUrl,
         controller: 'FieldEditCtrl',
         resolve: {
           application: function(Application, $route) {
@@ -286,7 +293,7 @@ angular
         }
       })
       .when('/applications/:applicationId/collections/:templateId/settings', {
-        templateUrl: '/views/template-edit.html',
+        templateUrl: templateUrl,
         controller: 'TemplateEditCtrl',
         resolve: {
           application: function(Application, $route) {
@@ -301,7 +308,7 @@ angular
         }
       })
       .when('/applications/:applicationId/collections/:templateId/developers', {
-        templateUrl: '/views/template-dev.html',
+        templateUrl: templateUrl,
         controller: 'TemplateDevCtrl',
         resolve: {
           application: function(Application, $route) {
@@ -316,7 +323,7 @@ angular
         }
       })
       .when('/applications/:applicationId/collections/:templateId/import', {
-        templateUrl: '/views/template-import.html',
+        templateUrl: templateUrl,
         controller: 'TemplateImportCtrl',
         resolve: {
           application: function(Application, $route) {

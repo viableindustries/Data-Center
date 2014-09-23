@@ -3,7 +3,7 @@
 //
 body {
   background-color: $color-brand-black-lighter;
-  color: $color-brand-white-base;
+  color: $color-brand-black-base;
   font-family: $font-sans;
   font-size: 100%;
   margin: 2px auto 60px;
@@ -28,8 +28,8 @@ body {
   }
 }
 
-.site-header {
-  color: rgb(25, 152, 198);
+main {
+  padding: 64px 0 128px;  
 }
 
 .site-content {
@@ -40,6 +40,13 @@ body {
 .site-content .row {
   margin-left: 0;
   margin-right: 0;
+}
+
+.site-content .row.site-header,
+.site-header {
+  margin: 24px auto;
+  max-width: 1430px;
+  width: 90%;
 }
 
 .site-map {
@@ -70,7 +77,8 @@ body {
 }
 
 .page-content > .inner.wide {
-  max-width: 100%;
+  width: 90%;
+  max-width: 1430px;
 }
 
 .page-content > .inner > .row > div {
@@ -114,10 +122,13 @@ body {
     background-color: $color-brand-blue-base;
     border: 0;
     color: $color-brand-white-base;
-    padding: 16px;
+    padding: 0 16px;
 
     h1 {
+      float: left;
       font-size: 20px;
+      padding-bottom: 24px;
+      padding-top: 24px;
       margin-bottom: 0;
     }
 
@@ -218,17 +229,7 @@ body {
   }
 
   .application.single {
-    padding: 16px 16px 32px;
-  }
-
-  .application.single > .row:first-child {
-    border-bottom: 1px solid $color-brand-brown-lightest;
-    margin-bottom: 32px;
-    padding-bottom: 12px;
-
-    h1 {
-      margin-top: 8px;
-    }
+    padding: 0 16px 0;
   }
 
   .delete {
@@ -513,33 +514,6 @@ body {
 
 
 /**
- * Sidebar navigation
- */
-.nav.sidebar {
-}
-
-.sidebar .nav > li {
-}
-
-.sidebar .nav > li > a {
-  background-color: transparent;
-  border-radius: 5px;
-}
-
-.sidebar .nav > li > a:hover,
-.sidebar .nav > li > a:focus {
-  text-decoration: none;
-  background-color: darken(rgb(33,39,41), 10%);
-  color: lighten(rgb(30, 190, 195), 10%);
-}
-
-
-.sidebar .nav > li.active > a {
-  background-color: rgb(242,242,242);
-}
-
-
-/**
  * Field Builder
  */
 .unselectable {
@@ -660,5 +634,45 @@ body {
   .row:last-child {
     border-bottom: 0;
     margin-bottom: 0;
+  }
+}
+
+
+.toolbox {
+  margin: -32px 0 16px;
+  padding: 0 0 16px;
+}
+
+.pager, .batch {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    list-style-type: none;
+    &> a {
+      border-radius: 0;
+      -webkit-border-radius: 0;
+      -moz-border-radius: 0;
+      background-color: darken($color-brand-white-base, 5%);
+      color: darken($color-brand-black-base, 5%);
+      padding: 6px 10px;
+
+      &:hover {
+        background-color: darken($color-brand-white-base, 2%);
+      }
+
+      .icon {
+        position: relative;
+        top: 2px;
+      }
+    }  
+    &.previous a {
+      margin-right: -1px;
+    }
+  }
+  
+  li > span {
+    border: 0;
   }
 }

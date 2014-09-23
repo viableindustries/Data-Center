@@ -16,15 +16,44 @@ angular.module('commonsCloudAdminApp')
     $scope.statistics = statistics;
 
     $scope.page = {
-      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
+      template: '/views/statistics.html',
       title: $scope.template.name + ' Statistics',
+      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
       links: [{
         url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics/new/',
         text: 'Add a statistic',
         type: 'new',
         static: 'static'
       }]
-    }
+    };
+
+    $scope.navigation = [
+      {
+        title: 'All Features',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features',
+        class: ''
+      }, {
+        title: 'Statistics',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics',
+        class: 'active'
+      }, {
+        title: 'Attributes',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/attributes',
+        class: ''
+      }, {
+        title: 'Settings',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/settings',
+        class: ''
+      }, {
+        title: 'Developers',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/developers',
+        class: ''
+      }, {
+        title: 'Import',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/import',
+        class: ''
+      },
+    ];
 
     //
     // Start a new Alerts array that is empty, this clears out any previous

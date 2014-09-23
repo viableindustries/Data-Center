@@ -3,7 +3,6 @@
 angular.module('commonsCloudAdminApp')
   .controller('StatisticEditCtrl', ['$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'application', 'template', 'fields', 'statistic', 'Statistic', 'user', function ($rootScope, $scope, $routeParams, $location, $timeout, application, template, fields, statistic, Statistic, user) {
 
-
   //
   // VARIABLES
   //
@@ -15,6 +14,12 @@ angular.module('commonsCloudAdminApp')
     $scope.template = template;
     $scope.fields = fields;
     $scope.statistic = statistic;
+
+    $scope.page = {
+      template: '/views/statistic-edit.html',
+      title: 'Edit statistic',
+      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics/'
+    }
 
     //
     // Start a new Alerts array that is empty, this clears out any previous

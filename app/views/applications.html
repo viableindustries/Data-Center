@@ -1,33 +1,8 @@
-<div class="row">
-
-  <section class="col-xs-12 col-sm-12 page-content">
-
-    <div class="inner wide">
-
-      <div class="row">
-        <div class="col-xs-12">
-          <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
-          
-          <!-- Alerts -->
-          <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
-
           <!-- Page Content -->
           <article data-ng-repeat="application in applications | orderBy:'name'" class="application row">
-            <div class="col-sm-6 col-sm-offset-3 application-content">
+            <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 application-content">
               <h1><a href="/applications/{{ application.id }}">{{ application.name }}</a></h1>
               <p data-ng-show="application.description">{{ application.description }}</p>
               <p data-ng-show="application.url" class="application-url"><a href="{{ application.url }}" target="_blank"><span class="icon retinaicon-essentials-039"></span> <span class="text">{{ application.url }}</span></a></p>
             </div>
           </article>
-
-        </div>
-      </div>
-
-    </div>
-    <!-- /.inner.wide -->
-
-  </section>
-
-</div>
-
-<div data-ng-include="'/views/includes/footer.html'"></div>

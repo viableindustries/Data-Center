@@ -1,55 +1,34 @@
 <div class="row">
 
-  <section data-ng-show="!loading" class="col-xs-12 col-sm-12 page-content">
+  <section class="col-xs-12 col-sm-12 page-content">
 
-    <div data-ng-include="'/views/includes/header.html'"></div>
-
-    <div data-ng-show="!loading" class="inner wide">
+    <div class="inner wide">
       <div class="row">
-        <div class="col-xs-12">  
-          <header class="application">
+        <div class="col-xs-12">
+          <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
+
+          <article class="application single">
             <div class="row">
-              <div class="col-sm-11">
-                <h1 class="short">{{ application.name }}</h1>
-              </div>
-              <div class="col-xs-1 text-right">
-                <a href="/applications/{{ application.id }}/edit"><span class="glyphicon glyphicon-pencil"></span></a>
-              </div>
-            </div>
-          </header>
-
-          <nav class="application-navigation navbar navbar-default">
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="/applications/{{ application.id }}/collections">Feature Collections</a></li>
-              <li><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li>
-            </ul>
-          </nav>
-
-          <div class="loading-page"></div>
-
-          <article class="application single template-nested">
-            <div class="row">
-              <div class="col-sm-5">
-                <h1>{{ template.name }}</h1>
-              </div>
-              <div class="col-sm-7">
+              <div class="col-sm-12">
                 <ul class="nav nav-pills pull-right">
                   <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features">All Features</a></li>
                   <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/statistics">Statistics</a></li>
-                  <li class="active"><a href="/applications/{{ application.id }}/collections/{{ template.id }}/fields">Fields</a></li>
+                  <li class="active"><a href="/applications/{{ application.id }}/collections/{{ template.id }}/attributes">Attributes</a></li>
                   <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/settings">Settings</a></li>
-                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/developers">Developer</a></li>
+                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/developers">Developers</a></li>
                   <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/import">Import</a></li>
                 </ul>
               </div>
             </div>
+
+            <!-- Alerts -->
+            <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>
 
             <!-- form-preview -->
             <div class="row">
               <div class="col-xs-12 col-xs-offset-0 col-sm-6 col-sm-offset-3">
                 <form class="unselectable">
                   <fieldset>
-                    <legend><strong>{{ template.name }}</strong> Feature Form</legend>
                     <div class="form-group" data-ng-repeat="field in fields | orderBy:'id'" data-ng-click="ActionEditField(field)">
                       <div class="row">
                         <div class="col-xs-10">
@@ -77,12 +56,9 @@
                         </div>
                         <div class="col-xs-2">
                           <label data-ng-if="field.data_type !== 'boolean'" for="{{ field.name }}" class="control-label">&nbsp;</label>
-                          <a class="btn btn-link" href="/applications/{{ application.id }}/collections/{{ template.id }}/fields/{{ field.id }}/edit">edit</a>
+                          <a class="btn btn-link" href="/applications/{{ application.id }}/collections/{{ template.id }}/attributes/{{ field.id }}/edit">edit</a>
                         </div>
                     </div>
-                  </fieldset>
-                  <fieldset class="text-center">
-                    <a class="button" href="/applications/{{ application.id }}/collections/{{ template.id }}/fields/new">Add a new field</a>
                   </fieldset>
                 </form>
               </div>

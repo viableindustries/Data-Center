@@ -7,31 +7,7 @@
         <div class="col-xs-12">
           <header class="application-header row" data-ng-include="'/views/includes/header.html'"></header>
 
-          <nav class="application-navigation navbar navbar-default">
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="/applications/{{ application.id }}/collections">Feature Collections</a></li>
-              <li><a href="/applications/{{ application.id }}/collaborators">Collaborators</a></li>
-            </ul>
-          </nav>
-
-          <div class="loading-page"></div>
-
           <article class="application single template-nested">
-            <div class="row">
-              <div class="col-sm-5">
-                <h1>{{ template.name }}</h1>
-              </div>
-              <div class="col-sm-7">
-                <ul class="nav nav-pills pull-right">
-                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features">All Features</a></li>
-                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/statistics">Statistics</a></li>
-                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/fields">Fields</a></li>
-                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/settings">Settings</a></li>
-                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/developers">Developers</a></li>
-                  <li><a href="/applications/{{ application.id }}/collections/{{ template.id }}/import">Import</a></li>
-                </ul>
-              </div>
-            </div>
 
             <!-- Alerts -->
             <div data-ng-if="alerts" data-ng-include="'/views/includes/alerts.html'"></div>

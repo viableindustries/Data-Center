@@ -769,42 +769,171 @@ angular
       })
       .when('/applications/:applicationId/collections/:templateId/statistics', {
         templateUrl: '/views/statistics.html',
-        controller: 'StatisticsCtrl'
+        controller: 'StatisticsCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          },
+          statistics: function(Statistic, $route) {
+            return Statistic.GetStatistics($route.current.params.templateId);
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId/statistics/new', {
         templateUrl: '/views/statistic-create.html',
-        controller: 'StatisticCreateCtrl'
+        controller: 'StatisticCreateCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          fields: function(Field, $route) {
+            return Field.GetFields($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId/statistics/:statisticId', {
+        redirectTo: '/applications/:applicationId/collections/:templateId/statistics/:statisticId/edit'
+      })
+      .when('/applications/:applicationId/collections/:templateId/statistics/:statisticId/edit', {
         templateUrl: '/views/statistic-edit.html',
-        controller: 'StatisticEditCtrl'
+        controller: 'StatisticEditCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          fields: function(Field, $route) {
+            return Field.GetFields($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          },
+          statistic: function(Statistic, $route) {
+            return Statistic.GetStatistic($route.current.params.templateId, $route.current.params.statisticId);
+          }
+        }
       })
-      .when('/applications/:applicationId/collections/:templateId/fields', {
+      .when('/applications/:applicationId/collections/:templateId/attributes', {
         templateUrl: '/views/fields.html',
-        controller: 'FieldsCtrl'
+        controller: 'FieldsCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          fields: function(Field, $route) {
+            return Field.GetFields($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
-      .when('/applications/:applicationId/collections/:templateId/fields/new', {
+      .when('/applications/:applicationId/collections/:templateId/attributes/new', {
         templateUrl: '/views/field-create.html',
-        controller: 'FieldCreateCtrl'
+        controller: 'FieldCreateCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          templates: function(Template, $route) {
+            return Template.GetTemplateList($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
-      .when('/applications/:applicationId/collections/:templateId/fields/:fieldId/edit', {
+      .when('/applications/:applicationId/collections/:templateId/attributes/:fieldId/edit', {
         templateUrl: '/views/field-edit.html',
-        controller: 'FieldEditCtrl'
+        controller: 'FieldEditCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          templates: function(Template, $route) {
+            return Template.GetTemplateList($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          field: function(Field, $route) {
+            return Field.GetField($route.current.params.templateId, $route.current.params.fieldId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId/settings', {
         templateUrl: '/views/template-edit.html',
-        controller: 'TemplateEditCtrl'
+        controller: 'TemplateEditCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId/developers', {
         templateUrl: '/views/template-dev.html',
-        controller: 'TemplateDevCtrl'
+        controller: 'TemplateDevCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
       })
       .when('/applications/:applicationId/collections/:templateId/import', {
         templateUrl: '/views/template-import.html',
-        controller: 'TemplateImportCtrl'
-      // })
-      // .otherwise({
-      //   templateUrl: '/views/errors/404.html'
+        controller: 'TemplateImportCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          template: function(Template, $route) {
+            return Template.GetTemplate($route.current.params.templateId);
+          },
+          activities: function(Template, $route) {
+            return Template.GetActivities($route.current.params.templateId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
+      })
+      .otherwise({
+        templateUrl: '/views/errors/404.html'
       });
 
     // If you remove this, you break the whole application
@@ -964,6 +1093,18 @@ angular.module('commonsCloudAdminApp')
             updated: new Date().getTime()
           }).$promise.then(function(response) {
             return response;
+          });
+
+        return promise;
+      };
+
+      Template.GetActivities = function(templateId) {
+
+        var promise = Template.activity({
+            templateId: templateId,
+            updated: new Date().getTime()
+          }).$promise.then(function(response) {
+            return response.response.activities;
           });
 
         return promise;
@@ -1183,6 +1324,19 @@ angular.module('commonsCloudAdminApp')
         return promise
       };
 
+      Field.GetField = function(templateId, fieldId) {
+
+        var promise = Field.get({
+            templateId: templateId,
+            fieldId: fieldId,
+            updated: new Date().getTime()
+          }).$promise.then(function(response) {
+            return response.response;
+          });
+
+        return promise
+      };
+
       return Field;
     }];
 
@@ -1247,6 +1401,29 @@ angular.module('commonsCloudAdminApp')
           method: 'PATCH'
         }
       });
+
+      Statistic.GetStatistics = function(templateId) {
+        
+        var promise = Statistic.query({
+            templateId: templateId
+          }).$promise.then(function(response) {
+            return response;
+          });
+
+        return promise;
+      };
+
+      Statistic.GetStatistic = function(templateId, statisticId) {
+        
+        var promise = Statistic.get({
+            templateId: templateId,
+            statisticId: statisticId
+          }).$promise.then(function(response) {
+            return response;
+          });
+
+        return promise;
+      };
 
       return Statistic;
     }];
@@ -1492,12 +1669,12 @@ angular.module('commonsCloudAdminApp')
 
     $scope.page = {
       title: 'My Applications',
-      link: {
+      links: [{
         type: 'new',
         url: '/applications/new',
         text: 'Add an application',
-        static: "static"
-      }
+        static: 'static'
+      }]
     };
 
 
@@ -1531,12 +1708,20 @@ angular.module('commonsCloudAdminApp')
 
     $scope.page = {
       title: $scope.application.name,
-      link: {
-        type: 'edit',
-        url: '/applications/' + $scope.application.id + '/edit/',
-        text: 'Edit this application',
-        static: "static"
-      },
+      links: [
+        {
+          type: 'edit',
+          url: '/applications/' + $scope.application.id + '/edit/',
+          text: 'Edit this application',
+          static: "static"
+        },
+        {
+          type: 'new',
+          url: '/applications/' + $scope.application.id + '/collections/new/',
+          text: 'Add a Feature Collection',
+          static: "static"
+        }
+      ],
       back: '/applications/'
     };
 
@@ -1852,14 +2037,19 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('TemplateEditCtrl', ['$rootScope', '$routeParams', '$scope', '$timeout', 'Application', 'Template', 'User', '$location', function ($rootScope, $routeParams, $scope, $timeout, Application, Template, User, $location) {
+  .controller('TemplateEditCtrl', ['$rootScope', '$scope', '$timeout', 'application', 'template', 'Template', 'user', '$location', function ($rootScope, $scope, $timeout, application, template, Template, user, $location) {
 
     //
     // Instantiate an Application object so that we can perform all necessary
     // functionality against our Application resource
     //
-    $scope.application = {};
-    $scope.template = {};
+    $scope.application = application;
+    $scope.template = template;
+
+    $scope.page = {
+      title: $scope.template.name + ' Settings',
+      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id
+    };
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -1870,93 +2060,6 @@ angular.module('commonsCloudAdminApp')
     $timeout(function () {
       $rootScope.alerts = [];
     }, 5000);
-
-    $rootScope.user = User.getUser();
-
-    //
-    // Define the Breadcrumbs that appear at the top of the page in the nav bar
-    //
-    $scope.breadcrumbs = [
-      {
-        'label': 'Applications',
-        'title': 'View my applications',
-        'url': '/applications',
-        'class': ''
-      }
-    ];
-
-    //
-    // Get the application the user has selected and begin loading the rest of
-    // the application page
-    //
-    $scope.GetApplication = function() {
-      //
-      // Get the single application that the user wants to view
-      //
-      Application.get({
-          id: $routeParams.applicationId,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-
-          //
-          // Assign the response to the Application object and end loading
-          //
-          $scope.application = response.response;
-
-          //
-          // Update the breadcrumbs based on the response from the application
-          //
-          $scope.breadcrumbs.push({
-            'label': $scope.application.name,
-            'title': 'View ' + $scope.application.name,
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Feature Collections',
-            'title': 'View all of ' + $scope.application.name + '\'s feature collections',
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          if ($routeParams.templateId) {
-            $scope.GetTemplate($routeParams.templateId);
-          }
-
-        }, function(error) {
-          $rootScope.alerts.push({
-            'type': 'error',
-            'title': 'Uh-oh!',
-            'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
-          });
-        });
-    };
-
-
-    $scope.GetTemplate = function(template_id) {
-      Template.get({
-          templateId: template_id,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          $scope.template = response.response;
-
-          $scope.breadcrumbs.push({
-            'label': $scope.template.name,
-            'title': 'View ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Edit ' + $scope.template.name,
-            'title': 'Edit ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/settings',
-            'class': 'active'
-          });
-
-        });
-    };
 
 
     //
@@ -1972,6 +2075,7 @@ angular.module('commonsCloudAdminApp')
           'title': 'Updated',
           'details': 'Your template updates were saved successfully!'
         });
+        $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/settings');
       }, function(error) {
         $rootScope.alerts.push({
           'type': 'error',
@@ -1982,7 +2086,7 @@ angular.module('commonsCloudAdminApp')
 
     };
 
-//
+    //
     // Delete an existing Template from the API Database
     //
     $scope.DeleteTemplate = function (template) {
@@ -2018,21 +2122,25 @@ angular.module('commonsCloudAdminApp')
       });
     };
 
-    $scope.GetApplication();
-
   }]);
 
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('TemplateDevCtrl', ['$rootScope', '$routeParams', '$scope', '$timeout', 'Application', 'Template', 'User', '$location', function ($rootScope, $routeParams, $scope, $timeout, Application, Template, User, $location) {
+  .controller('TemplateDevCtrl', ['$rootScope', '$scope', '$timeout', 'application', 'template', 'user', '$location', function ($rootScope, $scope, $timeout, application, template, user, $location) {
 
     //
     // Instantiate an Application object so that we can perform all necessary
     // functionality against our Application resource
     //
-    $scope.application = {};
-    $scope.template = {};
+    $scope.application = application;
+    $scope.template = template;
+
+    $scope.page = {
+      title: $scope.template.name + ' Developer Information',
+      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id
+    };
+
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -2044,110 +2152,26 @@ angular.module('commonsCloudAdminApp')
       $rootScope.alerts = [];
     }, 5000);
 
-    $rootScope.user = User.getUser();
-
-    //
-    // Define the Breadcrumbs that appear at the top of the page in the nav bar
-    //
-    $scope.breadcrumbs = [
-      {
-        'label': 'Applications',
-        'title': 'View my applications',
-        'url': '/applications',
-        'class': ''
-      }
-    ];
-
-    //
-    // Get the application the user has selected and begin loading the rest of
-    // the application page
-    //
-    $scope.GetApplication = function() {
-      //
-      // Get the single application that the user wants to view
-      //
-      Application.get({
-          id: $routeParams.applicationId,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-
-          //
-          // Assign the response to the Application object and end loading
-          //
-          $scope.application = response.response;
-
-          //
-          // Update the breadcrumbs based on the response from the application
-          //
-          $scope.breadcrumbs.push({
-            'label': $scope.application.name,
-            'title': 'View ' + $scope.application.name,
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Feature Collections',
-            'title': 'View all of ' + $scope.application.name + '\'s feature collections',
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          if ($routeParams.templateId) {
-            $scope.GetTemplate($routeParams.templateId);
-          }
-
-        }, function(error) {
-          $rootScope.alerts.push({
-            'type': 'error',
-            'title': 'Uh-oh!',
-            'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
-          });
-        });
-    };
-
-
-    $scope.GetTemplate = function(template_id) {
-      Template.get({
-          templateId: template_id,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          $scope.template = response.response;
-
-          $scope.breadcrumbs.push({
-            'label': $scope.template.name,
-            'title': 'View ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Developer',
-            'title': 'Developer',
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/developers',
-            'class': 'active'
-          });
-
-        });
-    };
-
-
-    $scope.GetApplication();
-
   }]);
 
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('TemplateImportCtrl', ['$rootScope', '$routeParams', '$scope', '$timeout', '$location', 'Application', 'Template', 'User', 'Import', function ($rootScope, $routeParams, $scope, $timeout, $location, Application, Template, User, Import) {
+  .controller('TemplateImportCtrl', ['$rootScope', '$scope', '$timeout', '$location', 'activities', 'application', 'template', 'user', 'Import', function ($rootScope, $scope, $timeout, $location, activities, application, template, user, Import) {
 
     //
     // Instantiate an Application object so that we can perform all necessary
     // functionality against our Application resource
     //
-    $scope.application = {};
-    $scope.template = {};
-    $scope.activities = [];
+    $scope.application = application;
+    $scope.template = template;
+    $scope.activities = activities;
+
+    $scope.page = {
+      title: 'Import new ' + $scope.template.name + ' features',
+      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id
+    };
+
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -2158,106 +2182,6 @@ angular.module('commonsCloudAdminApp')
     $timeout(function () {
       $rootScope.alerts = [];
     }, 5000);
-
-    $rootScope.user = User.getUser();
-
-    //
-    // Define the Breadcrumbs that appear at the top of the page in the nav bar
-    //
-    $scope.breadcrumbs = [
-      {
-        'label': 'Applications',
-        'title': 'View my applications',
-        'url': '/applications',
-        'class': ''
-      }
-    ];
-
-    //
-    // Get the application the user has selected and begin loading the rest of
-    // the application page
-    //
-    $scope.GetApplication = function() {
-      //
-      // Get the single application that the user wants to view
-      //
-      Application.get({
-          id: $routeParams.applicationId,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-
-          //
-          // Assign the response to the Application object and end loading
-          //
-          $scope.application = response.response;
-
-          //
-          // Update the breadcrumbs based on the response from the application
-          //
-          $scope.breadcrumbs.push({
-            'label': $scope.application.name,
-            'title': 'View ' + $scope.application.name,
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Feature Collections',
-            'title': 'View all of ' + $scope.application.name + '\'s feature collections',
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          if ($routeParams.templateId) {
-            $scope.GetTemplate($routeParams.templateId);
-          }
-
-        }, function(error) {
-          $rootScope.alerts.push({
-            'type': 'error',
-            'title': 'Uh-oh!',
-            'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
-          });
-        });
-    };
-
-
-    $scope.GetTemplate = function(template_id) {
-      Template.get({
-          templateId: template_id,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          $scope.template = response.response;
-
-          $scope.breadcrumbs.push({
-            'label': $scope.template.name,
-            'title': 'View ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Developer',
-            'title': 'Developer',
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/developers',
-            'class': 'active'
-          });
-
-          $scope.getActivities(template_id);
-
-        });
-    };
-
-    $scope.getActivities = function(template_id) {
-
-      Template.activity({
-          templateId: template_id,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          console.log('Template.activity response', response);
-          $scope.activities = response.response.activities;
-        });
-    };
 
 
     $scope.onFileSelect = function(files) {
@@ -2313,8 +2237,6 @@ angular.module('commonsCloudAdminApp')
 
     };
 
-    $scope.GetApplication();
-
   }]);
 
 'use strict';
@@ -2368,9 +2290,15 @@ angular.module('commonsCloudAdminApp')
     $scope.fields = fields;
 
     $scope.page = {
-      title: $scope.template.name + ' features',
-      back: '/applications/' + $scope.application.id
-    }
+      title: $scope.template.name,
+      back: '/applications/' + $scope.application.id,
+      links: [{
+        type: 'new',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features/new',
+        text: 'Add a ' + $scope.template.name,
+        static: 'static'
+      }]
+    };
 
     //
     // Ensure the Templates are sorted oldest to newest
@@ -2425,7 +2353,7 @@ angular.module('commonsCloudAdminApp')
     $scope.default_geometry = {};
 
     $scope.page = {
-      title: 'Add feature',
+      title: 'Add a ' + $scope.template.name,
       back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features/'
     }
 
@@ -2821,6 +2749,11 @@ angular.module('commonsCloudAdminApp')
     $scope.fields = fields;
     $scope.feature = feature;
     $scope.files = [];
+
+    $scope.page = {
+      title: 'Editing feature',
+      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features/'
+    }
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -3302,7 +3235,7 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('StatisticsCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'Template', 'Statistic', 'User', function ($route, $rootScope, $scope, $routeParams, $location, $timeout, Application, Template, Statistic, User) {
+  .controller('StatisticsCtrl', ['$route', '$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'application', 'template', 'statistics', 'user', function ($route, $rootScope, $scope, $routeParams, $location, $timeout, application, template, statistics, user) {
 
 
   //
@@ -3312,11 +3245,20 @@ angular.module('commonsCloudAdminApp')
     //
     // Placeholders for our on-screen content
     //
-    $scope.application = {};
-    $scope.template = {};
-    $scope.features = [];
-    $scope.fields = [];
-    $scope.statistics = [];
+    $scope.application = application;
+    $scope.template = template;
+    $scope.statistics = statistics;
+
+    $scope.page = {
+      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
+      title: $scope.template.name + ' Statistics',
+      links: [{
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics/new/',
+        text: 'Add a statistic',
+        type: 'new',
+        static: 'static'
+      }]
+    }
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -3328,113 +3270,18 @@ angular.module('commonsCloudAdminApp')
       $rootScope.alerts = [];
     }, 5000);
 
-    $rootScope.user = User.getUser();
-
     //
     // Controls for showing/hiding specific page elements that may not be
     // fully loaded or when a specific user interaction has not yet happened
     //
     $scope.orderByField = null;
     $scope.reverseSort = false;
-
-    //
-    // Define the Breadcrumbs that appear at the top of the page in the nav bar
-    //
-    $scope.breadcrumbs = [
-      {
-        'label': 'Applications',
-        'title': 'View my applications',
-        'url': '/applications',
-        'class': ''
-      }
-    ];
-
-    $scope.GetTemplate = function(template_id) {
-      Template.get({
-          templateId: template_id,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          $scope.template = response.response;
-
-          $scope.breadcrumbs.push({
-            'label': $scope.template.name,
-            'title': 'View ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Statistics',
-            'title': 'Viewing all statistics for the ' + $scope.template.name + ' feature collection',
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics',
-            'class': 'active'
-          });
-
-          //
-          // Once we've returned the Template we can get the Statistics for it
-          //
-          Statistic.query({
-            templateId: $scope.template.id
-          }).$promise.then(function(response) {
-            $scope.statistics = response;
-          });
-        });
-    };
-
-    $scope.GetApplication = function() {
-      //
-      // Get the single application that the user wants to view
-      //
-      Application.get({
-          id: $routeParams.applicationId,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-
-          //
-          // Assign the response to the Application object and end loading
-          //
-          $scope.application = response.response;
-          $scope.loading = false;
-
-          //
-          // Update the breadcrumbs based on the response from the application
-          //
-          $scope.breadcrumbs.push({
-            'label': $scope.application.name,
-            'title': 'View ' + $scope.application.name,
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Feature Collections',
-            'title': 'View all of ' + $scope.application.name + '\'s feature collections',
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          if ($routeParams.templateId) {
-            $scope.GetTemplate($routeParams.templateId);
-          }
-        }, function(error) {
-          $rootScope.alerts.push({
-            'type': 'error',
-            'title': 'Uh-oh!',
-            'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
-          });
-        });
-    };
-    //
-    // Now that we've got the everything prepared, let's go ahead and start
-    // the controller by instantiating the GetApplication method
-    //
-    $scope.GetApplication();
 
   }]);
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('StatisticCreateCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', '$location', 'Application', 'Template', 'Field', 'Statistic', 'User', function ($rootScope, $scope, $routeParams, $timeout, $location, Application, Template, Field, Statistic, User) {
+  .controller('StatisticCreateCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', '$location', 'application', 'template', 'fields', 'Statistic', 'user', function ($rootScope, $scope, $routeParams, $timeout, $location, application, template, fields, Statistic, user) {
 
   //
   // VARIABLES
@@ -3443,12 +3290,15 @@ angular.module('commonsCloudAdminApp')
     //
     // Placeholders for our on-screen content
     //
-    $scope.application = {};
-    $scope.template = {};
-    $scope.features = [];
-    $scope.fields = [];
-    $scope.statistics = [];
+    $scope.application = application;
+    $scope.template = template;
+    $scope.fields = fields;
     $scope.statistic = new Statistic();
+
+    $scope.page = {
+      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics/',
+      title: 'Add a ' + $scope.template.name + ' Statistics'
+    }
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -3460,8 +3310,6 @@ angular.module('commonsCloudAdminApp')
       $rootScope.alerts = [];
     }, 5000);
 
-    $rootScope.user = User.getUser();
-
     //
     // Controls for showing/hiding specific page elements that may not be
     // fully loaded or when a specific user interaction has not yet happened
@@ -3469,58 +3317,6 @@ angular.module('commonsCloudAdminApp')
     $scope.orderByField = null;
     $scope.reverseSort = false;
 
-    //
-    // Define the Breadcrumbs that appear at the top of the page in the nav bar
-    //
-    $scope.breadcrumbs = [
-      {
-        'label': 'Applications',
-        'title': 'View my applications',
-        'url': '/applications',
-        'class': ''
-      }
-    ];
-
-    $scope.GetTemplate = function(template_id) {
-      Template.get({
-          templateId: template_id,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          $scope.template = response.response;
-
-          $scope.breadcrumbs.push({
-            'label': $scope.template.name,
-            'title': 'View ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Statistics',
-            'title': 'Viewing all statistics for the ' + $scope.template.name + ' feature collection',
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics',
-            'class': 'active'
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Statistics',
-            'title': 'Viewing all statistics for the ' + $scope.template.name + ' feature collection',
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics/new',
-            'class': 'active'
-          });
-
-          $scope.GetFields();
-        });
-    };
-
-    $scope.GetFields = function() {
-      Field.query({
-          templateId: $scope.template.id,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          $scope.fields = response;
-        });
-    };
 
     $scope.CreateStatistic = function (statistic) {
       $scope.statistic.$save({
@@ -3530,63 +3326,11 @@ angular.module('commonsCloudAdminApp')
       });
     };
 
-    $scope.GetApplication = function() {
-      //
-      // Get the single application that the user wants to view
-      //
-      Application.get({
-          id: $routeParams.applicationId,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-
-          //
-          // Assign the response to the Application object and end loading
-          //
-          $scope.application = response.response;
-          $scope.loading = false;
-
-          //
-          // Update the breadcrumbs based on the response from the application
-          //
-          $scope.breadcrumbs.push({
-            'label': $scope.application.name,
-            'title': 'View ' + $scope.application.name,
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Feature Collections',
-            'title': 'View all of ' + $scope.application.name + '\'s feature collections',
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          //
-          // Return the requested Statistic after the Template is loaded
-          //
-          if ($routeParams.templateId) {
-            $scope.GetTemplate($routeParams.templateId);
-          }
-        }, function(error) {
-          $rootScope.alerts.push({
-            'type': 'error',
-            'title': 'Uh-oh!',
-            'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
-          });
-        });
-    };
-    //
-    // Now that we've got the everything prepared, let's go ahead and start
-    // the controller by instantiating the GetApplication method
-    //
-    $scope.GetApplication();
-
   }]);
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('StatisticEditCtrl', ['$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Application', 'Template', 'Field', 'Statistic', 'User', function ($rootScope, $scope, $routeParams, $location, $timeout, Application, Template, Field, Statistic, User) {
+  .controller('StatisticEditCtrl', ['$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'application', 'template', 'fields', 'statistic', 'Statistic', 'user', function ($rootScope, $scope, $routeParams, $location, $timeout, application, template, fields, statistic, Statistic, user) {
 
 
   //
@@ -3596,12 +3340,10 @@ angular.module('commonsCloudAdminApp')
     //
     // Placeholders for our on-screen content
     //
-    $scope.application = {};
-    $scope.template = {};
-    $scope.features = [];
-    $scope.fields = [];
-    $scope.statistics = [];
-    $scope.statistic = {};
+    $scope.application = application;
+    $scope.template = template;
+    $scope.fields = fields;
+    $scope.statistic = statistic;
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -3613,7 +3355,6 @@ angular.module('commonsCloudAdminApp')
       $rootScope.alerts = [];
     }, 5000);
 
-    $rootScope.user = User.getUser();
 
     //
     // Controls for showing/hiding specific page elements that may not be
@@ -3622,75 +3363,6 @@ angular.module('commonsCloudAdminApp')
     $scope.orderByField = null;
     $scope.reverseSort = false;
 
-    //
-    // Define the Breadcrumbs that appear at the top of the page in the nav bar
-    //
-    $scope.breadcrumbs = [
-      {
-        'label': 'Applications',
-        'title': 'View my applications',
-        'url': '/applications',
-        'class': ''
-      }
-    ];
-
-    $scope.GetTemplate = function(template_id) {
-      Template.get({
-          templateId: template_id,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          $scope.template = response.response;
-
-          $scope.breadcrumbs.push({
-            'label': $scope.template.name,
-            'title': 'View ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Statistics',
-            'title': 'Viewing all statistics for the ' + $scope.template.name + ' feature collection',
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics',
-            'class': 'active'
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Statistics',
-            'title': 'Viewing all statistics for the ' + $scope.template.name + ' feature collection',
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics/new',
-            'class': 'active'
-          });
-
-          $scope.GetFields();
-
-          //
-          // Return the requested Statistic after the Template is loaded
-          //
-          if ($routeParams.statisticId) {
-            $scope.GetStatistic($scope.template.id, $routeParams.statisticId);
-          }
-        });
-    };
-
-    $scope.GetFields = function() {
-      Field.query({
-          templateId: $scope.template.id,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          $scope.fields = response;
-        });
-    };
-
-    $scope.GetStatistic = function(template_id, statistic_id) {
-      Statistic.get({
-        templateId: template_id,
-        statisticId: statistic_id,
-        updated: new Date().getTime()
-      }).$promise.then(function (response) {
-        $scope.statistic = response;
-      });
-    };
 
     $scope.UpdateStatistic = function (statistic) {
       Statistic.update({
@@ -3732,57 +3404,12 @@ angular.module('commonsCloudAdminApp')
       $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/statistics');
     };
 
-
-    //
-    // Get the single application that the user wants to view
-    //
-    Application.get({
-        id: $routeParams.applicationId,
-        updated: new Date().getTime()
-      }).$promise.then(function(response) {
-
-        //
-        // Assign the response to the Application object and end loading
-        //
-        $scope.application = response.response;
-        $scope.loading = false;
-
-        //
-        // Update the breadcrumbs based on the response from the application
-        //
-        $scope.breadcrumbs.push({
-          'label': $scope.application.name,
-          'title': 'View ' + $scope.application.name,
-          'url': '/applications/' + $scope.application.id,
-          'class': ''
-        });
-
-        $scope.breadcrumbs.push({
-          'label': 'Feature Collections',
-          'title': 'View all of ' + $scope.application.name + '\'s feature collections',
-          'url': '/applications/' + $scope.application.id,
-          'class': ''
-        });
-
-        //
-        // Return the requested Statistic after the Template is loaded
-        //
-        if ($routeParams.templateId) {
-          $scope.GetTemplate($routeParams.templateId);
-        }
-      }, function(error) {
-        $rootScope.alerts.push({
-          'type': 'error',
-          'title': 'Uh-oh!',
-          'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
-        });
-      });
   }]);
 
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FieldsCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'Application', 'Template', 'Field', 'User', '$location', '$anchorScroll', function ($rootScope, $scope, $routeParams, $timeout, Application, Template, Field, User, $location, $anchorScroll) {
+  .controller('FieldsCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'application', 'template', 'fields', 'user', '$location', '$anchorScroll', function ($rootScope, $scope, $routeParams, $timeout, application, template, fields, user, $location, $anchorScroll) {
 
   //
   // VARIABLES
@@ -3791,9 +3418,20 @@ angular.module('commonsCloudAdminApp')
     //
     // Placeholders for our on-screen content
     //
-    $scope.application = {};
-    $scope.template = {};
-    $scope.fields = [];
+    $scope.application = application;
+    $scope.template = template;
+    $scope.fields = fields;
+
+    $scope.page = {
+      title: $scope.template.name + ' Attributes',
+      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
+      links: [{
+        type: 'new',
+        url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/attributes/new',
+        text: 'Add an attribute',
+        static: 'static'
+      }]
+    };
 
 
     //
@@ -3806,112 +3444,11 @@ angular.module('commonsCloudAdminApp')
       $rootScope.alerts = [];
     }, 5000);
 
-    $rootScope.user = User.getUser();
-
-    //
-    // Define the Breadcrumbs that appear at the top of the page in the nav bar
-    //
-    $scope.breadcrumbs = [
-      {
-        'label': 'Applications',
-        'title': 'View my applications',
-        'url': '/applications',
-        'class': ''
-      }
-    ];
-
-
-  //
-  // CONTENT
-  //
-    $scope.GetFields = function() {
-      Field.query({
-          templateId: $scope.template.id,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          $scope.fields = response;
-        });
-    };
-
-    $scope.GetTemplate = function(template_id) {
-      Template.get({
-          templateId: $routeParams.templateId,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          $scope.template = response.response;
-
-          $scope.GetFields();
-
-          $scope.breadcrumbs.push({
-            'label': $scope.template.name,
-            'title': 'View ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Fields',
-            'title': 'Viewing all field for ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields',
-            'class': 'active'
-          });
-
-        });
-    };
-
-    $scope.GetApplication = function() {
-      //
-      // Get the single application that the user wants to view
-      //
-      Application.get({
-          id: $routeParams.applicationId,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-
-          //
-          // Assign the response to the Application object and end loading
-          //
-          $scope.application = response.response;
-          $scope.loading = false;
-
-          //
-          // Update the breadcrumbs based on the response from the application
-          //
-          $scope.breadcrumbs.push({
-            'label': $scope.application.name,
-            'title': 'View ' + $scope.application.name,
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Feature Collections',
-            'title': 'View all of ' + $scope.application.name + '\'s feature collections',
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          $scope.GetTemplate();
-        }, function(error) {
-          $rootScope.alerts.push({
-            'type': 'error',
-            'title': 'Uh-oh!',
-            'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
-          });
-        });
-    };
-
-    //
-    // Now that we've got the everything prepared, let's go ahead and start
-    // the controller by instantiating the GetApplication method
-    //
-    $scope.GetApplication();
   }]);
-
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FieldCreateCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'Application', 'Template', 'Field', 'User', '$location', function ($rootScope, $scope, $routeParams, $timeout, Application, Template, Field, User, $location) {
+  .controller('FieldCreateCtrl', ['$rootScope', '$scope', '$timeout', 'application', 'template', 'templates', 'Field', 'user', '$location', function ($rootScope, $scope, $timeout, application, template, templates, Field, user, $location) {
 
   //
   // VARIABLES
@@ -3920,9 +3457,9 @@ angular.module('commonsCloudAdminApp')
     //
     // Placeholders for our on-screen content
     //
-    $scope.application = {};
-    $scope.templates = [];
-    $scope.template = {};
+    $scope.application = application;
+    $scope.templates = templates;
+    $scope.template = template;
     $scope.field = new Field();
 
 
@@ -3936,47 +3473,19 @@ angular.module('commonsCloudAdminApp')
       $rootScope.alerts = [];
     }, 5000);
 
-    $rootScope.user = User.getUser();
-
-    //
-    // Define the Breadcrumbs that appear at the top of the page in the nav bar
-    //
-    $scope.breadcrumbs = [
-      {
-        'label': 'Applications',
-        'title': 'View my applications',
-        'url': '/applications',
-        'class': ''
-      }
-    ];
-
+    $scope.page = {
+      title: 'Add a new attribute to ' + $scope.template.name,
+      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/attributes'
+    };
 
   //
   // CONTENT
   //
 
     //
-    // Get a list of templates for the relationship field type
-    //
-    $scope.GetTemplateList = function(application_id) {
-      //
-      // Get a list of templates associated with the current application
-      //
-      Template.query({
-          applicationId: application_id,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          $scope.templates = response;
-        });
-    };
-    //
     // Create a new Field that does not yet exist in the API database
     //
     $scope.CreateField = function () {
-
-
-      console.log('$scope.field', $scope.field);
-
       $scope.field.$save({
         templateId: $scope.template.id
       }).then(function(response) {
@@ -3986,8 +3495,7 @@ angular.module('commonsCloudAdminApp')
           'details': 'Your new Field was added to the Template.'
         });
 
-        $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields');
-
+        $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/attributes');
       }, function(error) {
         $rootScope.alerts.push({
           'type': 'error',
@@ -3997,97 +3505,12 @@ angular.module('commonsCloudAdminApp')
       });
     };
 
-    $scope.GetTemplate = function(template_id) {
-      Template.get({
-          templateId: template_id,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          $scope.template = response.response;
-
-          $scope.breadcrumbs.push({
-            'label': $scope.template.name,
-            'title': 'View ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Fields',
-            'title': 'Viewing all fields for ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields',
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'New',
-            'title': 'Create a new field',
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields/new',
-            'class': 'active'
-          });
-
-        });
-    };
-
-    $scope.GetApplication = function() {
-      //
-      // Get the single application that the user wants to view
-      //
-      Application.get({
-          id: $routeParams.applicationId,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-
-          //
-          // Assign the response to the Application object and end loading
-          //
-          $scope.application = response.response;
-          $scope.loading = false;
-
-          //
-          // Update the breadcrumbs based on the response from the application
-          //
-          $scope.breadcrumbs.push({
-            'label': $scope.application.name,
-            'title': 'View ' + $scope.application.name,
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Feature Collections',
-            'title': 'View all of ' + $scope.application.name + '\'s feature collections',
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          if ($routeParams.templateId) {
-            $scope.GetTemplate($routeParams.templateId);            
-          }
-
-          if ($routeParams.applicationId) {
-            $scope.GetTemplateList($routeParams.applicationId);            
-          }
-        }, function(error) {
-          $rootScope.alerts.push({
-            'type': 'error',
-            'title': 'Uh-oh!',
-            'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
-          });
-        });
-    };
-
-
-    //
-    // Now that we've got the everything prepared, let's go ahead and start
-    // the controller by instantiating the GetApplication method
-    //
-    $scope.GetApplication();
   }]);
 
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FieldEditCtrl', ['$rootScope', '$scope', '$routeParams', '$timeout', 'Application', 'Template', 'Field', 'User', '$location', function ($rootScope, $scope, $routeParams, $timeout, Application, Template, Field, User, $location) {
+  .controller('FieldEditCtrl', ['$rootScope', '$scope', '$timeout', 'application', 'template', 'templates', 'field', 'Field', 'user', '$location', function ($rootScope, $scope, $timeout, application, template, templates, field, Field, user, $location) {
 
   //
   // VARIABLES
@@ -4096,9 +3519,10 @@ angular.module('commonsCloudAdminApp')
     //
     // Placeholders for our on-screen content
     //
-    $scope.application = {};
-    $scope.template = {};
-    $scope.field = {};
+    $scope.application = application;
+    $scope.templates = templates;
+    $scope.template = template;
+    $scope.field = field;
 
 
     //
@@ -4111,40 +3535,14 @@ angular.module('commonsCloudAdminApp')
       $rootScope.alerts = [];
     }, 5000);
 
-    $rootScope.user = User.getUser();
-
-    //
-    // Define the Breadcrumbs that appear at the top of the page in the nav bar
-    //
-    $scope.breadcrumbs = [
-      {
-        'label': 'Applications',
-        'title': 'View my applications',
-        'url': '/applications',
-        'class': ''
-      }
-    ];
-
+    $scope.page = {
+      title: 'Edit attribute',
+      back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/attributes'
+    };
 
   //
   // CONTENT
   //
-    $scope.GetField = function(template_id, field_id) {
-      Field.get({
-          templateId: template_id,
-          fieldId: field_id,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          $scope.field = response.response;
-
-          $scope.breadcrumbs.push({
-            'label': 'Edit',
-            'title': 'Editing the ' + $scope.field.name + ' field',
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields/' + $scope.field.id + '/edit',
-            'class': 'active'
-          });
-        });
-    };
 
     //
     // Update the attributes of an existing Template
@@ -4162,7 +3560,7 @@ angular.module('commonsCloudAdminApp')
           'details': 'Your Field updates were saved successfully!'
         });
 
-        $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields');
+        $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/attributes');
 
       }, function(error) {
         $rootScope.alerts.push({
@@ -4192,7 +3590,7 @@ angular.module('commonsCloudAdminApp')
           'details': 'Your Field was deleted!'
         });
 
-        $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields');
+        $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/attributes');
       }, function(error) {
         $rootScope.alerts.push({
           'type': 'error',
@@ -4203,82 +3601,6 @@ angular.module('commonsCloudAdminApp')
 
     };
 
-    $scope.GetTemplate = function(template_id) {
-      Template.get({
-          templateId: $routeParams.templateId,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-          $scope.template = response.response;
-
-          $scope.breadcrumbs.push({
-            'label': $scope.template.name,
-            'title': 'View ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Fields',
-            'title': 'Viewing all fields for ' + $scope.template.name,
-            'url': '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/fields',
-            'class': ''
-          });
-
-          if ($routeParams.templateId && $routeParams.fieldId) {
-            $scope.GetField($routeParams.templateId, $routeParams.fieldId);            
-          }
-
-        });
-    };
-
-    $scope.GetApplication = function() {
-      //
-      // Get the single application that the user wants to view
-      //
-      Application.get({
-          id: $routeParams.applicationId,
-          updated: new Date().getTime()
-        }).$promise.then(function(response) {
-
-          //
-          // Assign the response to the Application object and end loading
-          //
-          $scope.application = response.response;
-          $scope.loading = false;
-
-          //
-          // Update the breadcrumbs based on the response from the application
-          //
-          $scope.breadcrumbs.push({
-            'label': $scope.application.name,
-            'title': 'View ' + $scope.application.name,
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          $scope.breadcrumbs.push({
-            'label': 'Feature Collections',
-            'title': 'View all of ' + $scope.application.name + '\'s feature collections',
-            'url': '/applications/' + $scope.application.id,
-            'class': ''
-          });
-
-          $scope.GetTemplate();
-        }, function(error) {
-          $rootScope.alerts.push({
-            'type': 'error',
-            'title': 'Uh-oh!',
-            'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
-          });
-        });
-    };
-
-
-    //
-    // Now that we've got the everything prepared, let's go ahead and start
-    // the controller by instantiating the GetApplication method
-    //
-    $scope.GetApplication();
   }]);
 
 'use strict';

@@ -641,6 +641,10 @@ main {
 .toolbox {
   margin: -32px 0 16px;
   padding: 0 0 16px;
+
+  & > .col-sm-6 {
+    padding: 0;
+  }
 }
 
 .pager, .batch {

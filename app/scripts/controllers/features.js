@@ -15,7 +15,9 @@ angular.module('commonsCloudAdminApp')
     $scope.features = features.response.features;
     $scope.featureproperties = features.properties;
     $scope.fields = fields;
-    $scope.batch = [];
+    $scope.batch = {
+      selected: false
+    };
 
     $scope.page = {
       template: '/views/features.html',
@@ -26,7 +28,10 @@ angular.module('commonsCloudAdminApp')
         url: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features/new',
         text: 'Add a ' + $scope.template.name,
         static: 'static'
-      }]
+      }],
+      refresh: function() {
+        $route.reload();
+      }
     };
 
     $scope.navigation = [
@@ -91,6 +96,18 @@ angular.module('commonsCloudAdminApp')
   //
   // BATCH
   //
+    $scope.batch.selectAll = function() {
+
+      $scope.batch.selected =! $scope.batch.selected;
+
+      console.log('select all?', $scope.batch.selected);
+
+      $scope.features.forEach(function(feature, index){
+        $scope.features[index].batch = $scope.batch.selected;
+        console.log('$scope.features[index].batch', index, $scope.features[index].batch);
+      });
+    };
+
     $scope.batch.delete = function() {
 
       var deferred = $q.defer();

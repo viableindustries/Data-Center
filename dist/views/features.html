@@ -5,7 +5,13 @@
                   <div class="col-sm-6">
                     <ul class="batch">
                       <li>
-                        <a class="btn btn-default" data-ng-click="remove_features_confirmation=true" data-ng-show="!remove_features_confirmation">Remove features</a>
+                        <a href="javascript:void(0)" data-ng-click="batch.selectAll()" class="btn btn-default" title="Select all features">
+                          <input type="checkbox" id="selectall" name="selectall" data-ng-model="selectall" />
+                        </a>
+                        <a class="btn btn-default" data-ng-click="page.refresh()" title="Refresh features list">
+                          <span class="icon retinaicon-essentials-029"></span>
+                        </a>
+                        <a title="Delete all selected features" class="btn btn-default" data-ng-click="remove_features_confirmation=true" data-ng-show="!remove_features_confirmation"><span class="icon retinaicon-essentials-142"></span></a>
                         <span data-ng-show="remove_features_confirmation"><a class="btn btn-xs btn-link" data-ng-click="remove_features_confirmation=false;">Nevermind</a> <em>or</em> <a class="btn btn-xs btn-danger" data-ng-click="batch.delete()">Permanently remove selected features?</a></span>
                       </li>
                     </ul>
@@ -16,8 +22,8 @@
                         <span data-ng-if="!featureproperties.current_page || featureproperties.current_page === 1">1-25 of {{ featureproperties.total_features | number }}</span>
                         <span data-ng-if="featureproperties.current_page && featureproperties.current_page > 1">{{ (featureproperties.current_page*featureproperties.features_per_page)-featureproperties.features_per_page | number }}-{{ (featureproperties.current_page*featureproperties.features_per_page) | number }} of {{ featureproperties.total_features | number }}</span>
                       </li>
-                      <li data-ng-if="featureproperties.current_page !== featureproperties.total_pages" class="next pull-right"><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features?page={{ featureproperties.current_page+1 }}"><div class="icon retinaicon-retina-icons-v-1-5"></div></a></li>
-                      <li data-ng-if="featureproperties.current_page !== 1" class="previous pull-right"><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features?page={{ featureproperties.current_page-1 }}"><div class="icon retinaicon-retina-icons-v-1-4"></div></a></li>
+                      <li data-ng-if="featureproperties.current_page !== featureproperties.total_pages" class="next pull-right"><a title="Older" href="/applications/{{ application.id }}/collections/{{ template.id }}/features?page={{ featureproperties.current_page+1 }}"><div class="icon retinaicon-retina-icons-v-1-5"></div></a></li>
+                      <li data-ng-if="featureproperties.current_page !== 1" class="previous pull-right"><a title="Newer" href="/applications/{{ application.id }}/collections/{{ template.id }}/features?page={{ featureproperties.current_page-1 }}"><div class="icon retinaicon-retina-icons-v-1-4"></div></a></li>
                     </ul>
                   </div>
                 </div>
@@ -41,7 +47,7 @@
                     <tbody>
                       <tr data-ng-repeat="feature in features track by $index | orderBy:orderByField:reverseSort">
                         <td>
-                          <input data-ng-click="features[$index].batch = !features[$index].batch;" type="checkbox" class="checkbox" id="batch[{{ feature.id }}]" name="feature[{{ feature.id }}]" />
+                          <input data-ng-checked="features[$index].batch" data-ng-click="features[$index].batch = !features[$index].batch;" type="checkbox" class="checkbox" id="batch[{{ feature.id }}]" name="feature[{{ feature.id }}]" />
                         </td>
                         <td><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features/{{ feature.id }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
                         <td data-ng-repeat="field in fields" data-ng-if="field.is_listed && (field.data_type === 'text' || field.data_type === 'date' || field.data_type === 'whole_number' || field.data_type === 'float')">

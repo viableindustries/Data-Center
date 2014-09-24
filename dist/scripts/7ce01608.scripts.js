@@ -2382,7 +2382,8 @@ angular.module('commonsCloudAdminApp')
     $scope.featureproperties = features.properties;
     $scope.fields = fields;
     $scope.batch = {
-      selected: false
+      selected: false,
+      functions: false
     };
 
     $scope.page = {
@@ -2462,9 +2463,35 @@ angular.module('commonsCloudAdminApp')
   //
   // BATCH
   //
+    $scope.batch.checkSelections = function() {
+
+      var deferred = $q.defer();
+      var promise = deferred.promise;
+      var check = false;
+
+      promise.then(function () {
+        $scope.features.forEach(function (feature, index) {
+          if ($scope.features[index].batch) {
+            check = true;
+          }
+        });
+      }).then(function () {
+        if (check) {
+          console.log('A feature is checked display the batch functions')
+          $scope.batch.functions = true;
+        } else {
+          console.log('No features are checked hide the batch functions')
+          $scope.batch.functions = false;
+        }
+      });
+      deferred.resolve();
+
+    };
+
     $scope.batch.selectAll = function() {
 
       $scope.batch.selected =! $scope.batch.selected;
+      $scope.batch.functions =! $scope.batch.functions;
 
       console.log('select all?', $scope.batch.selected);
 

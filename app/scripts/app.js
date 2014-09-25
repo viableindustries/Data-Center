@@ -348,3 +348,10 @@ angular
     $locationProvider.html5Mode(true).hashPrefix('!');
 
   }]);
+
+  angular.module('ui.gravatar').config([
+    'gravatarServiceProvider', function(gravatarServiceProvider) {
+      // Use https endpoint
+      gravatarServiceProvider.secure = true;
+    }
+  ]);

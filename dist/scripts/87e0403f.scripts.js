@@ -948,6 +948,13 @@ angular
 
   }]);
 
+  angular.module('ui.gravatar').config([
+    'gravatarServiceProvider', function(gravatarServiceProvider) {
+      // Use https endpoint
+      gravatarServiceProvider.secure = true;
+    }
+  ]);
+
 'use strict';
 
 angular.module('commonsCloudAdminApp')

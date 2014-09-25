@@ -817,7 +817,7 @@ angular.module('commonsCloudAdminApp')
         // Load and Prepare the Mapbox Basemap Tiles
         //
         // var MapboxBasemap = L.tileLayer('https://{s}.tiles.mapbox.com/v3/developedsimple.hl46o07c/{z}/{x}/{y}.png', {
-        //   attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+        //   attribution: '<a href="//www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
         // });
 
         // map.addLayer(MapboxBasemap);

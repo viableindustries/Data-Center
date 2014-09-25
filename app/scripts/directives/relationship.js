@@ -50,7 +50,7 @@ angular.module('commonsCloudAdminApp')
 							{
 								'name': 'name',
 								'op': 'ilike',
-								'val': '%' + scope.searchText + '%'
+								'val': scope.searchText + '%'
 							}
 						]
 					},

@@ -47,7 +47,7 @@
                         <div class="row upload-list" data-ng-repeat="file in feature[field.relationship] track by $index">
                           <div class="col-xs-12 thumbnail text-center">
                             <img data-ng-if="file.file.preview" data-ng-src="{{ file.file.preview }}" />
-                            <img data-ng-if="file.filepath" data-ng-src="//{{ file.filepath }}" />
+                            <img data-ng-if="file.filepath" data-ng-src="http://{{ file.filepath }}" />
                             <p class="help-block"><small data-ng-if="file.file.name">{{ file.file.name }}</small><small  data-ng-if="file.filename">{{ file.filename }}</small></p>
                             <a class="btn btn-xs btn-danger" data-ng-click="remove_confirmation=true;" data-ng-show="!remove_confirmation">Remove</a>
                             <span data-ng-show="remove_confirmation"><a class="btn btn-xs btn-link" data-ng-click="remove_confirmation=false;">Nevermind</a> <em>or</em> <a class="btn btn-xs btn-danger" data-ng-click="remove_confirmation=false;DeleteAttachment(file, $index, field.relationship)">Permanently remove</a></span>

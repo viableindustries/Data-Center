@@ -33,7 +33,7 @@ angular.module('commonsCloudAdminApp')
 
       });
 
-      Field.PrepareFields = function() {
+      Field.PrepareFields = function(fields) {
 
         var processed_fields = [];
 
@@ -55,7 +55,7 @@ angular.module('commonsCloudAdminApp')
             templateId: templateId,
             updated: new Date().getTime()
           }).$promise.then(function(response) {
-            return $scope.PrepareFields(response);
+            return Field.PrepareFields(response);
           });
 
         return promise

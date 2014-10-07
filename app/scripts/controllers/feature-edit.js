@@ -39,6 +39,7 @@ angular.module('commonsCloudAdminApp')
     // Default Map parameters and necessary variables
     //
     var featureGroup = new L.FeatureGroup();
+    L.Icon.Default.imagePath = '/scripts/images';
 
     $scope.defaults = {
       tileLayer: 'https://{s}.tiles.mapbox.com/v3/developedsimple.hl46o07c/{z}/{x}/{y}.png',

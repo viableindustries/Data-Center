@@ -694,6 +694,45 @@ angular
           application: function(Application, $route) {
             return Application.GetApplication($route.current.params.applicationId);
           },
+          collaborators: function(Application, $route) {
+            return Application.GetCollaborators($route.current.params.applicationId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
+      })
+      .when('/applications/:applicationId/collaborators/new', {
+        templateUrl: templateUrl,
+        controller: 'CollaboratorsCreateCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
+      })
+      .when('/applications/:applicationId/collaborators/:userId', {
+        redirectTo: '/applications/:applicationId/collaborators/:userId/edit'
+      })
+      .when('/applications/:applicationId/collaborators/:userId/edit', {
+        templateUrl: templateUrl,
+        controller: 'CollaboratorsEditCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          applicationPermissions: function(Application, $route) {
+            return Application.GetCollaboratorPermissions($route.current.params.applicationId, $route.current.params.userId);
+          },
+          templatePermissions: function(Application, $route) {
+            return {};
+          },
+          collaborator: function(Application, $route) {
+            return Application.GetCollaborator($route.current.params.applicationId, $route.current.params.userId);
+          },
           user: function(User) {
             return User.getUser();
           }
@@ -1505,7 +1544,7 @@ angular.module('commonsCloudAdminApp')
 angular.module('commonsCloudAdminApp')
   .provider('Application', function() {
 
-    this.$get = ['$resource', '$location', function($resource, $location) {
+    this.$get = ['$resource', '$location', '$rootScope', function($resource, $location, $rootScope) {
 
       var base_resource_url = '//api.commonscloud.org/v2/applications/:id.json';
 
@@ -1519,6 +1558,25 @@ angular.module('commonsCloudAdminApp')
 
             return applications.response.applications;
           }
+        },
+        collaborators: {
+          url: '//api.commonscloud.org/v2/applications/:id/users.json',
+          method: 'GET',
+          isArray: false
+        },
+        permission: {
+          url: '//api.commonscloud.org/v2/applications/:id/users/:userId.json',
+          method: 'GET',
+          isArray: false
+        },
+        permissionUpdate: {
+          url: '//api.commonscloud.org/v2/applications/:id/users/:userId.json',
+          method: 'PATCH'
+        },
+        collaborator: {
+          url: '//api.commonscloud.org/v2/users/:userId.json',
+          method: 'GET',
+          isArray: false
         },
         update: {
           method: 'PATCH'
@@ -1534,6 +1592,68 @@ angular.module('commonsCloudAdminApp')
             id: applicationId
           }).$promise.then(function(response) {
             return response.response;
+          }, function(error) {
+            $rootScope.alerts.push({
+              'type': 'error',
+              'title': 'Uh-oh!',
+              'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
+            });
+          });
+
+        return promise;
+      };
+
+      Application.GetCollaborators = function(applicationId) {
+
+        //
+        // Get the single application that the user wants to view
+        //
+        var promise = Application.collaborators({
+            id: applicationId
+          }).$promise.then(function(response) {
+            return response.response.users;
+          }, function(error) {
+            $rootScope.alerts.push({
+              'type': 'error',
+              'title': 'Uh-oh!',
+              'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
+            });
+          });
+
+        return promise;
+      };
+
+      Application.GetCollaborator = function(applicationId, userId) {
+
+        //
+        // Get the single application that the user wants to view
+        //
+        var promise = Application.collaborator({
+            id: applicationId,
+            userId: userId
+          }).$promise.then(function(response) {
+            return response.response;
+          }, function(error) {
+            $rootScope.alerts.push({
+              'type': 'error',
+              'title': 'Uh-oh!',
+              'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
+            });
+          });
+
+        return promise;
+      };
+
+      Application.GetCollaboratorPermissions = function(applicationId, userId) {
+
+        //
+        // Get the single application that the user wants to view
+        //
+        var promise = Application.permission({
+            id: applicationId,
+            userId: userId
+          }).$promise.then(function(response) {
+            return response;
           }, function(error) {
             $rootScope.alerts.push({
               'type': 'error',
@@ -1990,6 +2110,168 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
+  .controller('CollaboratorsCtrl', ['$rootScope', '$scope', '$timeout', 'application', 'collaborators', 'user', function ($rootScope, $scope, $timeout, application, collaborators, user) {
+
+  //
+  // VARIABLES
+  //
+
+    //
+    // Placeholders for our existing content
+    //
+    $scope.application = application;
+    $scope.collaborators = collaborators;
+
+    $scope.page = {
+      template: '/views/collaborators.html',
+      title: 'Collaborators',
+      back: '/applications/' + $scope.application.id,
+      links: [{
+        type: 'new',
+        url: '/applications/' + $scope.application.id + '/collaborators/new',
+        text: 'Add a collaborator',
+        static: 'static'
+      }]
+    };
+
+    console.log('collaborators', collaborators);
+
+    //
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
+    //
+    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 15000);
+
+
+  }]);
+
+'use strict';
+
+angular.module('commonsCloudAdminApp')
+  .controller('CollaboratorsCreateCtrl', ['$rootScope', '$scope', '$timeout', 'application', 'user', function ($rootScope, $scope, $timeout, application, user) {
+
+  //
+  // VARIABLES
+  //
+
+    //
+    // Placeholders for our existing content
+    //
+    $scope.application = application;
+
+    $scope.page = {
+      template: '/views/collaborators-create.html',
+      title: 'Collaborators',
+      back: '/applications/' + $scope.application.id + '/collaborators'
+    };
+
+    //
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
+    //
+    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 15000);
+
+
+  }]);
+
+'use strict';
+
+angular.module('commonsCloudAdminApp')
+  .controller('CollaboratorsEditCtrl', ['$rootScope', '$scope', '$timeout', 'Application', 'application', 'collaborator', 'applicationPermissions', 'templatePermissions', 'user', function ($rootScope, $scope, $timeout, Application, application, collaborator, applicationPermissions, templatePermissions, user) {
+
+  //
+  // VARIABLES
+  //
+
+    //
+    // Placeholders for our existing content
+    //
+    $scope.collaborator = collaborator;
+    $scope.application = application;
+    $scope.collaborator.permissions = {
+      application: applicationPermissions.response,
+      templates: templatePermissions.response
+    };
+
+    console.log('$scope.collaborator', $scope.collaborator);
+
+    $scope.page = {
+      template: '/views/collaborators-edit.html',
+      title: $scope.collaborator.name,
+      back: '/applications/' + $scope.application.id + '/collaborators'
+    };
+
+    //
+    // Start a new Alerts array that is empty, this clears out any previous
+    // messages that may have been presented on another page
+    //
+    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+
+    $timeout(function () {
+      $rootScope.alerts = [];
+    }, 15000);
+
+
+  //
+  // CONTENT
+  //
+
+    //
+    // When we send our PATCH request, ngChecked values are not sent along, if they
+    // are being set in the UI. We have to tell the data model to update based on
+    // whether the is_admin field is checked or not.
+    //
+    $scope.$watch('collaborator.permissions.application.is_admin', function() {
+      if ($scope.collaborator.permissions.application.is_admin) {
+        $scope.collaborator.permissions.application.read = true;
+        $scope.collaborator.permissions.application.write = true;
+      }
+    });
+
+    $scope.$watch('collaborator.permissions.application.write', function() {
+      if ($scope.collaborator.permissions.application.write) {
+        $scope.collaborator.permissions.application.read = true;
+      }
+    });
+
+
+    //
+    // Save a new Application to the API Database
+    //
+    $scope.UpdatePermissions = function() {
+      Application.permissionUpdate({
+        id: $scope.application.id,
+        userId: $scope.collaborator.id
+      }, $scope.collaborator.permissions.application).$promise.then(function(response) {
+        $rootScope.alerts = [];
+        $rootScope.alerts.push({
+          'type': 'success',
+          'title': 'Awesome!',
+          'details': 'We updated the collaborator\'s permissions.'
+        });
+      }, function(error) {
+        $rootScope.alerts.push({
+          'type': 'error',
+          'title': 'Uh-oh!',
+          'details': 'Mind trying that again? It looks like we couldn\'t save those Application updates for you.'
+        });
+      });
+    };
+
+
+  }]);
+
+'use strict';
+
+angular.module('commonsCloudAdminApp')
   .controller('TemplateCtrl', ['$rootScope', function ($rootScope) {
 
   }]);
@@ -2335,39 +2617,6 @@ angular.module('commonsCloudAdminApp')
       });
 
     };
-
-  }]);
-
-'use strict';
-
-angular.module('commonsCloudAdminApp')
-  .controller('CollaboratorsCtrl', ['$rootScope', '$scope', '$timeout', 'application', 'user', function ($rootScope, $scope, $timeout, application, user) {
-
-  //
-  // VARIABLES
-  //
-
-    //
-    // Placeholders for our existing content
-    //
-    $scope.application = application;
-
-    $scope.page = {
-      template: '/views/collaborators.html',
-      title: 'Collaborators',
-      back: '/applications/' + $scope.application.id
-    }
-
-    //
-    // Start a new Alerts array that is empty, this clears out any previous
-    // messages that may have been presented on another page
-    //
-    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
-
-    $timeout(function () {
-      $rootScope.alerts = [];
-    }, 5000);
-
 
   }]);
 

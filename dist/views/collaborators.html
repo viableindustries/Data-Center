@@ -1,8 +1,13 @@
-          <div class="application single">
-            <div class="row application-content">          
-              <article class="col-sm-12 text-center">
-                <h1><span style="font-size: 128px; color: rgb(232,232,232);" class="glyphicon glyphicon-flag"></span></h1>
-                <h1 style="color: rgb(111,111,111);">We're still working on this page.</h1>
+            <!-- Page Content -->
+            <div class="row">          
+              <article class="col-sm-12">
+                <div class="row">
+                  <div class="template col-sm-4 text-center" data-ng-repeat="collaborator in collaborators | orderBy:orderByField:reverseSort">
+                    <a class="collaborator-gravatar" href="/applications/{{ application.id }}/collaborators/{{ collaborator.id }}/edit">
+                      <img class="decorate" data-ng-if="collaborator.email" gravatar-src="'{{ collaborator.email }}'" gravatar-size="128" />
+                    </a>
+                    <h1>{{ collaborator.name }} <a class="collaborator-edit" href="/applications/{{ application.id }}/collaborators/{{ collaborator.id }}/edit"><span class="icon retinaicon-essentials-113"></span></a></h1>
+                  </div>
+                </div>  
               </article>
             </div>
-          </div>

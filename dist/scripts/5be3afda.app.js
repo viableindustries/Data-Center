@@ -95,6 +95,45 @@ angular
           application: function(Application, $route) {
             return Application.GetApplication($route.current.params.applicationId);
           },
+          collaborators: function(Application, $route) {
+            return Application.GetCollaborators($route.current.params.applicationId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
+      })
+      .when('/applications/:applicationId/collaborators/new', {
+        templateUrl: templateUrl,
+        controller: 'CollaboratorsCreateCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          user: function(User) {
+            return User.getUser();
+          }
+        }
+      })
+      .when('/applications/:applicationId/collaborators/:userId', {
+        redirectTo: '/applications/:applicationId/collaborators/:userId/edit'
+      })
+      .when('/applications/:applicationId/collaborators/:userId/edit', {
+        templateUrl: templateUrl,
+        controller: 'CollaboratorsEditCtrl',
+        resolve: {
+          application: function(Application, $route) {
+            return Application.GetApplication($route.current.params.applicationId);
+          },
+          applicationPermissions: function(Application, $route) {
+            return Application.GetCollaboratorPermissions($route.current.params.applicationId, $route.current.params.userId);
+          },
+          templatePermissions: function(Application, $route) {
+            return {};
+          },
+          collaborator: function(Application, $route) {
+            return Application.GetCollaborator($route.current.params.applicationId, $route.current.params.userId);
+          },
           user: function(User) {
             return User.getUser();
           }

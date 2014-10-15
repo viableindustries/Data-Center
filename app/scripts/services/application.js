@@ -18,13 +18,22 @@ angular.module('commonsCloudAdminApp')
             return applications.response.applications;
           }
         },
-        users: {
+        collaborators: {
           url: '//api.commonscloud.org/v2/applications/:id/users.json',
           method: 'GET',
           isArray: false
         },
-        user: {
+        permission: {
           url: '//api.commonscloud.org/v2/applications/:id/users/:userId.json',
+          method: 'GET',
+          isArray: false
+        },
+        permissionUpdate: {
+          url: '//api.commonscloud.org/v2/applications/:id/users/:userId.json',
+          method: 'PATCH'
+        },
+        collaborator: {
+          url: '//api.commonscloud.org/v2/users/:userId.json',
           method: 'GET',
           isArray: false
         },
@@ -53,12 +62,12 @@ angular.module('commonsCloudAdminApp')
         return promise;
       };
 
-      Application.GetUsers = function(applicationId) {
+      Application.GetCollaborators = function(applicationId) {
 
         //
         // Get the single application that the user wants to view
         //
-        var promise = Application.users({
+        var promise = Application.collaborators({
             id: applicationId
           }).$promise.then(function(response) {
             return response.response.users;
@@ -73,13 +82,33 @@ angular.module('commonsCloudAdminApp')
         return promise;
       };
 
-
-      Application.GetUserPermissions = function(applicationId, userId) {
+      Application.GetCollaborator = function(applicationId, userId) {
 
         //
         // Get the single application that the user wants to view
         //
-        var promise = Application.user({
+        var promise = Application.collaborator({
+            id: applicationId,
+            userId: userId
+          }).$promise.then(function(response) {
+            return response.response;
+          }, function(error) {
+            $rootScope.alerts.push({
+              'type': 'error',
+              'title': 'Uh-oh!',
+              'details': 'Mind reloading the page? It looks like we couldn\'t get that Application for you.'
+            });
+          });
+
+        return promise;
+      };
+
+      Application.GetCollaboratorPermissions = function(applicationId, userId) {
+
+        //
+        // Get the single application that the user wants to view
+        //
+        var promise = Application.permission({
             id: applicationId,
             userId: userId
           }).$promise.then(function(response) {

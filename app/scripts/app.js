@@ -96,7 +96,7 @@ angular
             return Application.GetApplication($route.current.params.applicationId);
           },
           collaborators: function(Application, $route) {
-            return Application.GetUsers($route.current.params.applicationId);
+            return Application.GetCollaborators($route.current.params.applicationId);
           },
           user: function(User) {
             return User.getUser();
@@ -126,13 +126,13 @@ angular
             return Application.GetApplication($route.current.params.applicationId);
           },
           applicationPermissions: function(Application, $route) {
-            return Application.GetUserPermissions($route.current.params.applicationId, $route.current.params.userId);
+            return Application.GetCollaboratorPermissions($route.current.params.applicationId, $route.current.params.userId);
           },
           templatePermissions: function(Application, $route) {
             return {};
           },
-          collaborator: function() {
-            return {};
+          collaborator: function(Application, $route) {
+            return Application.GetCollaborator($route.current.params.applicationId, $route.current.params.userId);
           },
           user: function(User) {
             return User.getUser();

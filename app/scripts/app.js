@@ -128,6 +128,9 @@ angular
           applicationPermissions: function(Application, $route) {
             return Application.GetCollaboratorPermissions($route.current.params.applicationId, $route.current.params.userId);
           },
+          templates: function(Template, $route) {
+            return Template.GetTemplateList($route.current.params.applicationId);
+          },
           templatePermissions: function(Application, $route) {
             return {};
           },

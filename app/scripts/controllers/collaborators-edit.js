@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('CollaboratorsEditCtrl', ['$rootScope', '$scope', '$timeout', 'Application', 'application', 'collaborator', 'applicationPermissions', 'templatePermissions', 'user', function ($rootScope, $scope, $timeout, Application, application, collaborator, applicationPermissions, templatePermissions, user) {
+  .controller('CollaboratorsEditCtrl', ['$rootScope', '$scope', '$timeout', '$location', 'Application', 'application', 'templates', 'collaborator', 'applicationPermissions', 'templatePermissions', 'user', function ($rootScope, $scope, $timeout, $location, Application, application, templates, collaborator, applicationPermissions, templatePermissions, user) {
 
   //
   // VARIABLES
@@ -12,10 +12,18 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.collaborator = collaborator;
     $scope.application = application;
+    $scope.templates = templates;
     $scope.collaborator.permissions = {
       application: applicationPermissions.response,
       templates: templatePermissions.response
     };
+
+    //
+    // DO NOT ALLOW THE CURRENT USER TO EDIT THEMSELVES
+    //
+    if ($rootScope.user.id === $scope.collaborator.id) {
+      $location.path('/applications/' + $scope.application.id + '/collaborators');
+    }
 
     console.log('$scope.collaborator', $scope.collaborator);
 

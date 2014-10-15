@@ -7,26 +7,48 @@
 
                   <div class="checkbox">
                     <label for="access_readonly">
-                      <input data-ng-disabled="collaborator.permissions.application.is_admin || collaborator.permissions.application.write" data-ng-model="collaborator.permissions.application.read" id="access_readonly" name="access_readonly" type="checkbox" />
+                      <input data-ng-disabled="collaborator.permissions.application.is_admin || collaborator.permissions.application.write" data-ng-model="collaborator.permissions.application.read" id="access_readonly" name="access_readonly" data-ng-change="UpdatePermissions()" type="checkbox" />
                       <p class="help-block">Read Only</p>
                     </label>
                   </div>
                   <div class="checkbox">
                     <label for="access_readwrite">
-                      <input data-ng-disabled="collaborator.permissions.application.is_admin" data-ng-model="collaborator.permissions.application.write" id="access_readwrite" name="access_readwrite" type="checkbox" />
+                      <input data-ng-disabled="collaborator.permissions.application.is_admin" data-ng-model="collaborator.permissions.application.write" data-ng-change="UpdatePermissions()" id="access_readwrite" name="access_readwrite" type="checkbox" />
                       <p class="help-block">Read/Write: Gives the user the ability to View and Edit the Application meta data</p>
                     </label>
                   </div>
                   <div class="checkbox">
                     <label for="access_administrator">
-                      <input data-ng-model="collaborator.permissions.application.is_admin" id="access_administrator" name="access_administrator" type="checkbox" />
+                      <input data-ng-model="collaborator.permissions.application.is_admin" data-ng-change="UpdatePermissions()" id="access_administrator" name="access_administrator" type="checkbox" />
                       <p class="help-block">Administrator: Gives the user the ability to View, Edit, or Delete the Application and manage Collaborators</p>
                     </label>                    
                   </div>
                 </div>
-                <div class="form-group">
-                  <input data-ng-click="UpdatePermissions()" id="update" name="update" type="submit" class="button pull-right" value="Save" />
-                </div>
               </form>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Feature Collection</th>
+                    <th>Access Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-ng-repeat="template in templates">
+                    <td>{{ template.name }}</td>
+                    <td>
+                      <form method="POST">
+                        <div class="form-group">
+                          <select>
+                            <option value="read">Read Only</option>
+                            <option value="write">Read/Write</option>
+                            <option value="is_moderator">Moderator</option>
+                            <option value="is_admin">Admin</option>
+                          </select>
+                        </div>
+                      </form>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>

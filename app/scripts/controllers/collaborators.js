@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('CollaboratorsCtrl', ['$rootScope', '$scope', '$timeout', 'application', 'user', function ($rootScope, $scope, $timeout, application, user) {
+  .controller('CollaboratorsCtrl', ['$rootScope', '$scope', '$timeout', 'application', 'collaborators', 'user', function ($rootScope, $scope, $timeout, application, collaborators, user) {
 
   //
   // VARIABLES
@@ -11,12 +11,21 @@ angular.module('commonsCloudAdminApp')
     // Placeholders for our existing content
     //
     $scope.application = application;
+    $scope.collaborators = collaborators;
 
     $scope.page = {
       template: '/views/collaborators.html',
       title: 'Collaborators',
-      back: '/applications/' + $scope.application.id
-    }
+      back: '/applications/' + $scope.application.id,
+      links: [{
+        type: 'new',
+        url: '/applications/' + $scope.application.id + '/collaborators/new',
+        text: 'Add a collaborator',
+        static: 'static'
+      }]
+    };
+
+    console.log('collaborators', collaborators);
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -26,7 +35,7 @@ angular.module('commonsCloudAdminApp')
 
     $timeout(function () {
       $rootScope.alerts = [];
-    }, 5000);
+    }, 15000);
 
 
   }]);

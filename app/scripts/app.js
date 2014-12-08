@@ -165,13 +165,13 @@ angular
             return Template.GetTemplate($route.current.params.templateId);
           },
           fields: function(Field, $route) {
-            return Field.GetFields($route.current.params.templateId);
+            return Field.GetPreparedFields($route.current.params.templateId);
           },
           user: function(User) {
             return User.getUser();
-          },
-          features: function(Feature, $route) {
-            return Feature.GetPaginatedFeatures($route.current.params.templateId, $route.current.params.page);
+          // },
+          // features: function(Feature, $route) {
+          //   return Feature.GetPaginatedFeatures($route.current.params.templateId, $route.current.params.page);
           }
         }
       })

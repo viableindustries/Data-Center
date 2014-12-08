@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FeaturesCtrl', ['$q', '$route', '$rootScope', '$scope', '$routeParams', '$timeout', 'application', 'template', 'features', 'Feature', 'fields', 'user', function ($q, $route, $rootScope, $scope, $routeParams, $timeout, application, template, features, Feature, fields, user) {
+  .controller('FeaturesCtrl', ['$q', '$route', '$rootScope', '$scope', '$routeParams', '$timeout', '$location', 'application', 'template', 'Feature', 'fields', 'user', function ($q, $route, $rootScope, $scope, $routeParams, $timeout, $location, application, template, Feature, fields, user) {
 
   //
   // VARIABLES
@@ -12,13 +12,14 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.application = application;
     $scope.template = template;
-    $scope.features = features.response.features;
-    $scope.featureproperties = features.properties;
+    // $scope.features = features.response.features;
+    // $scope.featureproperties = features.properties;
     $scope.fields = fields;
     $scope.batch = {
       selected: false,
       functions: false
     };
+    $scope.defaults = $location.search();
 
     $scope.page = {
       template: '/views/features.html',
@@ -83,6 +84,23 @@ angular.module('commonsCloudAdminApp')
   //
   // CONTENT
   //
+
+    //
+    // When the page initially loads, we should check to see if existing filters are present in the
+    // browser's address bar. We should pass those filters along to the Feature Search. The Projects
+    // that populate the list shown to the user, we update this later on based upon filters that the
+    // user applies
+    //
+    Feature.GetFeatures({
+      storage: $scope.template.storage,
+      page: $route.current.params.page,
+      q: $route.current.params.q,
+      location: $scope.defaults,
+      fields: fields
+    }).then(function(response) {
+      $scope.projects = response;
+    });
+
 
     //
     // Update how Features are sorted based on Field/Header clicked and

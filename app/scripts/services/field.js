@@ -49,16 +49,20 @@ angular.module('commonsCloudAdminApp')
         return processed_fields;
       }
 
-      Field.GetPreparedFields = function(templateId) {
+      Field.GetPreparedFields = function(templateId, returnAs) {
 
         var promise = Field.query({
             templateId: templateId,
             updated: new Date().getTime()
           }).$promise.then(function(response) {
-            return Field.PrepareFields(response);
+            if (returnAs && returnAs === 'object') {
+              return Field.PrepareFieldsObject(response);
+            } else {
+              return Field.PrepareFields(response);
+            }
           });
 
-        return promise
+        return promise;
       };
 
 

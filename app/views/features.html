@@ -2,7 +2,7 @@
             <div class="row">
               <div class="col-sm-12">
                 <div class="row toolbox">
-                  <div class="col-sm-6">
+                  <div class="col-sm-8">
                     <ul class="batch">
                       <li>
                         <a href="javascript:void(0)" data-ng-click="batch.selectAll()" class="btn btn-default" title="Select all features">
@@ -23,15 +23,81 @@
                         </a>
  -->                      </li>
                     </ul>
+
+                    <form class="filter" method="POST" role="search">
+                      <input type="hidden" data-ng-model="filters.page" />
+                      <input type="hidden" data-ng-model="filters.results_per_page" />
+                      <input type="hidden" data-ng-model="filters.callback" />
+
+                      <div class="row">
+                        <div class="col-sm-4">
+                          <label class="control-label filter-label"><span class="icon retinaicon-essentials-063"></span> Filter by</label>
+                        </div>
+                        <div class="col-sm-8">
+                          <div data-ng-if="filter.active" class="filter-group row" data-ng-repeat="filter in filters.available track by $index">
+                              <div class="column-flex">
+                                <label class="control-label filter-label">{{ filters.available[$index].label }}</label>
+                              </div>
+                              <div class="column-10">
+                              <!-- Text Field -->
+                              <div data-ng-if="filters.available[$index].type === 'text'">
+                                <input class="filter-control" type="text" data-ng-model="filters.available[$index].filter[0].value" data-ng-change="search.features()" autofocus="autofocus" />
+                              </div>
+
+                              <!-- Numeric Field -->
+                              <div class="row" data-ng-if="filters.available[$index].type === 'number'">
+                                <div class="column-8">
+                                  <input class="filter-control" type="number" data-ng-model="filters.available[$index].filter[0].value" data-ng-change="search.features()" autofocus="autofocus" />
+                                  <p class="help-text">Minimum</p>
+                                </div>
+
+                                <div class="column-8">
+                                  <input class="filter-control" type="number" data-ng-model="filters.available[$index].filter[1].value" data-ng-change="search.features()" autofocus="autofocus" />
+                                  <p class="help-text">Maximum</p>
+                                </div>
+                              </div>
+
+                              <!-- Date Field -->
+                              <div class="row" data-ng-if="filters.available[$index].type === 'date'">
+                                <div class="column-8">
+                                  <input class="filter-control" type="date" data-ng-model="filters.available[$index].filter[0].value" data-ng-change="search.features()" autofocus="autofocus" />
+                                  <p class="help-text">Minimum</p>
+                                </div>
+
+                                <div class="column-8">                  
+                                  <input class="filter-control" type="date" data-ng-model="filters.available[$index].filter[1].value" data-ng-change="search.features()" autofocus="autofocus" />
+                                  <p class="help-text">Maximum</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="column-2">
+                              <a class="filter-action" data-ng-click="filters.remove($index)">Remove</a>
+                            </div>
+                          </div>
+                          <div class="filter-group filter-group-readonly row">
+                            <div class="column-flex">
+                              <label class="control-label filter-label">Add Filter</label>
+                            </div>
+                            <div class="column-flex">
+                              <select class="filter-control" data-ng-model="filters.available[$index]" data-ng-change="filters.select($index)" data-ng-options="filter.label for filter in filters.available">
+                                <option value="">Pick a filter</option>
+                              </select>                                      
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
                   </div>
-                  <div class="col-sm-6">
-                    <ul class="pager pull-right" data-ng-if="featureproperties.total_features > featureproperties.features_per_page">
+                  <div class="col-sm-4">
+                    <ul class="pager pull-right">
                       <li class="pull-left">
-                        <span data-ng-if="!featureproperties.current_page || featureproperties.current_page === 1">1-25 of {{ featureproperties.total_features | number }}</span>
-                        <span data-ng-if="featureproperties.current_page && featureproperties.current_page > 1">{{ (featureproperties.current_page*featureproperties.features_per_page)-featureproperties.features_per_page | number }}-{{ (featureproperties.current_page*featureproperties.features_per_page) | number }} of {{ featureproperties.total_features | number }}</span>
+                        <span data-ng-if="features.properties.total_features === 0">No results</span>
+                        <span data-ng-if="features.properties.total_features <= 25 && features.properties.total_features !== 0">1-{{ features.properties.total_features }} of {{ features.properties.total_features }}</span>
+                        <span data-ng-if="features.properties.current_page === 1 && features.properties.total_features > 25">1-25 of {{ features.properties.total_features | number }}</span>
+                        <span data-ng-if="features.properties.current_page && features.properties.current_page > 1">{{ (features.properties.current_page*features.properties.features_per_page)-features.properties.features_per_page | number }}-{{ (features.properties.current_page*features.properties.features_per_page) | number }} of {{ features.properties.total_features | number }}</span>
                       </li>
-                      <li data-ng-if="featureproperties.current_page !== featureproperties.total_pages" class="next pull-right"><a title="Older" href="/applications/{{ application.id }}/collections/{{ template.id }}/features?page={{ featureproperties.current_page+1 }}"><div class="icon retinaicon-retina-icons-v-1-5"></div></a></li>
-                      <li data-ng-if="featureproperties.current_page !== 1" class="previous pull-right"><a title="Newer" href="/applications/{{ application.id }}/collections/{{ template.id }}/features?page={{ featureproperties.current_page-1 }}"><div class="icon retinaicon-retina-icons-v-1-4"></div></a></li>
+                      <li data-ng-if="features.properties.current_page !== features.properties.total_pages && features.properties.total_features !== 0" class="next pull-right"><a title="Older" data-ng-click="search.paginate(features.properties.current_page+1)"><div class="icon retinaicon-retina-icons-v-1-5"></div></a></li>
+                      <li data-ng-if="features.properties.current_page !== 1" class="previous pull-right"><a title="Newer" data-ng-click="search.paginate(features.properties.current_page-1)"><div class="icon retinaicon-retina-icons-v-1-4"></div></a></li>
                     </ul>
                   </div>
                 </div>
@@ -51,9 +117,9 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr data-ng-repeat="feature in features track by $index">
+                      <tr data-ng-repeat="feature in features.response.features track by $index">
                         <td>
-                          <input data-ng-checked="features[$index].batch" data-ng-click="features[$index].batch = !features[$index].batch; batch.checkSelections();" type="checkbox" class="checkbox" id="batch[{{ feature.id }}]" name="feature[{{ feature.id }}]" />
+                          <input data-ng-checked="features.response.features[$index].batch" data-ng-click="features.response.features[$index].batch = !features.response.features[$index].batch; batch.checkSelections();" type="checkbox" class="checkbox" id="batch[{{ feature.id }}]" name="feature[{{ feature.id }}]" />
                         </td>
                         <td><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features/{{ feature.id }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
                         <td data-ng-repeat="field in fields" data-ng-if="field.is_listed && (field.data_type === 'text' || field.data_type === 'date' || field.data_type === 'whole_number' || field.data_type === 'float')">

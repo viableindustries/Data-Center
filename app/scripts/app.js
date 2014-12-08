@@ -157,6 +157,7 @@ angular
       .when('/applications/:applicationId/collections/:templateId/features', {
         templateUrl: templateUrl,
         controller: 'FeaturesCtrl',
+        reloadOnSearch: false,
         resolve: {
           application: function(Application, $route) {
             return Application.GetApplication($route.current.params.applicationId);

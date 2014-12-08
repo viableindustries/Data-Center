@@ -1184,6 +1184,10 @@ angular.module('commonsCloudAdminApp')
       }, {
         query: {
           method: 'GET',
+          params: {
+            statistics: false,
+            relationship: false
+          },
           isArray: false,
           transformResponse: function (data, headersGetter) {
             return angular.fromJson(data);
@@ -1858,6 +1862,18 @@ angular.module('commonsCloudAdminApp')
       back: '/applications/'
     };
 
+    $scope.navigation = [
+      {
+        title: 'Collaborators',
+        url: '/applications/' + $scope.application.id + '/collaborators/',
+        class: ''
+      }, {
+        title: 'Collections',
+        url: '/applications/' + $scope.application.id + '/collections/',
+        class: 'active'
+      }
+    ];
+
     //
     // Template sorting options
     //
@@ -2137,8 +2153,19 @@ angular.module('commonsCloudAdminApp')
       }]
     };
 
-    console.log('collaborators', collaborators);
+    $scope.navigation = [
+      {
+        title: 'Collaborators',
+        url: '/applications/' + $scope.application.id + '/collaborators/',
+        class: 'active'
+      }, {
+        title: 'Collections',
+        url: '/applications/' + $scope.application.id + '/collections/',
+        class: ''
+      }
+    ];
 
+    
     //
     // Start a new Alerts array that is empty, this clears out any previous
     // messages that may have been presented on another page
@@ -2168,9 +2195,21 @@ angular.module('commonsCloudAdminApp')
 
     $scope.page = {
       template: '/views/collaborators-create.html',
-      title: 'Collaborators',
+      title: 'New Collaborator',
       back: '/applications/' + $scope.application.id + '/collaborators'
     };
+
+    $scope.navigation = [
+      {
+        title: 'Collaborators',
+        url: '/applications/' + $scope.application.id + '/collaborators/',
+        class: 'active'
+      }, {
+        title: 'Collections',
+        url: '/applications/' + $scope.application.id + '/collections/',
+        class: ''
+      }
+    ];
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -2220,6 +2259,19 @@ angular.module('commonsCloudAdminApp')
       back: '/applications/' + $scope.application.id + '/collaborators'
     };
 
+    $scope.navigation = [
+      {
+        title: 'Collaborators',
+        url: '/applications/' + $scope.application.id + '/collaborators/',
+        class: 'active'
+      }, {
+        title: 'Collections',
+        url: '/applications/' + $scope.application.id + '/collections/',
+        class: ''
+      }
+    ];
+
+
     //
     // Start a new Alerts array that is empty, this clears out any previous
     // messages that may have been presented on another page
@@ -2252,6 +2304,11 @@ angular.module('commonsCloudAdminApp')
         $scope.collaborator.permissions.application.read = true;
       }
     });
+
+
+    $scope.UpdateTemplatePermission = function(template_id, $index) {
+      console.log('$scope.templates[', $index, '].permissions', $scope.templates[$index].permission);
+    };
 
 
     //

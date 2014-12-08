@@ -106,10 +106,10 @@ angular.module('commonsCloudAdminApp')
     // Update how Features are sorted based on Field/Header clicked and
     // react to a second click by inverting the order
     //
-    $scope.ChangeOrder = function (value) {
-      $scope.orderByField = value;
-      $scope.reverseSort =! $scope.reverseSort;
-    };
+    // $scope.ChangeOrder = function (value) {
+    //   $scope.orderByField = value;
+    //   $scope.reverseSort =! $scope.reverseSort;
+    // };
 
 
   //

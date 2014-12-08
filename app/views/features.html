@@ -43,9 +43,7 @@
                         <th class="batch">&nbsp;</th>
                         <th class="edit">&nbsp;</th>
                         <th data-ng-repeat="field in fields" data-ng-if="field.is_listed && (field.data_type === 'text' || field.data_type === 'date' || field.data_type === 'whole_number' || field.data_type === 'float')">
-                          <a href="javascript:void()" data-ng-click="ChangeOrder(field.name)">
-                            {{ field.label }} <span data-ng-show="orderByField == '{{ field.name }}'"><span data-ng-show="!reverseSort" class="glyphicon glyphicon-arrow-down"></span><span data-ng-show="reverseSort" class="glyphicon glyphicon-arrow-up"></span></span>
-                          </a>
+                          {{ field.label }}
                         </th>
                         <th>Status</th>
                         <th>Created</th>
@@ -53,7 +51,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr data-ng-repeat="feature in features track by $index | orderBy:orderByField:reverseSort">
+                      <tr data-ng-repeat="feature in features track by $index">
                         <td>
                           <input data-ng-checked="features[$index].batch" data-ng-click="features[$index].batch = !features[$index].batch; batch.checkSelections();" type="checkbox" class="checkbox" id="batch[{{ feature.id }}]" name="feature[{{ feature.id }}]" />
                         </td>

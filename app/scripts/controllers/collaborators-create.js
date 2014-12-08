@@ -14,9 +14,21 @@ angular.module('commonsCloudAdminApp')
 
     $scope.page = {
       template: '/views/collaborators-create.html',
-      title: 'Collaborators',
+      title: 'New Collaborator',
       back: '/applications/' + $scope.application.id + '/collaborators'
     };
+
+    $scope.navigation = [
+      {
+        title: 'Collaborators',
+        url: '/applications/' + $scope.application.id + '/collaborators/',
+        class: 'active'
+      }, {
+        title: 'Collections',
+        url: '/applications/' + $scope.application.id + '/collections/',
+        class: ''
+      }
+    ];
 
     //
     // Start a new Alerts array that is empty, this clears out any previous

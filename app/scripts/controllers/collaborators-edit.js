@@ -33,6 +33,19 @@ angular.module('commonsCloudAdminApp')
       back: '/applications/' + $scope.application.id + '/collaborators'
     };
 
+    $scope.navigation = [
+      {
+        title: 'Collaborators',
+        url: '/applications/' + $scope.application.id + '/collaborators/',
+        class: 'active'
+      }, {
+        title: 'Collections',
+        url: '/applications/' + $scope.application.id + '/collections/',
+        class: ''
+      }
+    ];
+
+
     //
     // Start a new Alerts array that is empty, this clears out any previous
     // messages that may have been presented on another page
@@ -65,6 +78,11 @@ angular.module('commonsCloudAdminApp')
         $scope.collaborator.permissions.application.read = true;
       }
     });
+
+
+    $scope.UpdateTemplatePermission = function(template_id, $index) {
+      console.log('$scope.templates[', $index, '].permissions', $scope.templates[$index].permission);
+    };
 
 
     //

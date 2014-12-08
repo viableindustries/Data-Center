@@ -25,8 +25,19 @@ angular.module('commonsCloudAdminApp')
       }]
     };
 
-    console.log('collaborators', collaborators);
+    $scope.navigation = [
+      {
+        title: 'Collaborators',
+        url: '/applications/' + $scope.application.id + '/collaborators/',
+        class: 'active'
+      }, {
+        title: 'Collections',
+        url: '/applications/' + $scope.application.id + '/collections/',
+        class: ''
+      }
+    ];
 
+    
     //
     // Start a new Alerts array that is empty, this clears out any previous
     // messages that may have been presented on another page

@@ -3,13 +3,14 @@
               <article class="col-sm-12">
                 <div class="row">
                   <div class="template col-sm-4 text-center" data-ng-repeat="collaborator in collaborators | orderBy:orderByField:reverseSort">
-                    <a  data-ng-if="collaborator.id !== user.id" class="collaborator-gravatar" href="/applications/{{ application.id }}/collaborators/{{ collaborator.id }}/edit">
+                    <a  data-ng-if="collaborator.id !== user.id" class="collaborator-gravatar">
+                    <!-- <a  data-ng-if="collaborator.id !== user.id" class="collaborator-gravatar" href="/applications/{{ application.id }}/collaborators/{{ collaborator.id }}/edit"> -->
                       <img class="decorate" data-ng-if="collaborator.email" gravatar-src="'{{ collaborator.email }}'" gravatar-size="128" />
-                    </a>
+                    <!-- </a> -->
                     <a class="collaborator-gravatar">
                       <img data-ng-if="collaborator.id === user.id" class="decorate" data-ng-if="collaborator.email" gravatar-src="'{{ collaborator.email }}'" gravatar-size="128" />
                     </a>
-                    <h1>{{ collaborator.name }} <a data-ng-if="collaborator.id !== user.id" class="collaborator-edit" href="/applications/{{ application.id }}/collaborators/{{ collaborator.id }}/edit"><span class="icon retinaicon-essentials-113"></span></a></h1>
+                    <h1>{{ collaborator.name }} <!--<a data-ng-if="collaborator.id !== user.id" class="collaborator-edit" href="/applications/{{ application.id }}/collaborators/{{ collaborator.id }}/edit"><span class="icon retinaicon-essentials-113"></span></a>--></h1>
                   </div>
                 </div>  
               </article>

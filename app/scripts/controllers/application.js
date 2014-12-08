@@ -34,6 +34,18 @@ angular.module('commonsCloudAdminApp')
       back: '/applications/'
     };
 
+    $scope.navigation = [
+      {
+        title: 'Collaborators',
+        url: '/applications/' + $scope.application.id + '/collaborators/',
+        class: ''
+      }, {
+        title: 'Collections',
+        url: '/applications/' + $scope.application.id + '/collections/',
+        class: 'active'
+      }
+    ];
+
     //
     // Template sorting options
     //

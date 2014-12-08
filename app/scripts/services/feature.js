@@ -10,6 +10,10 @@ angular.module('commonsCloudAdminApp')
       }, {
         query: {
           method: 'GET',
+          params: {
+            statistics: false,
+            relationship: false
+          },
           isArray: false,
           transformResponse: function (data, headersGetter) {
             return angular.fromJson(data);

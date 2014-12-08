@@ -24,31 +24,19 @@
                     </label>                    
                   </div>
                 </div>
+
+                <p>Feature Collection Access for {{ application.name }}</p>
+
+                <div class="form-group" data-ng-repeat="template in templates track by $index">
+                  <label for="templates[$index].permission">{{ template.name }}</label>
+                  <select class="form-control" data-ng-model="templates[$index].permission" id="templates[$index].permission" name="templates[$index].permission" data-ng-change="UpdateTemplatePermission(template.id, $index)">
+                    <option value="none">No Access</option>
+                    <option value="read">Read Only</option>
+                    <option value="write">Read/Write</option>
+                    <option value="is_moderator">Moderator</option>
+                    <option value="is_admin">Admin</option>
+                  </select>
+                </div>
               </form>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Feature Collection</th>
-                    <th>Access Type</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr data-ng-repeat="template in templates">
-                    <td>{{ template.name }}</td>
-                    <td>
-                      <form method="POST">
-                        <div class="form-group">
-                          <select>
-                            <option value="read">Read Only</option>
-                            <option value="write">Read/Write</option>
-                            <option value="is_moderator">Moderator</option>
-                            <option value="is_admin">Admin</option>
-                          </select>
-                        </div>
-                      </form>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
             </div>
           </div>

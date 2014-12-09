@@ -2,7 +2,7 @@
             <div class="row">
               <div class="col-sm-12">
                 <div class="row toolbox">
-                  <div class="col-sm-8">
+                  <div class="col-sm-2">
                     <ul class="batch">
                       <li>
                         <a href="javascript:void(0)" data-ng-click="batch.selectAll()" class="btn btn-default" title="Select all features">
@@ -18,22 +18,25 @@
                           <a class="btn btn-xs btn-link" data-ng-click="remove_features_confirmation=false;">Nevermind</a>
                            <em>or</em> <a class="btn btn-xs btn-danger" data-ng-click="batch.delete()">Permanently remove selected features?</a>
                         </span>
-<!--                         <a class="btn btn-default" data-ng-click="batch.search =! batch.search" title="Refresh features list">
+                        <a class="btn btn-default" data-ng-click="batch.search =! batch.search" title="Refresh features list">
                           <span class="icon retinaicon-essentials-063"></span>
                         </a>
- -->                      </li>
+                      </li>
                     </ul>
+                  
+                  </div>
+                  <div class="col-sm-7">
 
-                    <form class="filter" method="POST" role="search">
+                    <form data-ng-show="batch.search" class="filter" method="POST" role="search">
                       <input type="hidden" data-ng-model="filters.page" />
                       <input type="hidden" data-ng-model="filters.results_per_page" />
                       <input type="hidden" data-ng-model="filters.callback" />
 
                       <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-2">
                           <label class="control-label filter-label"><span class="icon retinaicon-essentials-063"></span> Filter by</label>
                         </div>
-                        <div class="col-sm-8">
+                        <div class="col-sm-10">
                           <div data-ng-if="filter.active" class="filter-group row" data-ng-repeat="filter in filters.available track by $index">
                               <div class="column-flex">
                                 <label class="control-label filter-label">{{ filters.available[$index].label }}</label>
@@ -88,7 +91,7 @@
                       </div>
                     </form>
                   </div>
-                  <div class="col-sm-4">
+                  <div class="col-sm-3">
                     <ul class="pager pull-right">
                       <li class="pull-left">
                         <span data-ng-if="features.properties.total_features === 0">No results</span>

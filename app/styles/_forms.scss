@@ -400,3 +400,111 @@ input::-webkit-inner-spin-button {
 .help-block.error-message {
   color: #F44336;
 }
+
+//
+// List Filter Form
+//
+.filter {
+  float: left;
+  margin: 0;
+  width: 100%;
+
+  label.filter-label {
+    background-color: transparent;
+    color: lighten($color-brand-black-base, 10%);
+
+    display: block;
+    display: inline-block;
+
+    font-family: $font-sans;
+    font-size: 1em;
+    font-weight: 300;
+
+    line-height: 1.2;
+
+    padding: 8px;
+    margin: 0;
+
+    text-transform: none;
+
+    .icon {
+      font-size: 0.75em;
+    }
+
+    span {
+      color: lighten($color-brand-black-base, 50%);
+    }
+  }
+
+  input.filter-control {
+    background-color: $color-brand-white-base;
+    border: 1px solid $color-brand-white-dark;
+
+    color: $color-brand-black-lighter;
+
+    font-family: $font-sans;
+    font-size: 1em;
+    font-weight: 300;
+
+    line-height: 1.2;
+
+    margin: 0;
+    padding: 8px 12px;
+
+    width: 100%;
+
+    &:focus {
+      outline: 0;
+      box-shadow: none;
+    }
+  }
+
+  select.filter-control {
+    background-color: $color-brand-white-base;
+    border: 1px solid $color-brand-white-dark;
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -o-border-radius: 0;
+    -webkit-border-radius: 0;
+
+    color: $color-brand-black-lighter;
+
+    font-family: $font-sans;
+    font-size: 1em;
+    font-weight: 300;
+
+    height: 2.1875em;
+    line-height: 1.2;
+
+    margin: 0;
+
+    width: 100%;
+
+    &:focus {
+      outline: 0;
+      box-shadow: none;
+    }
+  }
+
+  .filter-group {
+    border-left: 3px solid $color-brightBlue;
+    margin-bottom: 16px;
+    padding: 0 16px;
+
+    &.filter-group-readonly {
+      border-left: 3px solid $color-brand-white-dark;
+    }
+  }
+
+  .filter-action {
+    color: $color-red-base;
+    cursor: pointer;
+    display: block;
+    font-size: 0.6875em;
+    padding: 8px 6px;
+
+    &:hover {
+      color: darken($color-red-base, 10%);
+    }
+  }
+}

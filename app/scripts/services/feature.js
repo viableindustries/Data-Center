@@ -256,7 +256,10 @@ angular.module('commonsCloudAdminApp')
             },
             q_ = angular.fromJson(defaults.q);
 
-        angular.forEach(fields, function(field, $index) {
+        console.log('Build fields')
+        for (var $index = 0; $index < fields.length; $index++) {
+          var field = fields[$index];
+          console.log('build filter for ', field)
           if (Feature.inList(field.data_type, types.text) && field.is_searchable) {
             filters.push({
               label: field.label,
@@ -287,19 +290,22 @@ angular.module('commonsCloudAdminApp')
             });
           }
           else if (Feature.inList(field.data_type, types.relationship) && field.is_searchable) {
-            filters.push({
-              label: field.label,
-              field: field.relationship + '__id',
-              relationship: field.relationship,
-              type: 'relationship',
-              active: Feature.getActive(field, q_),
-              filter: [
-                {
-                  op: 'any',
-                  value: Feature.getDefault(field, 'any', q_)
-                }
-              ]
-            });
+            // Feature.getRelationshipDefault(field, 'any', q_).then(function(response) {
+            //   filters.push({
+            //     label: field.label,
+            //     field: field.relationship + '__id',
+            //     relationship: field.relationship,
+            //     type: 'relationship',
+            //     active: Feature.getActive(field, q_),
+            //     filter: [
+            //       {
+            //         op: 'any',
+            //         value: response[0]
+            //       }
+            //     ]
+            //   });
+            //   console.log('Relationship Field Default Value', response);
+            // });
           }
           else if (Feature.inList(field.data_type, types.number) && field.is_searchable) {
             filters.push({
@@ -337,7 +343,7 @@ angular.module('commonsCloudAdminApp')
               ]
             });
           }
-        });
+        };
 
         return filters;
       };
@@ -375,10 +381,7 @@ angular.module('commonsCloudAdminApp')
               if (default_value.op === 'ilike') {
                 // Remove the % from the string
                 value = default_value.val.replace(/%/g, '');
-              } else if (default_value.op === 'any') {
-                console.log('default_value.val', default_value.val);
-                value = default_value.val
-              } else {
+              } else if (default_value.op !== 'any') {
                 value = default_value.val;
               }
               // console.log('default found for', default_value.name, default_value.op, default_value.val);
@@ -389,6 +392,36 @@ angular.module('commonsCloudAdminApp')
         return value;
       };
 
+      //
+      // Check if a property is in an object and then select a default value
+      //
+      Feature.getRelationshipDefault = function(field, op, defaults) {
+
+        var value = null;
+
+        if (defaults && defaults.filters !== undefined) {
+          angular.forEach(defaults.filters, function(default_value, $index) {
+            var field_name = (field.data_type !== 'relationship') ? field.name : field.relationship + '__id';
+            if (field_name === default_value.name && op === default_value.op) {
+              if (default_value.op === 'any') {
+                value = default_value.val
+              }
+            }
+          });
+        }
+
+        var $promise = Feature.get({
+            featureId: value,
+            storage: field.relationship
+          }).$promise.then(function(response) {
+            console.log('response', [response.response])
+            return [response.response];
+          });
+
+          return $promise;
+      };
+
+      
       //
       // Check if a value is in a list of values
       //

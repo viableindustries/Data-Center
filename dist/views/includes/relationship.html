@@ -1,4 +1,4 @@
-<div class="relationship" data-ng-show="template === 'default'">
+<div class="relationship" data-ng-show="template_.name !== 'filter'">
   <div class="row">
     <div class="col-xs-11">
       <input data-ng-focus="relationship_focus=true" data-ng-blur="relationship_focus=false" type="text" placeholder="{{ placeholder }}" data-ng-model="searchText" data-ng-change="search()" class="{{ class_ }}" />
@@ -26,7 +26,7 @@
   </div>
 </div>
 
-<div class="relationship" data-ng-show="template === 'filter'">
+<div class="relationship" data-ng-show="template_.name === 'filter'">
   <input data-ng-focus="relationship_focus=true" data-ng-blur="relationship_focus=false" type="text" placeholder="{{ placeholder }}" data-ng-model="searchText" data-ng-change="search()" class="{{ class_ }}" />
   <div data-ng-if="features.length" class="dropdown">
     <ul>

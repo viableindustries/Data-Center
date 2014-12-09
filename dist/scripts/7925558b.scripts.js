@@ -4672,8 +4672,9 @@ angular.module('commonsCloudAdminApp')
     var timeout;
     scope.relationship_focus = false;
 
-    scope.template = (scope.template === undefined) ? 'default': scope.template;
-    console.log(scope.template)
+    scope.template_ = {
+      name: (scope.template === undefined) ? 'default' : scope.template
+    }
     scope.class_ = (scope.class === undefined) ? 'form-control': scope.class;
 
     //$http request to be fired on search
@@ -4758,7 +4759,7 @@ angular.module('commonsCloudAdminApp')
       fields: '=',
       placeholder: '=',
       class: '=',
-      template: '='
+      template: '=bind'
     },
     templateUrl: '/views/includes/relationship.html',
     restrict: 'E',

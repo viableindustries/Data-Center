@@ -756,6 +756,7 @@ angular
       .when('/applications/:applicationId/collections/:templateId/features', {
         templateUrl: templateUrl,
         controller: 'FeaturesCtrl',
+        reloadOnSearch: false,
         resolve: {
           application: function(Application, $route) {
             return Application.GetApplication($route.current.params.applicationId);
@@ -764,13 +765,13 @@ angular
             return Template.GetTemplate($route.current.params.templateId);
           },
           fields: function(Field, $route) {
-            return Field.GetFields($route.current.params.templateId);
+            return Field.GetPreparedFields($route.current.params.templateId);
           },
           user: function(User) {
             return User.getUser();
-          },
-          features: function(Feature, $route) {
-            return Feature.GetPaginatedFeatures($route.current.params.templateId, $route.current.params.page);
+          // },
+          // features: function(Feature, $route) {
+          //   return Feature.GetPaginatedFeatures($route.current.params.templateId, $route.current.params.page);
           }
         }
       })
@@ -1177,7 +1178,7 @@ angular.module('commonsCloudAdminApp')
 angular.module('commonsCloudAdminApp')
   .provider('Feature', function () {
 
-    this.$get = ['$resource', 'Template', function ($resource, Template) {
+    this.$get = ['$resource', '$rootScope', 'Template', function ($resource, $rootScope, Template) {
 
       var Feature = $resource('//api.commonscloud.org/v2/:storage.json', {
 
@@ -1262,19 +1263,33 @@ angular.module('commonsCloudAdminApp')
 
         return promise;
       };
+
       Feature.GetFeatures = function(options) {
+
+        var defaults = options.location;
+        var getFilters = Feature.buildFilters(options.fields, defaults);
+
+        var filters = {
+          page: (defaults.page) ? defaults.page : null,
+          results_per_page: (defaults.results_per_page) ? defaults.results_per_page : null,
+          callback: (defaults.callback) ? defaults.callback : null,
+          selected: getFilters,
+          available: getFilters
+        };
 
         var promise = Feature.query({
             storage: options.storage,
             page: (options.page === undefined || options.page === null) ? 1: options.page,
             q: {
-              'order_by': [
+              filters: Feature.getFilters(filters),
+              order_by: [
                 {
-                  'field': 'id',
-                  'direction': 'desc'
+                  field: 'created',
+                  direction: 'desc'
                 }
               ]
             },
+            relationship: (options.relationship === undefined || options.relationship === null) ? false: options.relationship,
             updated: new Date().getTime()
           }).$promise.then(function(response) {
             return response;
@@ -1301,6 +1316,302 @@ angular.module('commonsCloudAdminApp')
 
         return promise;
       }
+
+      //
+      // From an Angular $location.search() object we need to parse it
+      // so that we can produce an appropriate URL for our API
+      //
+      // Our API can accept a limited number of keywords and values this
+      // functions is meant to act as a middleman to process it before
+      // sending it along to the API. This functionality will grant us the
+      // ability to use 'saved searches' and direct URL input from the user
+      // and retain appropriate search and pagination functionality
+      //
+      // Keywords:
+      // 
+      // results_per_page (integer) The number of results per page you wish to return, not to be used like limit/offset
+      // page (integer) The page number of results to return
+      // callback (string) Wrap response in a Javascript function with the name of the string
+      // q (object) An object containing the following attributes and values
+      //   filters (array) An array of filters (i.e., {"name": <fieldname>, "op": <operatorname>, "val": <argument>})
+      //   disjunction (boolean) Processed as AND or OR statement, default is False or AND
+      //   limit (integer) Number of Features to limit a single call to return
+      //   offset (integer) Number of Features to offset the current call
+      //   order_by (array) An array of order by clauses (i.e., {"field": <fieldname>, "direction": <directionname>})
+      //
+      //
+      // Feature.getSearchParameters = function(search_parameters) {
+      //   console.log('search_parameters', search_parameters);
+
+      //   //
+      //   // We need to convert the JSON from a string to a JSON object that our application can use
+      //   //
+      //   var q_ = angular.fromJson(search_parameters.q);
+
+      //   return {
+      //     results_per_page: search_parameters.results_per_page,
+      //     page: search_parameters.page,
+      //     callback: search_parameters.callback,
+      //     q: q_
+      //   };
+      // };
+
+
+      //
+      // Prepare Filters for submission via an HTTP request
+      //
+      Feature.getFilters = function(filters) {
+
+        var filters_ = [];
+
+        angular.forEach(filters.available, function(filter, $index) {
+
+          //
+          // Each Filter can have multiple criteria such as single ilike, or
+          // a combination of gte and lte. We need to create an individual filter
+          // for each of the criteria, even if it's for the same field.
+          //
+          angular.forEach(filter.filter, function(criteria, $index) {
+            if (criteria.value !== null) {
+              var criteria_value = null;
+
+              if (criteria.op === 'ilike') {
+                criteria_value = '%' + criteria.value + '%';
+              } else if (criteria.op === 'any' && angular.isArray(criteria.value)) {
+                // criteria_value = Feature.getFiltersRelationshipValue(criteria.value);
+                criteria_value = criteria.value[0].id;
+              } else {
+                criteria_value = criteria.value;
+              }
+
+              filters_.push({
+                name: filter.field,
+                op: criteria.op,
+                val: criteria_value
+              });
+            }
+          });          
+        
+        });
+
+        return filters_;
+      };
+
+      Feature.getFiltersRelationshipValue = function(values) {
+
+        var relationships = [];
+
+        angular.forEach(values, function(value, $index) {
+          relationships.push(value.id);
+        });
+
+        return relationships;
+      }
+
+      //
+      // Build a list of Filters based on a Template Field list passed in through the fields parameter
+      //
+      // fields (array) An array of fields specific to a template, these need to be in the default
+      //                CommonsCloudAPI's Field list format [1]
+      //
+      // @see [1] https://api.commonscloud.org/v2/templates/:templateId/fields.json for an example
+      //
+      Feature.buildFilters = function(fields, defaults) {
+
+        //
+        // Default, empty Filters list
+        //
+        var filters = [],
+            types = {
+              text: ['text', 'textarea', 'email', 'phone', 'url'],
+              number: ['float', 'whole_number'],
+              date: ['date', 'time'],
+              relationship: ['relationship'],
+              list: ['list']
+            },
+            q_ = angular.fromJson(defaults.q);
+
+        console.log('Build fields')
+        for (var $index = 0; $index < fields.length; $index++) {
+          var field = fields[$index];
+          console.log('build filter for ', field)
+          if (Feature.inList(field.data_type, types.text) && field.is_searchable) {
+            filters.push({
+              label: field.label,
+              field: field.name,
+              type: 'text',
+              active: Feature.getActive(field, q_),
+              filter: [
+                {
+                  op: 'ilike',
+                  value: Feature.getDefault(field, 'ilike', q_)
+                }
+              ]
+            });
+          }
+          else if (Feature.inList(field.data_type, types.list) && field.is_searchable) {
+            filters.push({
+              label: field.label,
+              field: field.name,
+              type: 'list',
+              options: field.options,
+              active: Feature.getActive(field, q_),
+              filter: [
+                {
+                  op: 'ilike',
+                  value: Feature.getDefault(field, 'ilike', q_)
+                }
+              ]
+            });
+          }
+          else if (Feature.inList(field.data_type, types.relationship) && field.is_searchable) {
+            // Feature.getRelationshipDefault(field, 'any', q_).then(function(response) {
+            //   filters.push({
+            //     label: field.label,
+            //     field: field.relationship + '__id',
+            //     relationship: field.relationship,
+            //     type: 'relationship',
+            //     active: Feature.getActive(field, q_),
+            //     filter: [
+            //       {
+            //         op: 'any',
+            //         value: response[0]
+            //       }
+            //     ]
+            //   });
+            //   console.log('Relationship Field Default Value', response);
+            // });
+          }
+          else if (Feature.inList(field.data_type, types.number) && field.is_searchable) {
+            filters.push({
+              label: field.label,
+              field: field.name,
+              type: 'number',
+              active: Feature.getActive(field, q_),
+              filter: [
+                {
+                  op: 'gte',
+                  value: Feature.getDefault(field, 'gte', q_)
+                },
+                {
+                  op: 'lte',
+                  value: Feature.getDefault(field, 'lte', q_)
+                }
+              ]
+            });
+          }
+          else if (Feature.inList(field.data_type, types.date) && field.is_searchable) {
+            filters.push({
+              label: field.label,
+              field: field.name,
+              type: 'date',
+              active: Feature.getActive(field, q_),
+              filter: [
+                {
+                  op: 'gte',
+                  value: Feature.getDefault(field, 'gte', q_)
+                },
+                {
+                  op: 'lte',
+                  value: Feature.getDefault(field, 'lte', q_)
+                }
+              ]
+            });
+          }
+        };
+
+        return filters;
+      };
+
+      Feature.getActive = function(field, defaults) {
+
+        var is_active = false;
+
+        if (defaults !== undefined) {
+          angular.forEach(defaults.filters, function(active_filter, $index) {
+            var field_name = (field.data_type !== 'relationship') ? field.name : field.relationship + '__id';
+            if (field_name === active_filter.name) {
+              is_active = true;
+            }
+          });          
+        }
+
+        return is_active;
+      }
+
+      //
+      // Check if a property is in an object and then select a default value
+      //
+      Feature.getDefault = function(field, op, defaults) {
+
+        var value = null;
+
+        if (defaults && defaults.filters !== undefined) {
+          angular.forEach(defaults.filters, function(default_value, $index) {
+
+            var field_name = (field.data_type !== 'relationship') ? field.name : field.relationship + '__id';
+            if (field_name === default_value.name && op === default_value.op) {
+              console.log('defaults.filters forEach', default_value.name, field_name, op, default_value.op)
+              console.log('filter match');
+              if (default_value.op === 'ilike') {
+                // Remove the % from the string
+                value = default_value.val.replace(/%/g, '');
+              } else if (default_value.op !== 'any') {
+                value = default_value.val;
+              }
+              // console.log('default found for', default_value.name, default_value.op, default_value.val);
+            }
+          });
+        }
+
+        return value;
+      };
+
+      //
+      // Check if a property is in an object and then select a default value
+      //
+      Feature.getRelationshipDefault = function(field, op, defaults) {
+
+        var value = null;
+
+        if (defaults && defaults.filters !== undefined) {
+          angular.forEach(defaults.filters, function(default_value, $index) {
+            var field_name = (field.data_type !== 'relationship') ? field.name : field.relationship + '__id';
+            if (field_name === default_value.name && op === default_value.op) {
+              if (default_value.op === 'any') {
+                value = default_value.val
+              }
+            }
+          });
+        }
+
+        var $promise = Feature.get({
+            featureId: value,
+            storage: field.relationship
+          }).$promise.then(function(response) {
+            console.log('response', [response.response])
+            return [response.response];
+          });
+
+          return $promise;
+      };
+
+      
+      //
+      // Check if a value is in a list of values
+      //
+      Feature.inList = function(search_value, list) {
+        
+        var $index;
+
+        for ($index = 0; $index < list.length; $index++) {
+          if (list[$index] === search_value) {
+            return true;
+          }
+        }
+
+        return false;
+      };
 
       return Feature;
     }];
@@ -1358,16 +1669,20 @@ angular.module('commonsCloudAdminApp')
         return processed_fields;
       }
 
-      Field.GetPreparedFields = function(templateId) {
+      Field.GetPreparedFields = function(templateId, returnAs) {
 
         var promise = Field.query({
             templateId: templateId,
             updated: new Date().getTime()
           }).$promise.then(function(response) {
-            return Field.PrepareFields(response);
+            if (returnAs && returnAs === 'object') {
+              return Field.PrepareFieldsObject(response);
+            } else {
+              return Field.PrepareFields(response);
+            }
           });
 
-        return promise
+        return promise;
       };
 
 
@@ -2691,24 +3006,29 @@ angular.module('commonsCloudAdminApp')
 'use strict';
 
 angular.module('commonsCloudAdminApp')
-  .controller('FeaturesCtrl', ['$q', '$route', '$rootScope', '$scope', '$routeParams', '$timeout', 'application', 'template', 'features', 'Feature', 'fields', 'user', function ($q, $route, $rootScope, $scope, $routeParams, $timeout, application, template, features, Feature, fields, user) {
+  .controller('FeaturesCtrl', ['$q', '$route', '$rootScope', '$scope', '$routeParams', '$timeout', '$location', 'application', 'template', 'Feature', 'fields', 'user', function ($q, $route, $rootScope, $scope, $routeParams, $timeout, $location, application, template, Feature, fields, user) {
 
   //
   // VARIABLES
   //
+    var timeout;
 
     //
     // Placeholders for our on-screen content
     //
     $scope.application = application;
     $scope.template = template;
-    $scope.features = features.response.features;
-    $scope.featureproperties = features.properties;
+    // $scope.features = features.response.features;
+    // $scope.featureproperties = features.properties;
     $scope.fields = fields;
     $scope.batch = {
       selected: false,
-      functions: false
+      functions: false,
+      search: false
     };
+
+    $scope.defaults = $location.search();
+    $scope.features = [];
 
     $scope.page = {
       template: '/views/features.html',
@@ -2722,6 +3042,10 @@ angular.module('commonsCloudAdminApp')
       }],
       refresh: function() {
         $route.reload();
+      },
+      reset: function() {
+        $scope.filters.reset();
+        $scope.search.execute();
       }
     };
 
@@ -2753,11 +3077,6 @@ angular.module('commonsCloudAdminApp')
       },
     ];
 
-    //
-    // Ensure the Templates are sorted oldest to newest
-    //
-    $scope.orderByField = 'id';
-    $scope.reverseSort = true;
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -2765,24 +3084,171 @@ angular.module('commonsCloudAdminApp')
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
 
-    $timeout(function () {
-      $rootScope.alerts = [];
-    }, 25000);
-
 
   //
   // CONTENT
   //
+    if ($scope.defaults.q !== undefined && $scope.defaults.q !== null) {
+      $scope.batch.search = true;
+    }
 
     //
-    // Update how Features are sorted based on Field/Header clicked and
-    // react to a second click by inverting the order
+    // When the page initially loads, we should check to see if existing filters are present in the
+    // browser's address bar. We should pass those filters along to the Feature Search. The Features
+    // that populate the list shown to the user, we update this later on based upon filters that the
+    // user applies
     //
-    $scope.ChangeOrder = function (value) {
-      $scope.orderByField = value;
-      $scope.reverseSort =! $scope.reverseSort;
+    console.log('$scope.defaults', $scope.defaults);
+    Feature.GetFeatures({
+      storage: $scope.template.storage,
+      page: $route.current.params.page,
+      q: $route.current.params.q,
+      location: $scope.defaults,
+      fields: fields,
+      relationship: true
+    }).then(function(response) {
+      $scope.features = response;
+    });
+
+    //
+    // Setup project filter functionality
+    //
+    var filters_ = Feature.buildFilters(fields, $scope.defaults);
+
+    $scope.filters = {
+      page: ($scope.defaults.page) ? $scope.defaults.page : null,
+      results_per_page: ($scope.defaults.results_per_page) ? $scope.defaults.results_per_page : null,
+      callback: ($scope.defaults.callback) ? $scope.defaults.callback : null,
+      selected: filters_,
+      available: filters_
     };
 
+    $scope.filters.clear = function ($index) {
+
+      //
+      // Each Filter can have multiple criteria such as single ilike, or
+      // a combination of gte and lte. We need to null the values of all 
+      // filters in order for the URL to change appropriately
+      //
+      angular.forEach($scope.filters.available[$index].filter, function(criteria, $_index) {
+        $scope.filters.available[$index].filter[$_index].value = null;
+      }); 
+
+      $scope.search.execute();
+    };
+
+    $scope.filters.select = function ($index) {
+      $scope.filters.available[$index].active = true;
+    };
+
+    $scope.filters.remove = function ($index) {
+      $scope.filters.available[$index].active = false;
+
+      //
+      // Each Filter can have multiple criteria such as single ilike, or
+      // a combination of gte and lte. We need to null the values of all 
+      // filters in order for the URL to change appropriately
+      //
+      angular.forEach($scope.filters.available[$index].filter, function(criteria, $_index) {
+        $scope.filters.available[$index].filter[$_index].value = null;
+      }); 
+
+      $scope.search.execute();
+    };
+
+    $scope.filters.reset = function () {
+
+      //
+      // Each Filter can have multiple criteria such as single ilike, or
+      // a combination of gte and lte. We need to null the values of all 
+      // filters in order for the URL to change appropriately
+      //
+      angular.forEach($scope.filters.available, function(criteria, $index) {
+        angular.forEach($scope.filters.available[$index].filter, function(criteria, $__index) {
+          $scope.filters.available[$index].filter[$__index].value = null;
+          $scope.filters.available[$index].active = false;
+        }); 
+      }); 
+
+      $scope.search.execute();
+    };
+
+    //
+    // Filter existing Features to a specified list based on the user's input
+    //
+    $scope.search = {};
+
+    $scope.search.features = function() {
+
+      $timeout.cancel(timeout);
+
+      timeout = $timeout(function () {
+        $scope.search.execute();
+      }, 1000);
+      
+    };
+
+    $scope.search.execute = function(page_number) {
+
+      var Q = Feature.getFilters($scope.filters);
+
+      console.log('Q', Q);
+
+      $scope.filters.page = page_number;
+
+      Feature.query({
+        storage: $scope.template.storage,
+        q: {
+          filters: Q,
+          order_by: [
+            {
+              field: 'created',
+              direction: 'desc'
+            }
+          ]
+        },
+        relationship: true,
+        page: ($scope.filters.page) ? $scope.filters.page: null,
+        results_per_page: ($scope.filters.results_per_page) ? $scope.filters.results_per_page: null,
+        callback: ($scope.filters.callback) ? $scope.filters.callback: null,
+        updated: new Date().getTime()
+      }).$promise.then(function(response) {
+
+        //
+        // Check to see if there are Filters remaining and if not, we should just remove the Q
+        //
+        var Q_ = null;
+
+        if (Q.length) {
+          Q_ = angular.toJson({
+            filters: Q
+          });
+        }
+
+        $location.search({
+          q: Q_,
+          page: ($scope.filters.page) ? $scope.filters.page: null,
+          results_per_page: ($scope.filters.results_per_page) ? $scope.filters.results_per_page: null,
+          callback: ($scope.filters.callback) ? $scope.filters.callback: null
+        });
+
+        $scope.features = response;
+      });
+    };
+
+    $scope.search.paginate = function(page_number) {
+
+      //
+      // First, we need to make sure we preserve any filters that the user has defined
+      //
+      $scope.search.execute(page_number);
+
+      //
+      // Next we go to the selected page `page_number`
+      //
+
+      console.log('Go to page', page_number);
+    };
 
   //
   // BATCH
@@ -2850,6 +3316,7 @@ angular.module('commonsCloudAdminApp')
       deferred.resolve();
 
     };
+
 
   }]);
 
@@ -4197,65 +4664,43 @@ angular.module('commonsCloudAdminApp')
 
 angular.module('commonsCloudAdminApp')
   .directive('relationship', function ($http, $timeout) {
-	function link(scope, el, attrs) {
-		//create variables for needed DOM elements
-		var container = el.children()[0];
-		var input = angular.element(container.children[0]);
-		var dropdown = angular.element(container.children[1]);
-		var timeout;
+  function link(scope, el, attrs) {
+    //create variables for needed DOM elements
+    var container = el.children()[0];
+    var input = angular.element(container.children[0]);
+    var dropdown = angular.element(container.children[1]);
+    var timeout;
     scope.relationship_focus = false;
 
-    //
-    // scope.human_readable_values = (scope.model) ? scope.model: [];
-    //
-    // scope.$watch('model', function (data) {
-    //   console.log('model updated', data);
-    //   scope.human_readable_values = data;
-    // });
+    scope.template = (scope.template === undefined) ? 'default': scope.template;
+    console.log(scope.template)
+    scope.class_ = (scope.class === undefined) ? 'form-control': scope.class;
 
-    console.log('enumerated value checking', scope.human_readable_values, scope.model);
+    //$http request to be fired on search
+    var getFilteredResults = function(table){
+      var url = '//api.commonscloud.org/v2/' + table + '.json';
 
-    scope.getPlaceholderText = function(field) {
-
-      var label = field.label;
-      var article = 'a';
-
-      // if ("aeiouAEIOU".indexOf(label) != -1) {
-      if (/[aeiouAEIOU]/.test(label)) {
-        article = 'an';
-      }
-
-      return 'Choose ' + article + ' ' + label;
-    };
-
-    scope.placeholder = scope.getPlaceholderText(scope.field);
-
-		//$http request to be fired on search
-		var getFilteredResults = function(field){
-			var table = field.relationship;
-			var url = '//api.commonscloud.org/v2/' + table + '.json';
-
-			$http({
-				method: 'GET',
-				url: url,
-				params: {
-					'q': {
-						'filters':
-						[
-							{
-								'name': 'name',
-								'op': 'ilike',
-								'val': scope.searchText + '%'
-							}
-						]
-					},
+      $http({
+        method: 'GET',
+        url: url,
+        params: {
+          'q': {
+            'filters':
+            [
+              {
+                'name': 'name',
+                'op': 'ilike',
+                'val': scope.searchText + '%'
+              }
+            ]
+          },
           'results_per_page': 6
-				}
-			}).success(function(data){
-				//assign feature objects to scope for use in template
-				scope.features = data.response.features;
-			});
-		};
+        }
+      }).success(function(data){
+        //assign feature objects to scope for use in template
+        scope.features = data.response.features;
+      });
+    };
 
     var set = function(arr) {
       return arr.reduce(function (a, val) {
@@ -4264,18 +4709,18 @@ angular.module('commonsCloudAdminApp')
         }
         return a;
       }, []);
-    }
+    };
 
-		//search with timeout to prevent it from firing on every keystroke
-		scope.search = function(){
-			$timeout.cancel(timeout);
+    //search with timeout to prevent it from firing on every keystroke
+    scope.search = function(){
+      $timeout.cancel(timeout);
 
-			timeout = $timeout(function () {
-				getFilteredResults(scope.field);
-			}, 2000);
-		};
+      timeout = $timeout(function () {
+        getFilteredResults(scope.table);
+      }, 200);
+    };
 
-		scope.addFeatureToRelationships = function(feature){
+    scope.addFeatureToRelationships = function(feature){
 
       if (angular.isArray(scope.model)) {
         // scope.human_readable_values.push(feature);
@@ -4291,11 +4736,10 @@ angular.module('commonsCloudAdminApp')
       // Clear out input field
       scope.searchText = '';
       scope.features = [];
-		};
+    };
 
     scope.removeFeatureFromRelationships = function(index) {
-      // delete scope.human_readable_values.splice(index, 1);
-      delete scope.model.splice(index, 1);
+      scope.model.splice(index, 1);
     };
 
     scope.resetField = function() {
@@ -4305,16 +4749,19 @@ angular.module('commonsCloudAdminApp')
       console.log('Field reset');
     };
 
-	}
+  }
 
-	return {
-	  scope: {
-			field: '=',
-      feature: '=',
-      model: '='
-	  },
-	  templateUrl: '/views/includes/relationship.html',
-	  restrict: 'E',
-	  link: link
-	};
+  return {
+    scope: {
+      table: '=',
+      model: '=',
+      fields: '=',
+      placeholder: '=',
+      class: '=',
+      template: '='
+    },
+    templateUrl: '/views/includes/relationship.html',
+    restrict: 'E',
+    link: link
+  };
 });

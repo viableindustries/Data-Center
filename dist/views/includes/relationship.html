@@ -1,26 +1,47 @@
-<div class="relationship">
+<div class="relationship" data-ng-show="template === 'default'">
   <div class="row">
-  	<div class="col-xs-11">
-			<input data-ng-focus="relationship_focus=true" data-ng-blur="relationship_focus=false" type="text" placeholder="{{ placeholder }}" data-ng-model="searchText" data-ng-change="search()" class="form-control" />
-			<div data-ng-if="features.length" class="dropdown">
-				<ul>
-					<!-- <li data-ng-if="relationship_focus && !features.length"><p><em>Begin typing to select the {{ field.label }} you want</em></p></li> -->
-					<li data-ng-repeat="feature in features"><a href="#" data-ng-click="addFeatureToRelationships(feature)">{{ feature.name }}</a></li>
-				</ul>
-			</div>
-			<div data-ng-if="model.length >= 1" class="relationship-values">
-				<div class="row" data-ng-repeat="option in model">
-					<div class="col-sm-11">
-						<p>{{ option.name }}</p>
-					</div>
-					<div class="col-xs-1">
-						<p><a class="text-right icon retinaicon-essentials-068" href="#" data-ng-click="removeFeatureFromRelationships($index)"></a></p>
-					</div>
-				</div>
-			</div>
-  	</div>
-  	<div class="col-xs-1">
-  	  <br />
-  		<a data-ng-click="resetField()"><span class="icon retinaicon-essentials-045"></span></a>
-  	</div>
+    <div class="col-xs-11">
+      <input data-ng-focus="relationship_focus=true" data-ng-blur="relationship_focus=false" type="text" placeholder="{{ placeholder }}" data-ng-model="searchText" data-ng-change="search()" class="{{ class_ }}" />
+      <div data-ng-if="features.length" class="dropdown">
+        <ul>
+          <!-- <li data-ng-if="relationship_focus && !features.length"><p><em>Begin typing to select the {{ field.label }} you want</em></p></li> -->
+          <li data-ng-repeat="feature in features"><a href="#" data-ng-click="addFeatureToRelationships(feature)">{{ feature.name }}</a></li>
+        </ul>
+      </div>
+      <div data-ng-if="model.length >= 1" class="relationship-values">
+        <div class="row" data-ng-repeat="option in model">
+          <div class="col-sm-11">
+            <p>{{ option.name }}</p>
+          </div>
+          <div class="col-xs-1">
+            <p><a class="text-right icon retinaicon-essentials-068" href="#" data-ng-click="removeFeatureFromRelationships($index)"></a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-1">
+      <br />
+     <a data-ng-click="resetField()"><span class="icon retinaicon-essentials-045"></span></a>
+    </div>
+  </div>
+</div>
+
+<div class="relationship" data-ng-show="template === 'filter'">
+  <input data-ng-focus="relationship_focus=true" data-ng-blur="relationship_focus=false" type="text" placeholder="{{ placeholder }}" data-ng-model="searchText" data-ng-change="search()" class="{{ class_ }}" />
+  <div data-ng-if="features.length" class="dropdown">
+    <ul>
+      <!-- <li data-ng-if="relationship_focus && !features.length"><p><em>Begin typing to select the {{ field.label }} you want</em></p></li> -->
+      <li data-ng-repeat="feature in features"><a href="#" data-ng-click="addFeatureToRelationships(feature)">{{ feature.name }}</a></li>
+    </ul>
+  </div>
+  <div data-ng-if="model.length >= 1" class="relationship-values">
+    <div class="row" data-ng-repeat="option in model">
+      <div class="col-sm-11">
+        <p>{{ option.name }}</p>
+      </div>
+      <div class="col-xs-1">
+        <p><a class="text-right icon retinaicon-essentials-068" href="#" data-ng-click="removeFeatureFromRelationships($index)"></a></p>
+      </div>
+    </div>
+  </div>
 </div>

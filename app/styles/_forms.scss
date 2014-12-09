@@ -172,6 +172,12 @@ label.alt {
   text-decoration: none;
 }
 
+.btn.btn-text {
+  background: none;
+  border: none;
+  font-size: 11px;
+}
+
 .checkbox {}
 
   .checkbox.inline {
@@ -422,17 +428,22 @@ input::-webkit-inner-spin-button {
 
     line-height: 1.2;
 
-    padding: 8px;
+    padding: 8px 0;
     margin: 0;
 
     text-transform: none;
 
     .icon {
       font-size: 0.75em;
+      padding-right: 8px;
     }
 
     span {
       color: lighten($color-brand-black-base, 50%);
+    }
+
+    &.filter-label-push {
+      padding: 8px 16px;
     }
   }
 
@@ -489,7 +500,7 @@ input::-webkit-inner-spin-button {
   .filter-group {
     border-left: 3px solid $color-brightBlue;
     margin-bottom: 16px;
-    padding: 0 16px;
+    padding: 0;
 
     &.filter-group-readonly {
       border-left: 3px solid $color-brand-white-dark;
@@ -506,5 +517,10 @@ input::-webkit-inner-spin-button {
     &:hover {
       color: darken($color-red-base, 10%);
     }
+  }
+
+  .column-flex {
+    float: left;
+    width: auto;
   }
 }

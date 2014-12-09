@@ -18,9 +18,12 @@ angular.module('commonsCloudAdminApp')
     $scope.fields = fields;
     $scope.batch = {
       selected: false,
-      functions: false
+      functions: false,
+      search: false
     };
+
     $scope.defaults = $location.search();
+    $scope.features = [];
 
     $scope.page = {
       template: '/views/features.html',
@@ -34,6 +37,10 @@ angular.module('commonsCloudAdminApp')
       }],
       refresh: function() {
         $route.reload();
+      },
+      reset: function() {
+        $scope.filters.reset();
+        $scope.search.execute();
       }
     };
 
@@ -76,6 +83,9 @@ angular.module('commonsCloudAdminApp')
   //
   // CONTENT
   //
+    if ($scope.defaults.q !== undefined && $scope.defaults.q !== null) {
+      $scope.batch.search = true;
+    }
 
     //
     // When the page initially loads, we should check to see if existing filters are present in the
@@ -83,16 +93,17 @@ angular.module('commonsCloudAdminApp')
     // that populate the list shown to the user, we update this later on based upon filters that the
     // user applies
     //
+    console.log('$scope.defaults', $scope.defaults);
     Feature.GetFeatures({
       storage: $scope.template.storage,
       page: $route.current.params.page,
       q: $route.current.params.q,
       location: $scope.defaults,
-      fields: fields
+      fields: fields,
+      relationship: true
     }).then(function(response) {
       $scope.features = response;
     });
-
 
     //
     // Setup project filter functionality
@@ -105,6 +116,20 @@ angular.module('commonsCloudAdminApp')
       callback: ($scope.defaults.callback) ? $scope.defaults.callback : null,
       selected: filters_,
       available: filters_
+    };
+
+    $scope.filters.clear = function ($index) {
+
+      //
+      // Each Filter can have multiple criteria such as single ilike, or
+      // a combination of gte and lte. We need to null the values of all 
+      // filters in order for the URL to change appropriately
+      //
+      angular.forEach($scope.filters.available[$index].filter, function(criteria, $_index) {
+        $scope.filters.available[$index].filter[$_index].value = null;
+      }); 
+
+      $scope.search.execute();
     };
 
     $scope.filters.select = function ($index) {
@@ -126,6 +151,22 @@ angular.module('commonsCloudAdminApp')
       $scope.search.execute();
     };
 
+    $scope.filters.reset = function () {
+
+      //
+      // Each Filter can have multiple criteria such as single ilike, or
+      // a combination of gte and lte. We need to null the values of all 
+      // filters in order for the URL to change appropriately
+      //
+      angular.forEach($scope.filters.available, function(criteria, $index) {
+        angular.forEach($scope.filters.available[$index].filter, function(criteria, $__index) {
+          $scope.filters.available[$index].filter[$__index].value = null;
+          $scope.filters.available[$index].active = false;
+        }); 
+      }); 
+
+      $scope.search.execute();
+    };
 
     //
     // Filter existing Features to a specified list based on the user's input
@@ -161,6 +202,7 @@ angular.module('commonsCloudAdminApp')
             }
           ]
         },
+        relationship: true,
         page: ($scope.filters.page) ? $scope.filters.page: null,
         results_per_page: ($scope.filters.results_per_page) ? $scope.filters.results_per_page: null,
         callback: ($scope.filters.callback) ? $scope.filters.callback: null,
@@ -182,7 +224,7 @@ angular.module('commonsCloudAdminApp')
           q: Q_,
           page: ($scope.filters.page) ? $scope.filters.page: null,
           results_per_page: ($scope.filters.results_per_page) ? $scope.filters.results_per_page: null,
-          callback: ($scope.filters.callback) ? $scope.filters.callback: null 
+          callback: ($scope.filters.callback) ? $scope.filters.callback: null
         });
 
         $scope.features = response;
@@ -202,7 +244,6 @@ angular.module('commonsCloudAdminApp')
 
       console.log('Go to page', page_number);
     };
-
 
   //
   // BATCH
@@ -270,5 +311,6 @@ angular.module('commonsCloudAdminApp')
       deferred.resolve();
 
     };
+
 
   }]);

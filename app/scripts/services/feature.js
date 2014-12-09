@@ -88,19 +88,33 @@ angular.module('commonsCloudAdminApp')
 
         return promise;
       };
+
       Feature.GetFeatures = function(options) {
+
+        var defaults = options.location;
+        var getFilters = Feature.buildFilters(options.fields, defaults);
+
+        var filters = {
+          page: (defaults.page) ? defaults.page : null,
+          results_per_page: (defaults.results_per_page) ? defaults.results_per_page : null,
+          callback: (defaults.callback) ? defaults.callback : null,
+          selected: getFilters,
+          available: getFilters
+        };
 
         var promise = Feature.query({
             storage: options.storage,
             page: (options.page === undefined || options.page === null) ? 1: options.page,
             q: {
-              'order_by': [
+              filters: Feature.getFilters(filters),
+              order_by: [
                 {
-                  'field': 'id',
-                  'direction': 'desc'
+                  field: 'created',
+                  direction: 'desc'
                 }
               ]
             },
+            relationship: (options.relationship === undefined || options.relationship === null) ? false: options.relationship,
             updated: new Date().getTime()
           }).$promise.then(function(response) {
             return response;
@@ -184,10 +198,21 @@ angular.module('commonsCloudAdminApp')
           //
           angular.forEach(filter.filter, function(criteria, $index) {
             if (criteria.value !== null) {
+              var criteria_value = null;
+
+              if (criteria.op === 'ilike') {
+                criteria_value = '%' + criteria.value + '%';
+              } else if (criteria.op === 'any' && angular.isArray(criteria.value)) {
+                // criteria_value = Feature.getFiltersRelationshipValue(criteria.value);
+                criteria_value = criteria.value[0].id;
+              } else {
+                criteria_value = criteria.value;
+              }
+
               filters_.push({
                 name: filter.field,
                 op: criteria.op,
-                val: (criteria.op === 'ilike') ? '%' + criteria.value + '%' : criteria.value
+                val: criteria_value
               });
             }
           });          
@@ -196,6 +221,17 @@ angular.module('commonsCloudAdminApp')
 
         return filters_;
       };
+
+      Feature.getFiltersRelationshipValue = function(values) {
+
+        var relationships = [];
+
+        angular.forEach(values, function(value, $index) {
+          relationships.push(value.id);
+        });
+
+        return relationships;
+      }
 
       //
       // Build a list of Filters based on a Template Field list passed in through the fields parameter
@@ -212,19 +248,21 @@ angular.module('commonsCloudAdminApp')
         //
         var filters = [],
             types = {
-              text: ['text', 'textarea', 'list', 'email', 'phone', 'url'],
+              text: ['text', 'textarea', 'email', 'phone', 'url'],
               number: ['float', 'whole_number'],
-              date: ['date', 'time']
+              date: ['date', 'time'],
+              relationship: ['relationship'],
+              list: ['list']
             },
             q_ = angular.fromJson(defaults.q);
 
         angular.forEach(fields, function(field, $index) {
-          if (Feature.inList(field.data_type, types.text)) {
+          if (Feature.inList(field.data_type, types.text) && field.is_searchable) {
             filters.push({
               label: field.label,
               field: field.name,
               type: 'text',
-              active: (Feature.getDefault(field, 'ilike', q_)) ? true: false,
+              active: Feature.getActive(field, q_),
               filter: [
                 {
                   op: 'ilike',
@@ -233,12 +271,42 @@ angular.module('commonsCloudAdminApp')
               ]
             });
           }
-          else if (Feature.inList(field.data_type, types.number)) {
+          else if (Feature.inList(field.data_type, types.list) && field.is_searchable) {
+            filters.push({
+              label: field.label,
+              field: field.name,
+              type: 'list',
+              options: field.options,
+              active: Feature.getActive(field, q_),
+              filter: [
+                {
+                  op: 'ilike',
+                  value: Feature.getDefault(field, 'ilike', q_)
+                }
+              ]
+            });
+          }
+          else if (Feature.inList(field.data_type, types.relationship) && field.is_searchable) {
+            filters.push({
+              label: field.label,
+              field: field.relationship + '__id',
+              relationship: field.relationship,
+              type: 'relationship',
+              active: Feature.getActive(field, q_),
+              filter: [
+                {
+                  op: 'any',
+                  value: Feature.getDefault(field, 'any', q_)
+                }
+              ]
+            });
+          }
+          else if (Feature.inList(field.data_type, types.number) && field.is_searchable) {
             filters.push({
               label: field.label,
               field: field.name,
               type: 'number',
-              active: false,
+              active: Feature.getActive(field, q_),
               filter: [
                 {
                   op: 'gte',
@@ -251,12 +319,12 @@ angular.module('commonsCloudAdminApp')
               ]
             });
           }
-          else if (Feature.inList(field.data_type, types.date)) {
+          else if (Feature.inList(field.data_type, types.date) && field.is_searchable) {
             filters.push({
               label: field.label,
               field: field.name,
               type: 'date',
-              active: false,
+              active: Feature.getActive(field, q_),
               filter: [
                 {
                   op: 'gte',
@@ -274,6 +342,22 @@ angular.module('commonsCloudAdminApp')
         return filters;
       };
 
+      Feature.getActive = function(field, defaults) {
+
+        var is_active = false;
+
+        if (defaults !== undefined) {
+          angular.forEach(defaults.filters, function(active_filter, $index) {
+            var field_name = (field.data_type !== 'relationship') ? field.name : field.relationship + '__id';
+            if (field_name === active_filter.name) {
+              is_active = true;
+            }
+          });          
+        }
+
+        return is_active;
+      }
+
       //
       // Check if a property is in an object and then select a default value
       //
@@ -283,10 +367,17 @@ angular.module('commonsCloudAdminApp')
 
         if (defaults && defaults.filters !== undefined) {
           angular.forEach(defaults.filters, function(default_value, $index) {
-            if (field.name === default_value.name && op === default_value.op) {
+
+            var field_name = (field.data_type !== 'relationship') ? field.name : field.relationship + '__id';
+            if (field_name === default_value.name && op === default_value.op) {
+              console.log('defaults.filters forEach', default_value.name, field_name, op, default_value.op)
+              console.log('filter match');
               if (default_value.op === 'ilike') {
                 // Remove the % from the string
                 value = default_value.val.replace(/%/g, '');
+              } else if (default_value.op === 'any') {
+                console.log('default_value.val', default_value.val);
+                value = default_value.val
               } else {
                 value = default_value.val;
               }

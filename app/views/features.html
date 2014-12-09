@@ -2,7 +2,7 @@
             <div class="row">
               <div class="col-sm-12">
                 <div class="row toolbox">
-                  <div class="col-sm-2">
+                  <div class="col-sm-3">
                     <ul class="batch">
                       <li>
                         <a href="javascript:void(0)" data-ng-click="batch.selectAll()" class="btn btn-default" title="Select all features">
@@ -21,11 +21,12 @@
                         <a class="btn btn-default" data-ng-click="batch.search =! batch.search" title="Refresh features list">
                           <span class="icon retinaicon-essentials-063"></span>
                         </a>
+                        <a class="btn btn-default btn-text" data-ng-show="batch.search" data-ng-click="page.reset()">Reset Search</a>
                       </li>
                     </ul>
                   
                   </div>
-                  <div class="col-sm-7">
+                  <div class="col-sm-6">
 
                     <form data-ng-show="batch.search" class="filter" method="POST" role="search">
                       <input type="hidden" data-ng-model="filters.page" />
@@ -35,13 +36,20 @@
                       <div class="row">
                         <div class="col-sm-2">
                           <label class="control-label filter-label"><span class="icon retinaicon-essentials-063"></span> Filter by</label>
+
                         </div>
                         <div class="col-sm-10">
                           <div data-ng-if="filter.active" class="filter-group row" data-ng-repeat="filter in filters.available track by $index">
-                              <div class="column-flex">
-                                <label class="control-label filter-label">{{ filters.available[$index].label }}</label>
-                              </div>
-                              <div class="column-10">
+                            <div class="col-sm-12">
+                              <label class="control-label filter-label">{{ filters.available[$index].label }}</label>
+                            </div>
+                            <div class="col-sm-10">
+
+                              <div data-ng-if="filters.available[$index].type === 'relationship'">
+                                <relationship data-ng-if="!filters.available[$index].filter[0].value" model="filters.available[$index].filter[0].value" table="filter.relationship" fields="['name']" placeholder="'Enter ' + filter.label + ' name'" class="'filter-control'" template="'filter'"></relationship>
+                                <input type="text" readonly="readonly" data-ng-if="filters.available[$index].filter[0].value" value="{{ filters.available[$index].filter[0].value[0].name }}" data-ng-init="search.features()" class="filter-control" />
+                              </div>              
+
                               <!-- Text Field -->
                               <div data-ng-if="filters.available[$index].type === 'text'">
                                 <input class="filter-control" type="text" data-ng-model="filters.available[$index].filter[0].value" data-ng-change="search.features()" autofocus="autofocus" />
@@ -73,18 +81,18 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="column-2">
+                            <div class="col-sm-2">
                               <a class="filter-action" data-ng-click="filters.remove($index)">Remove</a>
                             </div>
                           </div>
                           <div class="filter-group filter-group-readonly row">
                             <div class="column-flex">
-                              <label class="control-label filter-label">Add Filter</label>
+                              <label class="control-label filter-label filter-label-push">Add Filter</label>
                             </div>
                             <div class="column-flex">
                               <select class="filter-control" data-ng-model="filters.available[$index]" data-ng-change="filters.select($index)" data-ng-options="filter.label for filter in filters.available">
                                 <option value="">Pick a filter</option>
-                              </select>                                      
+                              </select>  
                             </div>
                           </div>
                         </div>

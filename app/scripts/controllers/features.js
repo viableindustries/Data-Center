@@ -197,7 +197,7 @@ angular.module('commonsCloudAdminApp')
           filters: Q,
           order_by: [
             {
-              field: 'created',
+              field: 'id',
               direction: 'desc'
             }
           ]

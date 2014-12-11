@@ -1284,7 +1284,7 @@ angular.module('commonsCloudAdminApp')
               filters: Feature.getFilters(filters),
               order_by: [
                 {
-                  field: 'created',
+                  field: 'id',
                   direction: 'desc'
                 }
               ]
@@ -3202,7 +3202,7 @@ angular.module('commonsCloudAdminApp')
           filters: Q,
           order_by: [
             {
-              field: 'created',
+              field: 'id',
               direction: 'desc'
             }
           ]

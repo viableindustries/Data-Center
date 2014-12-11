@@ -3260,8 +3260,8 @@ angular.module('commonsCloudAdminApp')
       var check = false;
 
       promise.then(function () {
-        $scope.features.forEach(function (feature, index) {
-          if ($scope.features[index].batch) {
+        $scope.features.response.features.forEach(function (feature, index) {
+          if ($scope.features.response.features[index].batch) {
             check = true;
           }
         });
@@ -3285,9 +3285,9 @@ angular.module('commonsCloudAdminApp')
 
       console.log('select all?', $scope.batch.selected);
 
-      $scope.features.forEach(function(feature, index){
-        $scope.features[index].batch = $scope.batch.selected;
-        console.log('$scope.features[index].batch', index, $scope.features[index].batch);
+      angular.forEach($scope.features.response.features, function(feature, index){
+        $scope.features.response.features[index].batch = $scope.batch.selected;
+        console.log('$scope.features.response.features[index].batch', index, $scope.features.response.features[index].batch);
       });
     };
 
@@ -3297,7 +3297,7 @@ angular.module('commonsCloudAdminApp')
       var promise = deferred.promise;
 
       promise.then(function () {
-        $scope.features.forEach(function (feature, index) {
+        $scope.features.response.features.forEach(function (feature, index) {
           if (feature.batch) {
             Feature.delete({
               storage: $scope.template.storage,

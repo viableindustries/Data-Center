@@ -22,10 +22,6 @@ angular.module('commonsCloudAdminApp')
     //
     $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
 
-    $timeout(function () {
-      $rootScope.alerts = [];
-    }, 5000);
-
     $scope.page = {
       template: '/views/field-create.html',
       title: 'Add a new attribute to ' + $scope.template.name,
@@ -40,23 +36,30 @@ angular.module('commonsCloudAdminApp')
     // Create a new Field that does not yet exist in the API database
     //
     $scope.CreateField = function () {
-      $scope.field.$save({
-        templateId: $scope.template.id
-      }).then(function(response) {
-        $rootScope.alerts.push({
-          'type': 'success',
-          'title': 'Great!',
-          'details': 'Your new Field was added to the Template.'
-        });
+      console.log('$scope.CreateField', $scope.field);
+      // $scope.field.$save({
+      //   templateId: $scope.template.id
+      // }).then(function(response) {
+      //   $rootScope.alerts.push({
+      //     'type': 'success',
+      //     'title': 'Great!',
+      //     'details': 'Your new Field was added to the Template.'
+      //   });
 
-        $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/attributes');
-      }, function(error) {
-        $rootScope.alerts.push({
-          'type': 'error',
-          'title': 'Uh-oh!',
-          'details': 'Mind trying that again? It looks like we couldn\'t create that Field for you.'
-        });
-      });
+      //   $location.path('/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/attributes');
+      // }, function(error) {
+      //   $rootScope.alerts.push({
+      //     'type': 'error',
+      //     'title': 'Uh-oh!',
+      //     'details': 'Mind trying that again? It looks like we couldn\'t create that Field for you.'
+      //   });
+      // });
     };
+
+    console.log('$scope.templates', $scope.templates);
+
+    $scope.$watch('field', function(old_, new_) {
+      console.log('$scope.field', old_, new_);
+    });
 
   }]);

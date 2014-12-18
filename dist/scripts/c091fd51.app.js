@@ -6,7 +6,6 @@ angular
     'ngResource',
     'ngSanitize',
     'ngRoute',
-    'ngAnimate',
     'ui.gravatar',
     'leaflet-directive',
     'angularFileUpload',

@@ -3375,85 +3375,81 @@ angular.module('commonsCloudAdminApp')
 
     $scope.controls = {
       draw: {
-        options: {
-          draw: {
-            circle: false,
-            rectangle: false,
-            polyline: {
-              shapeOptions: {
-                stroke: true,
-                color: '#ffffff',
-                weight: 4,
-                opacity: 0.5,
-                fill: true,
-                fillColor: null,
-                fillOpacity: 0.2,
-                clickable: true
-              }
-            },
-            polygon: {
-              shapeOptions: {
-                stroke: true,
-                color: '#ffffff',
-                weight: 4,
-                opacity: 0.5,
-                fill: true,
-                fillColor: '#ffffff',
-                fillOpacity: 0.2,
-                clickable: true
-              }
-            },
-            handlers: {
-              marker: {
-                tooltip: {
-                  start: 'Click map to place marker.'
-                }
-              },
-              polygon: {
-                tooltip: {
-                  start: 'Click to start drawing shape.',
-                  cont: 'Click to continue drawing shape.',
-                  end: 'Click first point to close this shape.'
-                }
-              },
-              polyline: {
-                error: '<strong>Error:</strong> shape edges cannot cross!',
-                tooltip: {
-                  start: 'Click to start drawing line.',
-                  cont: 'Click to continue drawing line.',
-                  end: 'Click last point to finish line.'
-                }
-              },
-              simpleshape: {
-                tooltip: {
-                  end: 'Release mouse to finish drawing.'
-                }
-              }
+        circle: false,
+        rectangle: false,
+        polyline: {
+          shapeOptions: {
+            stroke: true,
+            color: '#ffffff',
+            weight: 4,
+            opacity: 0.5,
+            fill: true,
+            fillColor: null,
+            fillOpacity: 0.2,
+            clickable: true
+          }
+        },
+        polygon: {
+          shapeOptions: {
+            stroke: true,
+            color: '#ffffff',
+            weight: 4,
+            opacity: 0.5,
+            fill: true,
+            fillColor: '#ffffff',
+            fillOpacity: 0.2,
+            clickable: true
+          }
+        },
+        handlers: {
+          marker: {
+            tooltip: {
+              start: 'Click map to place marker.'
             }
           },
+          polygon: {
+            tooltip: {
+              start: 'Click to start drawing shape.',
+              cont: 'Click to continue drawing shape.',
+              end: 'Click first point to close this shape.'
+            }
+          },
+          polyline: {
+            error: '<strong>Error:</strong> shape edges cannot cross!',
+            tooltip: {
+              start: 'Click to start drawing line.',
+              cont: 'Click to continue drawing line.',
+              end: 'Click last point to finish line.'
+            }
+          },
+          simpleshape: {
+            tooltip: {
+              end: 'Release mouse to finish drawing.'
+            }
+          }
+        }
+      },
+      edit: {
+        selectedPathOptions: {
+          color: '#ffffff',
+          opacity: 0.6,
+          dashArray: '10, 10',
+          fill: true,
+          fillColor: '#ffffff',
+          fillOpacity: 0.1
+        },
+        'featureGroup': featureGroup,
+        'remove': true,
+        handlers: {
           edit: {
-            selectedPathOptions: {
-              color: '#ffffff',
-              opacity: 0.6,
-              dashArray: '10, 10',
-              fill: true,
-              fillColor: '#ffffff',
-              fillOpacity: 0.1
-            },
-            'featureGroup': featureGroup,
-            'remove': true,
-            handlers: {
-              edit: {
-                tooltip: {
-                  text: 'Drag handles, or marker to edit feature.',
-                  subtext: 'Click cancel to undo changes.'
-                }
-              },
-              remove: {
-                tooltip: {
-                  text: 'Click on a feature to remove'
-                }
-              }
+            tooltip: {
+              text: 'Drag handles, or marker to edit feature.',
+              subtext: 'Click cancel to undo changes.'
+            }
+          },
+          remove: {
+            tooltip: {
+              text: 'Click on a feature to remove'
             }
           }
         }
@@ -3776,85 +3772,81 @@ angular.module('commonsCloudAdminApp')
 
     $scope.controls = {
       draw: {
-        options: {
-          draw: {
-            circle: false,
-            rectangle: false,
-            polyline: {
-              shapeOptions: {
-                stroke: true,
-                color: '#ffffff',
-                weight: 4,
-                opacity: 0.5,
-                fill: true,
-                fillColor: null,
-                fillOpacity: 0.2,
-                clickable: true
-              }
-            },
-            polygon: {
-              shapeOptions: {
-                stroke: true,
-                color: '#ffffff',
-                weight: 4,
-                opacity: 0.5,
-                fill: true,
-                fillColor: '#ffffff',
-                fillOpacity: 0.2,
-                clickable: true
-              }
-            },
-            handlers: {
-              marker: {
-                tooltip: {
-                  start: 'Click map to place marker.'
-                }
-              },
-              polygon: {
-                tooltip: {
-                  start: 'Click to start drawing shape.',
-                  cont: 'Click to continue drawing shape.',
-                  end: 'Click first point to close this shape.'
-                }
-              },
-              polyline: {
-                error: '<strong>Error:</strong> shape edges cannot cross!',
-                tooltip: {
-                  start: 'Click to start drawing line.',
-                  cont: 'Click to continue drawing line.',
-                  end: 'Click last point to finish line.'
-                }
-              },
-              simpleshape: {
-                tooltip: {
-                  end: 'Release mouse to finish drawing.'
-                }
-              }
+        circle: false,
+        rectangle: false,
+        polyline: {
+          shapeOptions: {
+            stroke: true,
+            color: '#ffffff',
+            weight: 4,
+            opacity: 0.5,
+            fill: true,
+            fillColor: null,
+            fillOpacity: 0.2,
+            clickable: true
+          }
+        },
+        polygon: {
+          shapeOptions: {
+            stroke: true,
+            color: '#ffffff',
+            weight: 4,
+            opacity: 0.5,
+            fill: true,
+            fillColor: '#ffffff',
+            fillOpacity: 0.2,
+            clickable: true
+          }
+        },
+        handlers: {
+          marker: {
+            tooltip: {
+              start: 'Click map to place marker.'
             }
           },
+          polygon: {
+            tooltip: {
+              start: 'Click to start drawing shape.',
+              cont: 'Click to continue drawing shape.',
+              end: 'Click first point to close this shape.'
+            }
+          },
+          polyline: {
+            error: '<strong>Error:</strong> shape edges cannot cross!',
+            tooltip: {
+              start: 'Click to start drawing line.',
+              cont: 'Click to continue drawing line.',
+              end: 'Click last point to finish line.'
+            }
+          },
+          simpleshape: {
+            tooltip: {
+              end: 'Release mouse to finish drawing.'
+            }
+          }
+        }
+      },
+      edit: {
+        selectedPathOptions: {
+          color: '#ffffff',
+          opacity: 0.6,
+          dashArray: '10, 10',
+          fill: true,
+          fillColor: '#ffffff',
+          fillOpacity: 0.1
+        },
+        'featureGroup': featureGroup,
+        'remove': true,
+        handlers: {
           edit: {
-            selectedPathOptions: {
-              color: '#ffffff',
-              opacity: 0.6,
-              dashArray: '10, 10',
-              fill: true,
-              fillColor: '#ffffff',
-              fillOpacity: 0.1
-            },
-            'featureGroup': featureGroup,
-            'remove': true,
-            handlers: {
-              edit: {
-                tooltip: {
-                  text: 'Drag handles, or marker to edit feature.',
-                  subtext: 'Click cancel to undo changes.'
-                }
-              },
-              remove: {
-                tooltip: {
-                  text: 'Click on a feature to remove'
-                }
-              }
+            tooltip: {
+              text: 'Drag handles, or marker to edit feature.',
+              subtext: 'Click cancel to undo changes.'
+            }
+          },
+          remove: {
+            tooltip: {
+              text: 'Click on a feature to remove'
             }
           }
         }

@@ -32,7 +32,7 @@ angular.module('commonsCloudAdminApp')
         return response || $q.when(response);
       },
       responseError: function (response) {
-        if (response && (response.status === 401 || response === 403)) {
+        if (response && (response.status === 401 || response.status === 403)) {
           console.error('Couldn\'t retrieve user information from server., need to redirect and clear cookies');
 
           var session_cookie = ipCookie('COMMONS_SESSION');

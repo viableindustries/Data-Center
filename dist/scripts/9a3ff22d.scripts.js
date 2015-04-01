@@ -1031,7 +1031,7 @@ angular.module('commonsCloudAdminApp')
         return response || $q.when(response);
       },
       responseError: function (response) {
-        if (response && (response.status === 401 || response === 403)) {
+        if (response && (response.status === 401 || response.status === 403)) {
           console.error('Couldn\'t retrieve user information from server., need to redirect and clear cookies');
 
           var session_cookie = ipCookie('COMMONS_SESSION');
@@ -1377,7 +1377,7 @@ angular.module('commonsCloudAdminApp')
               if (criteria.op === 'ilike') {
                 criteria_value = '%' + criteria.value + '%';
               } else if (criteria.op === 'any' && angular.isArray(criteria.value)) {
-                // criteria_value = Feature.getFiltersRelationshipValue(criteria.value);
+                criteria_value = Feature.getFiltersRelationshipValue(criteria.value);
                 criteria_value = criteria.value[0].id;
               } else {
                 criteria_value = criteria.value;
@@ -1430,10 +1430,10 @@ angular.module('commonsCloudAdminApp')
             },
             q_ = angular.fromJson(defaults.q);
 
-        console.log('Build fields')
+        // console.log('Build fields')
         for (var $index = 0; $index < fields.length; $index++) {
           var field = fields[$index];
-          console.log('build filter for ', field)
+          // console.log('build filter for ', field)
           if (Feature.inList(field.data_type, types.text) && field.is_searchable) {
             filters.push({
               label: field.label,
@@ -1464,22 +1464,22 @@ angular.module('commonsCloudAdminApp')
             });
           }
           else if (Feature.inList(field.data_type, types.relationship) && field.is_searchable) {
-            // Feature.getRelationshipDefault(field, 'any', q_).then(function(response) {
-            //   filters.push({
-            //     label: field.label,
-            //     field: field.relationship + '__id',
-            //     relationship: field.relationship,
-            //     type: 'relationship',
-            //     active: Feature.getActive(field, q_),
-            //     filter: [
-            //       {
-            //         op: 'any',
-            //         value: response[0]
-            //       }
-            //     ]
-            //   });
-            //   console.log('Relationship Field Default Value', response);
-            // });
+            Feature.getRelationshipDefault(field, 'any', q_).then(function(response) {
+              filters.push({
+                label: field.label,
+                field: field.relationship + '__id',
+                relationship: field.relationship,
+                type: 'relationship',
+                active: Feature.getActive(field, q_),
+                filter: [
+                  {
+                    op: 'any',
+                    value: response[0]
+                  }
+                ]
+              });
+              console.log('Relationship Field Default Value', response);
+            });
           }
           else if (Feature.inList(field.data_type, types.number) && field.is_searchable) {
             filters.push({
@@ -2019,31 +2019,40 @@ angular.module('commonsCloudAdminApp')
 angular.module('commonsCloudAdminApp')
   .controller('IndexCtrl', ['$rootScope', '$scope', 'ipCookie', '$location', '$window', 'user', function($rootScope, $scope, ipCookie, $location, $window, user) {
 
-    var session_cookie = ipCookie('COMMONS_SESSION');
+    $scope.sessionCookie = ipCookie('COMMONS_SESSION');
 
-    $scope.setupLoginPage = function() {
-      var host = $location.host();
-
-      //
-      // Redirect based on current enviornment
-      //
-      if (host === 'localhost' || host === '127.0.0.1') {
-        $scope.login_url = '//api.commonscloud.org/oauth/authorize?response_type=token&client_id=PGvNp0niToyRspXaaqx3PiQBMn66QXyAq5yrNHpz&redirect_uri=http%3A%2F%2F127.0.0.1%3A9000%2Fauthorize&scope=user applications';
-      } else if (host === 'stg.commonscloud.org') {
-        $scope.login_url = '//api.commonscloud.org/oauth/authorize?response_type=token&client_id=MbanCzYpm0fUW8md1cdSJjUoYI78zTbak2XhZ2hf&redirect_uri=http%3A%2F%2Fstg.commonscloud.org%2Fauthorize&scope=user applications';
-      } else {
-        $scope.login_url = '//api.commonscloud.org/oauth/authorize?response_type=token&client_id=MbanCzYpm0fUW8md1cdSJjUoYI78zTbak2XhZ2hF&redirect_uri=http%3A%2F%2Fapp.commonscloud.org%2Fauthorize&scope=user applications';
+    //
+    // Setup basic page variables
+    //
+    $scope.page = {
+      host: $location.host(),
+      links: {
+        development: $location.protocol() + '://api.commonscloud.org/oauth/authorize?response_type=token&client_id=PGvNp0niToyRspXaaqx3PiQBMn66QXyAq5yrNHpz&redirect_uri=http%3A%2F%2F127.0.0.1%3A9000%2Fauthorize&scope=user applications',
+        production: $location.protocol() + '://api.commonscloud.org/oauth/authorize?response_type=token&client_id=MbanCzYpm0fUW8md1cdSJjUoYI78zTbak2XhZ2hF&redirect_uri=http%3A%2F%2Fapp.commonscloud.org%2Fauthorize&scope=user applications'
       }
-
     };
 
-    if (session_cookie && session_cookie !== undefined && session_cookie !== 'undefined') {
+    //
+    // Check to see if the user has a defined session cookie that we can use to authenicate
+    // to the API with
+    //
+    if ($scope.sessionCookie !== undefined && $scope.sessionCookie !== 'undefined') {
       $location.hash('');
       $location.path('/applications');
     } else {
+      //
+      // If the cookie is not valid, then we need to just delete the offending cookie
+      //
       ipCookie.remove('COMMONS_SESSION');
       ipCookie.remove('COMMONS_SESSION', { path: '/' });
-      $scope.setupLoginPage();
+
+      //
+      // Since this system requires authentication to perform any task we should just
+      // redirect the user to the login page via the $scope.page.links variable
+      //
+      $location.hash('');
+
+      $window.location.href = ($scope.page.host === 'localhost' || $scope.page.host === '127.0.0.1') ? $scope.page.links.development : $scope.page.links.production;
     }
 
   }]);
@@ -3017,8 +3026,7 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.application = application;
     $scope.template = template;
-    // $scope.features = features.response.features;
-    // $scope.featureproperties = features.properties;
+
     $scope.fields = fields;
     $scope.batch = {
       selected: false,
@@ -3113,6 +3121,8 @@ angular.module('commonsCloudAdminApp')
     // Setup project filter functionality
     //
     var filters_ = Feature.buildFilters(fields, $scope.defaults);
+
+    console.log('filters_', filters_)
 
     $scope.filters = {
       page: ($scope.defaults.page) ? $scope.defaults.page : null,
@@ -3338,6 +3348,8 @@ angular.module('commonsCloudAdminApp')
     $scope.files = [];
     $scope.feature.status = 'public';
     $scope.default_geometry = {};
+
+    $scope.search = {};
 
     $scope.page = {
       template: '/views/feature-create.html',
@@ -3668,10 +3680,14 @@ angular.module('commonsCloudAdminApp')
 
     };
 
-    $scope.initGeocoder = function() {
-      var requested_location = $scope.geocoder;
+    $scope.$watch('search', function(new_value) {
+      console.log('geocoder watch', new_value)
+    }, true);
 
-      console.log(requested_location);
+    $scope.initGeocoder = function() {
+      var requested_location = $scope.search.address;
+
+      console.log('requested_location', requested_location);
 
       var geocode_service_url = '//api.tiles.mapbox.com/v4/geocode/mapbox.places-v1/' + requested_location + '.json';
       $http({
@@ -3701,7 +3717,7 @@ angular.module('commonsCloudAdminApp')
       // the list of possible results so that we can see the map and allow the
       // click event to center the map.
       //
-      $scope.geocoder = '';
+      $scope.search.address = '';
       $scope.geocode_features = [];
 
       leafletData.getMap().then(function(map) {
@@ -4142,7 +4158,7 @@ angular.module('commonsCloudAdminApp')
     };
 
     $scope.initGeocoder = function() {
-      var requested_location = $scope.geocoder;
+      var requested_location = $scope.search.address;
 
       console.log(requested_location);
 
@@ -4172,7 +4188,7 @@ angular.module('commonsCloudAdminApp')
       // the list of possible results so that we can see the map and allow the
       // click event to center the map.
       //
-      $scope.geocoder = '';
+      $scope.search.address = '';
       $scope.geocode_features = [];
 
       leafletData.getMap().then(function(map) {

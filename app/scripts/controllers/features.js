@@ -13,8 +13,7 @@ angular.module('commonsCloudAdminApp')
     //
     $scope.application = application;
     $scope.template = template;
-    // $scope.features = features.response.features;
-    // $scope.featureproperties = features.properties;
+
     $scope.fields = fields;
     $scope.batch = {
       selected: false,
@@ -109,6 +108,8 @@ angular.module('commonsCloudAdminApp')
     // Setup project filter functionality
     //
     var filters_ = Feature.buildFilters(fields, $scope.defaults);
+
+    console.log('filters_', filters_)
 
     $scope.filters = {
       page: ($scope.defaults.page) ? $scope.defaults.page : null,

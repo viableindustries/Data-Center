@@ -91,7 +91,13 @@
                               <label class="control-label filter-label filter-label-push">Add Filter</label>
                             </div>
                             <div class="column-flex">
-                              <select class="filter-control" data-ng-model="filters.available[$index]" data-ng-change="filters.select($index)" data-ng-options="filter.label for filter in filters.available">
+
+<!--                               <p data-ng-repeat="filter in filters.available">
+                                {{ filter }}
+                                {{ filter.type }},{{ filter.label }}
+                              </p> -->
+
+                              <select class="filter-control" data-ng-model="filters.available[$index]" data-ng-change="filters.select($index)" data-ng-options="filter.label for filter in filters.available | orderBy:'label'">
                                 <option value="">Pick a filter</option>
                               </select>  
                             </div>

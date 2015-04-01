@@ -81,7 +81,7 @@
                       <a class="icon retinaicon-essentials-161" href="javascript:void(0)" data-ng-click="getCurrentLocation()"></a>
                     </div>
                     <div class="col-xs-10 address">
-                      <input type="text" id="geocoder" name="geocoder" class="form-control" data-ng-model="geocoder" data-ng-change="initGeocoder()" placeholder="Search for address"/>
+                      <input type="text" id="geocoder" name="geocoder" class="form-control" data-ng-model="search.address" data-ng-change="initGeocoder()" placeholder="Search for address"/>
                       <div data-ng-if="geocode_features.length && geocoder.length >= 3" class="dropdown">
                         <ul>
                           <!-- <li data-ng-if="relationship_focus && !features.length"><p><em>Begin typing to select the {{ field.label }} you want</em></p></li> -->

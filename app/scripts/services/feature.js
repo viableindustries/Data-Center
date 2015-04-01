@@ -203,7 +203,7 @@ angular.module('commonsCloudAdminApp')
               if (criteria.op === 'ilike') {
                 criteria_value = '%' + criteria.value + '%';
               } else if (criteria.op === 'any' && angular.isArray(criteria.value)) {
-                // criteria_value = Feature.getFiltersRelationshipValue(criteria.value);
+                criteria_value = Feature.getFiltersRelationshipValue(criteria.value);
                 criteria_value = criteria.value[0].id;
               } else {
                 criteria_value = criteria.value;
@@ -256,10 +256,10 @@ angular.module('commonsCloudAdminApp')
             },
             q_ = angular.fromJson(defaults.q);
 
-        console.log('Build fields')
+        // console.log('Build fields')
         for (var $index = 0; $index < fields.length; $index++) {
           var field = fields[$index];
-          console.log('build filter for ', field)
+          // console.log('build filter for ', field)
           if (Feature.inList(field.data_type, types.text) && field.is_searchable) {
             filters.push({
               label: field.label,
@@ -290,22 +290,22 @@ angular.module('commonsCloudAdminApp')
             });
           }
           else if (Feature.inList(field.data_type, types.relationship) && field.is_searchable) {
-            // Feature.getRelationshipDefault(field, 'any', q_).then(function(response) {
-            //   filters.push({
-            //     label: field.label,
-            //     field: field.relationship + '__id',
-            //     relationship: field.relationship,
-            //     type: 'relationship',
-            //     active: Feature.getActive(field, q_),
-            //     filter: [
-            //       {
-            //         op: 'any',
-            //         value: response[0]
-            //       }
-            //     ]
-            //   });
-            //   console.log('Relationship Field Default Value', response);
-            // });
+            Feature.getRelationshipDefault(field, 'any', q_).then(function(response) {
+              filters.push({
+                label: field.label,
+                field: field.relationship + '__id',
+                relationship: field.relationship,
+                type: 'relationship',
+                active: Feature.getActive(field, q_),
+                filter: [
+                  {
+                    op: 'any',
+                    value: response[0]
+                  }
+                ]
+              });
+              console.log('Relationship Field Default Value', response);
+            });
           }
           else if (Feature.inList(field.data_type, types.number) && field.is_searchable) {
             filters.push({

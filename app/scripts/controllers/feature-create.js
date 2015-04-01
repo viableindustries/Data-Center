@@ -18,6 +18,8 @@ angular.module('commonsCloudAdminApp')
     $scope.feature.status = 'public';
     $scope.default_geometry = {};
 
+    $scope.search = {};
+
     $scope.page = {
       template: '/views/feature-create.html',
       title: 'Add a ' + $scope.template.name,
@@ -347,10 +349,14 @@ angular.module('commonsCloudAdminApp')
 
     };
 
-    $scope.initGeocoder = function() {
-      var requested_location = $scope.geocoder;
+    $scope.$watch('search', function(new_value) {
+      console.log('geocoder watch', new_value)
+    }, true);
 
-      console.log(requested_location);
+    $scope.initGeocoder = function() {
+      var requested_location = $scope.search.address;
+
+      console.log('requested_location', requested_location);
 
       var geocode_service_url = '//api.tiles.mapbox.com/v4/geocode/mapbox.places-v1/' + requested_location + '.json';
       $http({
@@ -380,7 +386,7 @@ angular.module('commonsCloudAdminApp')
       // the list of possible results so that we can see the map and allow the
       // click event to center the map.
       //
-      $scope.geocoder = '';
+      $scope.search.address = '';
       $scope.geocode_features = [];
 
       leafletData.getMap().then(function(map) {

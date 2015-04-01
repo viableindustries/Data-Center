@@ -423,7 +423,7 @@ angular.module('commonsCloudAdminApp')
     };
 
     $scope.initGeocoder = function() {
-      var requested_location = $scope.geocoder;
+      var requested_location = $scope.search.address;
 
       console.log(requested_location);
 
@@ -453,7 +453,7 @@ angular.module('commonsCloudAdminApp')
       // the list of possible results so that we can see the map and allow the
       // click event to center the map.
       //
-      $scope.geocoder = '';
+      $scope.search.address = '';
       $scope.geocode_features = [];
 
       leafletData.getMap().then(function(map) {

@@ -92,7 +92,7 @@ angular.module('commonsCloudAdminApp')
     // that populate the list shown to the user, we update this later on based upon filters that the
     // user applies
     //
-    console.log('$scope.defaults', $scope.defaults);
+    // console.log('$scope.defaults', $scope.defaults);
     Feature.GetFeatures({
       storage: $scope.template.storage,
       page: $route.current.params.page,
@@ -109,7 +109,7 @@ angular.module('commonsCloudAdminApp')
     //
     var filters_ = Feature.buildFilters(fields, $scope.defaults);
 
-    console.log('filters_', filters_)
+    // console.log('filters_', filters_)
 
     $scope.filters = {
       page: ($scope.defaults.page) ? $scope.defaults.page : null,
@@ -188,7 +188,7 @@ angular.module('commonsCloudAdminApp')
 
       var Q = Feature.getFilters($scope.filters);
 
-      console.log('Q', Q);
+      // console.log('Q', Q);
 
       $scope.filters.page = page_number;
 
@@ -243,7 +243,7 @@ angular.module('commonsCloudAdminApp')
       // Next we go to the selected page `page_number`
       //
 
-      console.log('Go to page', page_number);
+      // console.log('Go to page', page_number);
     };
 
   //
@@ -263,10 +263,10 @@ angular.module('commonsCloudAdminApp')
         });
       }).then(function () {
         if (check) {
-          console.log('A feature is checked display the batch functions')
+          // console.log('A feature is checked display the batch functions')
           $scope.batch.functions = true;
         } else {
-          console.log('No features are checked hide the batch functions')
+          // console.log('No features are checked hide the batch functions')
           $scope.batch.functions = false;
         }
       });
@@ -279,11 +279,11 @@ angular.module('commonsCloudAdminApp')
       $scope.batch.selected =! $scope.batch.selected;
       $scope.batch.functions =! $scope.batch.functions;
 
-      console.log('select all?', $scope.batch.selected);
+      // console.log('select all?', $scope.batch.selected);
 
       angular.forEach($scope.features.response.features, function(feature, index){
         $scope.features.response.features[index].batch = $scope.batch.selected;
-        console.log('$scope.features.response.features[index].batch', index, $scope.features.response.features[index].batch);
+        // console.log('$scope.features.response.features[index].batch', index, $scope.features.response.features[index].batch);
       });
     };
 

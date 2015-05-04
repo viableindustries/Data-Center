@@ -251,7 +251,7 @@ angular.module('commonsCloudAdminApp')
               text: ['text', 'textarea', 'email', 'phone', 'url'],
               number: ['float', 'whole_number'],
               date: ['date', 'time'],
-              relationship: ['relationship'],
+              // relationship: ['relationship'],
               list: ['list']
             },
             q_ = angular.fromJson(defaults.q);
@@ -289,24 +289,24 @@ angular.module('commonsCloudAdminApp')
               ]
             });
           }
-          else if (Feature.inList(field.data_type, types.relationship) && field.is_searchable) {
-            Feature.getRelationshipDefault(field, 'any', q_).then(function(response) {
-              filters.push({
-                label: field.label,
-                field: field.relationship + '__id',
-                relationship: field.relationship,
-                type: 'relationship',
-                active: Feature.getActive(field, q_),
-                filter: [
-                  {
-                    op: 'any',
-                    value: response[0]
-                  }
-                ]
-              });
-              console.log('Relationship Field Default Value', response);
-            });
-          }
+          // else if (Feature.inList(field.data_type, types.relationship) && field.is_searchable) {
+          //   Feature.getRelationshipDefault(field, 'any', q_).then(function(response) {
+          //     filters.push({
+          //       label: field.label,
+          //       field: field.relationship + '__id',
+          //       relationship: field.relationship,
+          //       type: 'relationship',
+          //       active: Feature.getActive(field, q_),
+          //       filter: [
+          //         {
+          //           op: 'any',
+          //           value: response[0]
+          //         }
+          //       ]
+          //     });
+          //     console.log('Relationship Field Default Value', response);
+          //   });
+          // }
           else if (Feature.inList(field.data_type, types.number) && field.is_searchable) {
             filters.push({
               label: field.label,

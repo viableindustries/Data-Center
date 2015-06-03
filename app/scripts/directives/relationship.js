@@ -33,7 +33,7 @@ angular.module('commonsCloudAdminApp')
               }
             ]
           },
-          'results_per_page': 6
+          'results_per_page': 500
         }
       }).success(function(data){
         //assign feature objects to scope for use in template

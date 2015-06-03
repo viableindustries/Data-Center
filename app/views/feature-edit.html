@@ -21,7 +21,7 @@
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'phone'" class="form-control" type="tel" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'date'" class="form-control" class="form-control" type="date" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
                       <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'time'" class="form-control" type="time" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
-                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'whole_number' || field.data_type === 'float'" class="form-control" type="number" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" />
+                      <input data-ng-model="feature[field.name]" data-ng-if="field.data_type === 'whole_number' || field.data_type === 'float'" class="form-control" type="number" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}" step="any" />
 
                       <textarea rows="1" data-ng-show="show" data-ng-init="show = true" data-ng-model="feature[field.name]" class="form-control animate"  msd-elastic data-ng-if="field.data_type === 'textarea' || field.data_type === 'text'" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.label }}">{{ feature[field.name] }}</textarea>
                       <!-- <div data-ng-if="field.data_type === 'relationship'">

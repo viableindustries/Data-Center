@@ -121,35 +121,37 @@
                 </div>
 
                 <form method="POST" class="form">
-                  <table class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th class="batch">&nbsp;</th>
-                        <th class="edit">&nbsp;</th>
-                        <th data-ng-repeat="field in fields" data-ng-if="field.is_listed && (field.data_type === 'text' || field.data_type === 'date' || field.data_type === 'whole_number' || field.data_type === 'float')">
-                          {{ field.label }}
-                        </th>
-                        <th>Status</th>
-                        <th>Created</th>
-                        <th>Last Modified</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr data-ng-repeat="feature in features.response.features track by $index">
-                        <td>
-                          <input data-ng-checked="features.response.features[$index].batch" data-ng-click="features.response.features[$index].batch = !features.response.features[$index].batch; batch.checkSelections();" type="checkbox" class="checkbox" id="batch[{{ feature.id }}]" name="feature[{{ feature.id }}]" />
-                        </td>
-                        <td><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features/{{ feature.id }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                        <td data-ng-repeat="field in fields" data-ng-if="field.is_listed && (field.data_type === 'text' || field.data_type === 'date' || field.data_type === 'whole_number' || field.data_type === 'float')">
-                          <span data-ng-if="field.data_type === 'date'">{{ feature[field.name] | date : 'MMMM d, y @ h:mm a' }}</span>
-                          <span data-ng-if="field.data_type !== 'date'">{{ feature[field.name] }}</span>
-                        </td>
-                        <td>{{ feature.status }}</td>
-                        <td>{{ feature.created | date : 'MMMM d, y @ h:mm a' }}</td>
-                        <td>{{ feature.updated | date : 'MMMM d, y @ h:mm a' }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div class="table-responsive">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th class="batch">&nbsp;</th>
+                          <th class="edit">&nbsp;</th>
+                          <th data-ng-repeat="field in fields" data-ng-if="field.is_listed && (field.data_type === 'text' || field.data_type === 'date' || field.data_type === 'whole_number' || field.data_type === 'float')">
+                            {{ field.label }}
+                          </th>
+                          <th>Status</th>
+                          <th>Created</th>
+                          <th>Last Modified</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr data-ng-repeat="feature in features.response.features track by $index">
+                          <td>
+                            <input data-ng-checked="features.response.features[$index].batch" data-ng-click="features.response.features[$index].batch = !features.response.features[$index].batch; batch.checkSelections();" type="checkbox" class="checkbox" id="batch[{{ feature.id }}]" name="feature[{{ feature.id }}]" />
+                          </td>
+                          <td><a href="/applications/{{ application.id }}/collections/{{ template.id }}/features/{{ feature.id }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                          <td data-ng-repeat="field in fields" data-ng-if="field.is_listed && (field.data_type === 'text' || field.data_type === 'date' || field.data_type === 'whole_number' || field.data_type === 'float')">
+                            <span data-ng-if="field.data_type === 'date'">{{ feature[field.name] | date : 'MMMM d, y @ h:mm a' }}</span>
+                            <span data-ng-if="field.data_type !== 'date'">{{ feature[field.name] }}</span>
+                          </td>
+                          <td>{{ feature.status }}</td>
+                          <td>{{ feature.created | date : 'MMMM d, y @ h:mm a' }}</td>
+                          <td>{{ feature.updated | date : 'MMMM d, y @ h:mm a' }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </form>
               </div>
             </div>

@@ -3349,13 +3349,17 @@ angular.module('commonsCloudAdminApp')
     $scope.feature.status = 'public';
     $scope.default_geometry = {};
 
-    $scope.search = {};
+    $scope.search = {
+      address: null
+    };
+    $scope.geocoder = null;
+    $scope.geocode_features = [];
 
     $scope.page = {
       template: '/views/feature-create.html',
       title: 'Add a ' + $scope.template.name,
       back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features/'
-    }
+    };
 
     //
     // Start a new Alerts array that is empty, this clears out any previous

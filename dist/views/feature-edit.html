@@ -83,7 +83,7 @@
                     </div>
                     <div class="col-xs-10 address">
                       <input type="text" id="geocoder" name="geocoder" class="form-control" data-ng-model="search.address" data-ng-change="initGeocoder()" placeholder="Search for address"/>
-                      <div data-ng-if="geocode_features.length" class="dropdown">
+                      <div data-ng-if="geocode_features.length && search.address.length >= 2" class="dropdown">
                         <ul>
                           <li data-ng-repeat="possible_result in geocode_features"><a href="#" data-ng-click="centerMapOnGeocode(possible_result)">{{ possible_result.place_name }}</a></li>
                         </ul>

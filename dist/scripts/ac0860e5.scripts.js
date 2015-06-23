@@ -3750,12 +3750,17 @@ angular.module('commonsCloudAdminApp')
     $scope.fields = fields;
     $scope.feature = feature;
     $scope.files = [];
+    $scope.search = {
+      address: null
+    };
+    $scope.geocoder = null;
+    $scope.geocode_features = [];
 
     $scope.page = {
       template: '/views/feature-edit.html',
       title: 'Editing feature',
       back: '/applications/' + $scope.application.id + '/collections/' + $scope.template.id + '/features/'
-    }
+    };
 
     //
     // Start a new Alerts array that is empty, this clears out any previous
@@ -4050,7 +4055,7 @@ angular.module('commonsCloudAdminApp')
         var fileData = new FormData();
 
         angular.forEach($scope.files, function(file, index) {
-          fileData.append(file.field, file.file)
+          fileData.append(file.field, file.file);
         });
 
         Feature.postFiles({
@@ -4160,8 +4165,6 @@ angular.module('commonsCloudAdminApp')
     $scope.initGeocoder = function() {
       var requested_location = $scope.search.address;
 
-      console.log(requested_location);
-
       var geocode_service_url = '//api.tiles.mapbox.com/v4/geocode/mapbox.places-v1/' + requested_location + '.json';
       $http({
         method: 'get',
@@ -4178,7 +4181,6 @@ angular.module('commonsCloudAdminApp')
       }).error(function(data, status, headers, config) {
         console.log('ERROR: ', data);
       });
-
     };
 
     $scope.centerMapOnGeocode = function(result) {

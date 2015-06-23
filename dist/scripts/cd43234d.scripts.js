@@ -3761,7 +3761,7 @@ angular.module('commonsCloudAdminApp')
     // Start a new Alerts array that is empty, this clears out any previous
     // messages that may have been presented on another page
     //
-    // $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
+    $rootScope.alerts = ($rootScope.alerts) ? $rootScope.alerts: [];
 
     $timeout(function () {
       $rootScope.alerts = [];
@@ -3989,7 +3989,7 @@ angular.module('commonsCloudAdminApp')
         NewFeatureCollection.geometries.push(feature.geometry);
       });
 
-      return NewFeatureCollection;
+      return (NewFeatureCollection.geometries.length) ? NewFeatureCollection : null;
     };
 
     //
